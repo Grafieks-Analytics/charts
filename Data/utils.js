@@ -585,7 +585,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                 var legendWidth = legendElement.offsetWidth;
                 y_pos_x_label = 20;
 
-                d3.select("#xAxisLabelId").style("bottom", "60px");
+                d3.select("#xAxisLabelId").style("bottom", "40px");
                 d3.select("#mainChartWindow").attr("style", null);
 
                 // d3.select("#mainChartWindow").style("width", width);

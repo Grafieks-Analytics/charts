@@ -139,6 +139,7 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
+                d3.selectAll("#xAxisLabelId").html("");
                 var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 let { legendStatus, legendPosition } = legendConfig;
@@ -189,6 +190,18 @@
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
                     width -= legendWidth;
+                }
+                if (legendPosition == "top") {
+                    var legendHeightTop = legendHeight;
+                    height -= legendHeight+20;
+                } else {
+                    legendHeightTop = 0;
+                }
+                if (legendPosition == "bottom") {
+                    var legendHeightTop = legendHeight;
+                    height -= legendHeight-10;
+                } else {
+                    legendHeightTop = 0;
                 }
 
                 // legends code ends
@@ -676,8 +689,8 @@
                     });
             }
            
-            // redrawChartLineVerticle();
-            // drawChartLineVerticle();
+            redrawChartLineVerticle();
+            drawChartLineVerticle();
         </script>
     </body>
 </html>
