@@ -214,10 +214,17 @@
 
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
-                    width -= legendWidth;
+                    width -= legendWidth+5;
                 }
                 if (legendPosition == "top") {
                     var legendHeightTop = legendHeight;
+                    height -= legendWidth+50;
+                } else {
+                    legendHeightTop = 0;
+                }
+                if (legendPosition == "bottom") {
+                    var legendHeightTop = legendHeight;
+                    height -= legendWidth+10;
                 } else {
                     legendHeightTop = 0;
                 }
