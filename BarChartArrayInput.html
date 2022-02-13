@@ -195,7 +195,18 @@
                     width = dataValues[0].length * standardThresholdWidth;
                 }
 
-                var height = window.innerHeight - margin.top - margin.bottom - extraHeight - 20;
+                var height = window.innerHeight - margin.top - margin.bottom;
+                // [TAG: EXCEPTION]
+                // CONDITION WHEN WE HAVE VERTICAL TICKS --> RESZIE CHART
+                if (extraHeight) {
+                    height = height - extraHeight / 2 - 20;
+                    if(legendStatus && legendPosition == "top"){
+                        height -= 20;
+                    }
+                    if(legendStatus && legendPosition == "bottom"){
+                        height -= 10;
+                    }
+                }
 
                 // legends height ,width elements
 
@@ -203,7 +214,7 @@
 
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#xAxisLabelId").style("bottom", 20 + "px");
+                d3.select("#xAxisLabelId").style("bottom",  "0px");
 
                 // legends code starts
                 var legendElement = document.querySelector("#legend");
@@ -214,9 +225,12 @@
 
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
-                    width -= legendWidth+5;
+                    width -= legendWidth;
                 }
-                if (legendPosition == "top") {
+                // [TAG: EXCEPTION]
+                // REMOVED SOME CONDITION FOR LEGEND TOP
+                /* OLD CODE
+                 if (legendPosition == "top") {
                     var legendHeightTop = legendHeight;
                     height -= legendWidth+50;
                 } else {
@@ -225,6 +239,19 @@
                 if (legendPosition == "bottom") {
                     var legendHeightTop = legendHeight;
                     height -= legendWidth+10;
+                } else {
+                    legendHeightTop = 0;
+                }
+                if (legendPosition == "left") {
+                    var legendWidthLeft = legendWidth;
+                } else {
+                    legendWidthLeft = 0;
+                }
+
+                */
+                
+                if (legendPosition == "top") {
+                    var legendHeightTop = legendHeight;
                 } else {
                     legendHeightTop = 0;
                 }
@@ -243,7 +270,7 @@
                 var svg = d3
                     .selectAll("#my_dataviz")
                     .append("svg")
-                    .attr("width", width+10)
+                    .attr("width", width + 10)
                     .attr("height", height + extraHeight + margin.top + margin.bottom)
                     .append("g") //add group to leave margin for axis
                     .attr("transform", "translate(0," + margin.top + ")");
@@ -270,7 +297,11 @@
 
                 //add x and y axis
                 var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks).tickFormat(d3.format(".2s"));
-                var xAxisLabelSvg=d3.select("#xAxisLabelId").append("svg").attr("width", window.innerWidth).attr("height", 40);
+                var xAxisLabelSvg = d3
+                    .select("#xAxisLabelId")
+                    .append("svg")
+                    .attr("width", window.innerWidth)
+                    .attr("height", 40);
 
                 d3.select("#yAxisDiv")
                     .append("svg")
@@ -463,6 +494,19 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
+                // [TAG: EXCEPTION]
+                // UPDATING SVG HEIGHT AND WIDTH TO fiRst G box;
+                // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS 
+                var svgMain = document.querySelector("#my_dataviz svg");
+                var firstG = svgMain.querySelector('g');
+                var gDimensions = firstG.getBBox();
+                var svgHeight = gDimensions.height;
+                var svgWidth = gDimensions.width;
+                if(legendStatus && legendPosition == "top"){
+                    svgHeight += 50;
+                }
+                svgMain.setAttribute("height", svgHeight + 30);
+                svgMain.setAttribute("width", svgWidth - 20);
 
                 YAxisTicksConfig(yTickfontSize, yTickfontFamily, yboldTick, yitalicTick, yTickfontColor);
                 XAxisTicksConfig(xTickfontSize, xTickfontFamily, xboldTick, xitalicTick, xTickfontColor);

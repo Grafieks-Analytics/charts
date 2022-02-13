@@ -118,7 +118,7 @@ body {
 }
 
 #my_dataviz {
-    overflow-x: scroll;
+    overflow: hidden;
     margin-left: 72px;
     height: 100vh;
 }
