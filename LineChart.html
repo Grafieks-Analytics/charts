@@ -84,7 +84,6 @@
                     d3colorPalette = defaultD3Config.d3ColorPalette,
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     dateFormat = defaultD3Config.dateFormat,
-                    chartType = defaultD3Config.chartType,
                     toolTip,
                     dataColumns,
                     legendConfig = defaultD3Config.defaultLegendConfig,
@@ -136,10 +135,14 @@
                 window.dataLabelColor = dataLabelColor;
 
                 d3Colors = d3colorPalette;
+                let chartType = defaultD3Config.chartType;
+                console.log({ chartType })
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
                 d3.selectAll("#xAxisLabelId").html("");
+                d3.select("#legend").html("").style("padding", "");
+
                 var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 let { legendStatus, legendPosition } = legendConfig;
@@ -172,11 +175,34 @@
 
                 var lineStroke = (1 - paddingInner) * 4;
 
-                height = window.innerHeight - margin.top - margin.bottom - 30 - extraHeight;
+                // height = window.innerHeight - margin.top - margin.bottom - 30 - extraHeight/ 2;
+                // height = window.innerHeight - margin.top - margin.bottom - extraHeight / 2 - 20;
+                height = window.innerHeight - margin.top - margin.bottom + 10;
+                // debugger;
+                if(!extraHeight){
+                    height += 15;
+                }
+                if(extraHeight){
+                    height = height - extraHeight / 2 - 30;
+                }
+                if(legendStatus && legendPosition == "top"){
+                    height -= 20;
+                } else if(legendStatus && legendPosition == "bottom"){
+                    height -= 40;
+                } else if(legendStatus && (legendPosition == "right" || legendPosition == "left")){
+                    height -= 20;
+                }
 
+                if(!legendStatus && !extraHeight){
+                    height -= 20;
+                }
+                if(!legendStatus && extraHeight){
+                    height -= 15;
+                }
+                
                 if (chartType == constants.chartType.STANDARD) {
                     width = dataValues.length * standardThresholdWidth;
-                    height = window.innerHeight - margin.top - margin.bottom - extraHeight - 30;
+                    height = window.innerHeight - margin.top - margin.bottom - extraHeight / 2 - 30;
                 }
                 yaxisTicks = height / 70;
                 var y_pos_x_label = 55;
@@ -476,7 +502,21 @@
                 if (extraHeightWorked && redrawn) {
                     extraHeightWorked = false;
                     redrawn = false;
+                    // var svgMain = document.querySelector('#my_dataviz svg'); 
+                    // var oldheight = svgMain.getAttribute('height');
+                    // var finalHeight = oldheight - extraHeight / 2;
+                    // if(legendStatus && (legendPosition == "bottom" || legendPosition == "top")) {
+                    //     finalHeight -= 20;
+                    // }
+                    // svgMain.setAttribute('height', finalHeight);
                 }
+                
+                var svgMain = document.querySelector("#my_dataviz svg");
+                var svgHeight = svgMain.getAttribute('height');
+                if(legendStatus && legendPosition == "top"){
+                    svgHeight += 50;
+                }
+                svgMain.setAttribute("height", svgHeight);
 
                 if (chartType == constants.chartType.STANDARD) {
                     setStandardTickWidths();
@@ -689,7 +729,7 @@
                     });
             }
            
-            redrawChartLineVerticle();
+            // redrawChartLineVerticle();
             drawChartLineVerticle();
         </script>
     </body>
