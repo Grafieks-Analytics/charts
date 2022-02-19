@@ -206,6 +206,11 @@
                     if(legendStatus && legendPosition == "bottom"){
                         height -= 10;
                     }
+                } else{ 
+                    height += 15;
+                    if(legendStatus && (legendPosition == "top" || legendPosition == "bottom")){
+                        height -= 15;
+                    }
                 }
 
                 // legends height ,width elements
