@@ -26,18 +26,6 @@
         <div id="legend"></div>
 
         <script>
-            // var dataset = [
-            //     [
-            //         ["Furniture", 741999.0625],
-            //         ["OfficeSupplies", 719048.25],
-            //         ["Technology", 836155.4375],
-            //         ["Technology1", 836155.4375],
-            //         ["Technology2 Technology2", 836155.4375],
-            //         ["Technology3", 836155.4375],
-            //     ],
-            //     ["Category", "Sales"],
-            // ];
-
             // variables
             var extraHeightWorked = false;
             var redrawn = false;
@@ -53,20 +41,19 @@
                 defaultLineCurve
             } = defaultD3Config;
 
-            // drawChart(dataset);
-     
-
-            function transformData(dataValues, dateFormat) {
+            function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
-
-                if (isDateFormat(dataValues[0][0])) {
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
+                    dateFormat = xAxisColumnDetails[0].dateFormat;
                 }
                 var dateWiseResponse = {};
 
                 if (valueDateType) {
                     dataValues.forEach((dataRow) => {
                         var requiredTypeData = getDateFormattedData(dataRow[0], dateFormat);
+                        // debugger;
                         if (!dateWiseResponse[requiredTypeData]) {
                             dateWiseResponse[requiredTypeData] = 0;
                         }
@@ -97,8 +84,8 @@
                     d3colorPalette = defaultD3Config.d3ColorPalette,
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     dateFormat = defaultD3Config.dateFormat,
-                    chartType = defaultD3Config.chartType,
                     toolTip,
+                    dataColumns,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -148,10 +135,15 @@
                 window.dataLabelColor = dataLabelColor;
 
                 d3Colors = d3colorPalette;
+                let chartType = defaultD3Config.chartType;
+                console.log({ chartType })
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
                 d3.selectAll("#xAxisLabelId").html("");
+                d3.select("#legend").html("").style("padding", "");
+
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
@@ -168,7 +160,7 @@
                     [xAxisLabel, yAxisLabel] = [xAxisConfig.xlabel, yAxisConfig.ylabel];
                 }
 
-                dataValues = transformData(dataValues, dateFormat);
+                dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
                 // [xAxisLabel, yAxisLabel] = data[1];
                 if (!toolTip) {
@@ -183,17 +175,40 @@
 
                 var lineStroke = (1 - paddingInner) * 4;
 
-                height = window.innerHeight - margin.top - margin.bottom - 50 - extraHeight;
+                // height = window.innerHeight - margin.top - margin.bottom - 30 - extraHeight/ 2;
+                // height = window.innerHeight - margin.top - margin.bottom - extraHeight / 2 - 20;
+                height = window.innerHeight - margin.top - margin.bottom + 10;
+                // debugger;
+                if(!extraHeight){
+                    height += 15;
+                }
+                if(extraHeight){
+                    height = height - extraHeight / 2 - 30;
+                }
+                if(legendStatus && legendPosition == "top"){
+                    height -= 20;
+                } else if(legendStatus && legendPosition == "bottom"){
+                    height -= 40;
+                } else if(legendStatus && (legendPosition == "right" || legendPosition == "left")){
+                    height -= 20;
+                }
 
+                if(!legendStatus && !extraHeight){
+                    height -= 20;
+                }
+                if(!legendStatus && extraHeight){
+                    height -= 15;
+                }
+                
                 if (chartType == constants.chartType.STANDARD) {
                     width = dataValues.length * standardThresholdWidth;
-                    height = window.innerHeight - margin.top - margin.bottom - extraHeight - 30;
+                    height = window.innerHeight - margin.top - margin.bottom - extraHeight / 2 - 30;
                 }
                 yaxisTicks = height / 70;
                 var y_pos_x_label = 55;
 
                 // legends code starts
-               var legendElement = document.querySelector("#legend");
+                var legendElement = document.querySelector("#legend");
                 var legendHeight = legendElement.offsetHeight;
                 var legendWidth = legendElement.offsetWidth;
 
@@ -214,7 +229,6 @@
                 } else {
                     legendHeightTop = 0;
                 }
-              
 
                 // legends code ends
 
@@ -339,17 +353,17 @@
                 //         }
                 //     }
 
-                    //     extraHeightWorked = true;
+                //     //     extraHeightWorked = true;
 
-                    //     // d3.select(".x-axis .tick text").attr("text-anchor", "right");
+                //     //     // d3.select(".x-axis .tick text").attr("text-anchor", "right");
 
-                    //     d3.selectAll(".x-axis text")
-                    //         .attr("transform", "rotate(-90)")
-                    //         .attr("dy", "0.3em")
-                    //         .attr("x", "-" + +extraHeight)
-                    //         .attr("text-anchor", "start")
-                    //         .attr("y", "0");
-                    // }
+                //     //     d3.selectAll(".x-axis text")
+                //     //         .attr("transform", "rotate(-90)")
+                //     //         .attr("dy", "0.3em")
+                //     //         .attr("x", "-" + +extraHeight)
+                //     //         .attr("text-anchor", "start")
+                //     //         .attr("y", "0");
+                //     // }
                 //     extraHeightWorked = true;
                 //     maxWidth = maxWidth < 60 ? maxWidth : 60;
                 //     extraHeight = maxWidth;
@@ -408,12 +422,13 @@
                     //     //     return 10;
                     //     // })
                     //     //  label.textContent = textColumn2[1];
-                    //     label.textContent = Math.round(dataValues[i][1]);
+                    //     label.textContent = labelFormatSet(dataValues[i][1], labelFormat);
                     //     var dataLabelLimit = height - window.innerHeight / 3;
                     //     label.setAttribute("display", labelYPosition > dataLabelLimit ? "none" : "");
                     // });
-                    dataLabelLineChart(svg, xAxis, yScale, dataValues, labelFormat);
+                     dataLabelLineChart(svg, xAxis, yScale, dataValues, labelFormat);
                 }
+
                 d3.select(".axis.label path").remove();
 
                 // axis setting starts
@@ -489,7 +504,21 @@
                 if (extraHeightWorked && redrawn) {
                     extraHeightWorked = false;
                     redrawn = false;
+                    // var svgMain = document.querySelector('#my_dataviz svg'); 
+                    // var oldheight = svgMain.getAttribute('height');
+                    // var finalHeight = oldheight - extraHeight / 2;
+                    // if(legendStatus && (legendPosition == "bottom" || legendPosition == "top")) {
+                    //     finalHeight -= 20;
+                    // }
+                    // svgMain.setAttribute('height', finalHeight);
                 }
+                
+                var svgMain = document.querySelector("#my_dataviz svg");
+                var svgHeight = svgMain.getAttribute('height');
+                if(legendStatus && legendPosition == "top"){
+                    svgHeight += 50;
+                }
+                svgMain.setAttribute("height", svgHeight);
 
                 if (chartType == constants.chartType.STANDARD) {
                     setStandardTickWidths();
@@ -701,7 +730,9 @@
                             .attr("width", initialBoxDimension);
                     });
             }
-              drawChartAreaVerticle();
-       </script>
+           
+            // redrawChartLineVerticle();
+            drawChartLineVerticle();
+        </script>
     </body>
 </html>
