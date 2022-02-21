@@ -143,6 +143,8 @@
                 d3.selectAll("#xAxisLabelId").html("");
                 d3.select("#legend").html("").style("padding", "");
 
+                d3.selectAll("#xAxisLabelId").style('bottom',"0px");
+
                 var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 let { legendStatus, legendPosition } = legendConfig;
