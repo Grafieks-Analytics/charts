@@ -429,7 +429,8 @@ function setXaxisWidth() {
     extraHeightWorked = true;
     maxWidth = maxWidth < 100 ? maxWidth : 60;
     if (window.innerHeight < 400) {
-        extraHeight = Math.min(maxWidth, window.innerHeight / 8);
+        // [TAG: EXCEPTION] UPDATED MAGIC NUMBER;
+        extraHeight = Math.min(maxWidth, window.innerHeight / 4);
     } else {
         extraHeight = maxWidth;
     }
@@ -510,7 +511,15 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
         } else {
             topPosition = 0;
         }
-        rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+        // OLD CODE BEFORE REFACTORING ON 14th 
+        // rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+        
+        // NEW CODE  CAN BE OPTIMIZED
+        // [TAG: EXCEPTION]: ALIGNING LEGEND TO THE CENTER OF CHART/WINDOW
+        var leftWidth = document.querySelector('#yAxisDiv');
+        leftWidth = (leftWidth && leftWidth.clientWidth) || 0;
+        rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth/2) + "px)";
+        // NEW CODE 
 
         //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
         var widthOld = document.querySelector("html").clientWidth - 72;
@@ -549,12 +558,16 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
 
                 d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
                 d3.select("#mainChartWindow").style("margin-left", legendWidth + "px");
-                d3.select("#xAxisLabelId").style("bottom", 20);
+                // [TAG: EXCEPTION]
+                // XLABEL BOTTOM WILL ALWAYS BE 0
+                d3.select("#xAxisLabelId").style("bottom", 0);
 
                 break;
             case "top":
                 d3.select("#mainChartWindow").attr("style", null);
-                margin.top += 50;
+                // [TAG: EXCEPTION]
+                // UPDATED MARGIN TOP FROM +50 TO +20
+                margin.top += 20;
                 height -= 50;
                 y_pos_x_label = 57;
                 d3.select("#legend")
@@ -572,7 +585,9 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                     .style("white-space", "nowrap")
                     .style("overflow", "hidden")
                     .style("text-overflow", "ellipsis");
-                d3.select("#xAxisLabelId").style("bottom", 20);
+                // [TAG: EXCEPTION]
+                // XLABEL BOTTOM WILL ALWAYS BE 0
+                d3.select("#xAxisLabelId").style("bottom", 0);
 
                 // d3.selectAll("#legend div").style(
                 //     "padding",
@@ -584,8 +599,9 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                 margin.bottom += 10;
                 var legendWidth = legendElement.offsetWidth;
                 y_pos_x_label = 20;
-
-                d3.select("#xAxisLabelId").style("bottom", "40px");
+                // [TAG: EXCEPTION]
+                // XLABEL BOTTOM WILL BE 20 in case of legend at bottom
+                d3.select("#xAxisLabelId").style("bottom", "20px");
                 d3.select("#mainChartWindow").attr("style", null);
 
                 // d3.select("#mainChartWindow").style("width", width);
@@ -634,9 +650,13 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                     .style("text-overflow", "ellipsis");
 
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth - 10);
+                // [TAG: EXCEPTION]
+                // REMOVED 10px MAGIC NUMBER
+                d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
                 d3.select("#mainChartWindow").style("margin-left", 0);
-                d3.select("#xAxisLabelId").style("bottom", 20);
+                // [TAG: EXCEPTION]
+                // XLABEL BOTTOM WILL BE ALWAYS 0
+                d3.select("#xAxisLabelId").style("bottom", 0);
         }
     }
 }
@@ -822,6 +842,7 @@ const getDistance = (x1, x2, y1, y2) => {
 };
 
 const getDistanceBetweenElements = (rect1, rect2) => {
+    if(!rect1 || !rect2) return 0;
     rect1 = rect1.getClientRects()[0];
     rect2 = rect2.getClientRects()[0];
     let { x: x1, y: y1, width: width1, height: height1 } = rect1;
