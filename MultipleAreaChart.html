@@ -36,7 +36,6 @@
             #xAxisLabelId {
                 position: fixed;
                 bottom: 0px;
-                z-index: -1;
                 height: 40px;
                 /* background-color: red; */
             }
@@ -67,15 +66,10 @@
                 initialBoxDimension,
                 onHoverCircleRadius,
                 onHoverBoxDimension,
-                defaultLineCurve,
+                defaultLineCurve
             } = defaultD3Config;
 
-            function transformData(
-                dataValue,
-                dataColumns,
-                dateFormat,
-                dateFormat1
-            ) {
+            function transformData(dataValue, dataColumns, dateFormat, dateFormat1) {
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
@@ -153,7 +147,6 @@
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
-                console.clear();
                 if (!redrawn) {
                     extraHeight = 0;
                 }
@@ -195,7 +188,7 @@
                     xAxisConfig = defaultD3Config.xAxisConfig,
                     yAxisConfig = defaultD3Config.yAxisConfig,
 
-                    filledStatus = true,
+                    filledStatus = true
                 } = plottingConfiguration;
 
                 window.xLabelfontSize = xLabelfontSize;
@@ -219,8 +212,12 @@
                 // var dataValues = data[0];
                 var y_pos_x_label = 55;
 
-                var [dataValues, lineMainCategories, allKeys, label] =
-                    transformData(data[0], dataColumns, dateFormat, dateFormat);
+                var [dataValues, lineMainCategories, allKeys, label] = transformData(
+                    data[0],
+                    dataColumns,
+                    dateFormat,
+                    dateFormat
+                );
 
                 // console.log({ lineMainCategories });
 
@@ -241,46 +238,28 @@
                 d3.selectAll("#yAxisDiv").html("");
                 d3.select("#legend").html("").attr("style", null).style("padding", "");
                 d3.selectAll("#xAxisLabelId").html("");
-                d3.selectAll("#my_dataviz").attr("style", null)
+                d3.selectAll("#my_dataviz").attr("style", null);
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
-                let {
-                    xlabel,
-                    xboldLabel,
-                    xitalicLabel,
-                    xboldTick,
-                    xitalicTick,
-                    xaxisStatus,
-                } = xAxisConfig;
-                let {
-                    ylabel,
-                    yboldLabel,
-                    yitalicLabel,
-                    yboldTick,
-                    yitalicTick,
-                    yaxisStatus,
-                } = yAxisConfig;
+                let { xlabel, xboldLabel, xitalicLabel, xboldTick, xitalicTick, xaxisStatus } = xAxisConfig;
+                let { ylabel, yboldLabel, yitalicLabel, yboldTick, yitalicTick, yaxisStatus } = yAxisConfig;
                 window.yboldLabel = yboldLabel;
                 window.xboldLabel = xboldLabel;
                 window.xitalicLabel = xitalicLabel;
                 window.yitalicLabel = yitalicLabel;
-                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                if (!xAxisConfig.xlabel || !yAxisConfig.ylabel) {
                     [xAxisLabel, yAxisLabel, colorData] = data[2];
                 } else {
-                    [xAxisLabel, yAxisLabel, colorData] = [
-                        xAxisConfig.xlabel,
-                        yAxisConfig.ylabel,
-                        data[2][2],
-                    ];
+                    [xAxisLabel, yAxisLabel, colorData] = [xAxisConfig.xlabel, yAxisConfig.ylabel, data[2][2]];
                 }
                 // [xAxisLabel, yAxisLabel, colorData] = data[2];
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel,
-                        colorData: colorData,
+                        colorData: colorData
                     };
                 }
                 // legends code starts
@@ -319,8 +298,7 @@
 
                 // legends height ,width elements
 
-                const yAxisWidth =
-                    document.querySelector("#yAxisDiv").clientWidth;
+                const yAxisWidth = document.querySelector("#yAxisDiv").clientWidth;
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
                 d3.select("#xAxisLabelId").style("bottom", 20);
@@ -329,26 +307,24 @@
                 d3.selectAll("#my_dataviz").html("");
                 var margin = constants.chartMargins;
                 var width = window.innerWidth - 100,
-                    height =
-                        window.innerHeight - margin.top - margin.bottom + 25 - extraHeight ;
+                    height = window.innerHeight - margin.top - margin.bottom + 25 - extraHeight;
 
                 console.log(JSON.stringify({ height }));
-                        
-                if(!extraHeight && !legendStatus){
+
+                if (!extraHeight && !legendStatus) {
                     height -= 20;
                 }
 
-                if(extraHeight && !legendStatus){
+                if (extraHeight && !legendStatus) {
                     height -= 10;
                 }
-                
-                
+
                 if (chartType == constants.chartType.STANDARD) {
                     width = lineMainCategories.length * standardThresholdWidth;
                 }
 
-                if (legendStatus &&  (legendPosition == "top" || legendPosition == "bottom")) {
-                    console.log(JSON.stringify({ state:"legendOn",height }));
+                if (legendStatus && (legendPosition == "top" || legendPosition == "bottom")) {
+                    console.log(JSON.stringify({ state: "legendOn", height }));
                     height -= 50;
                 }
                 if (legendStatus && (legendPosition == "left" || legendPosition == "right")) {
@@ -362,23 +338,21 @@
 
                 var legendWidth = legendElement.offsetWidth;
 
+                d3.select("#xAxisLabelId").style("bottom", "0px");
+
                 // legends code starts
                 if (legendStatus) {
-                    if (
-                        legendHeight <
-                        document.querySelector("html").offsetHeight
-                    ) {
+                    if (legendHeight < document.querySelector("html").offsetHeight) {
                         topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
                     } else {
                         topPosition = 0;
                     }
-                    var leftWidth = document.querySelector('#yAxisDiv');
+                    var leftWidth = document.querySelector("#yAxisDiv");
                     leftWidth = (leftWidth && leftWidth.clientWidth) || 0;
-                    rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth/2) + "px)";
+                    rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth / 2) + "px)";
 
                     //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
-                    var widthOld =
-                        document.querySelector("html").clientWidth - 72;
+                    var widthOld = document.querySelector("html").clientWidth - 72;
                     var heightOld = document.querySelector("html").clientHeight;
 
                     // legendElement.style.padding = "10px";
@@ -411,20 +385,11 @@
 
                             d3.select("#mainChartWindow").attr("style", null);
 
-                            d3.select("#mainChartWindow").style(
-                                "width",
-                                widthOld - legendWidth + yAxisWidth
-                            );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                legendWidth + "px"
-                            );
+                            d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
+                            d3.select("#mainChartWindow").style("margin-left", legendWidth + "px");
                             d3.select("#xAxisLabelId").style("bottom", "0px");
 
-                            d3.selectAll("#my_dataviz").style(
-                                "margin-top",
-                                0 + "px"
-                            );
+                            d3.selectAll("#my_dataviz").style("margin-top", 0 + "px");
 
                             break;
                         case "top":
@@ -449,24 +414,14 @@
                                 .style("overflow", "hidden")
                                 .style("text-overflow", "ellipsis");
                             // d3.select("#xAxisLabelId").style("bottom", 20);
-                            d3.select("#xAxisLabelId").style(
-                                "bottom",
-                                0 + "px"
-                            );
-                            ;
-                            d3.selectAll("#my_dataviz").style(
-                                "height",
-                                "calc(100vh - 42px) "
-                            );
-                            d3.selectAll("#my_dataviz").style(
-                                "margin-top",
-                                40 + "px"
-                            );
+                            d3.select("#xAxisLabelId").style("bottom", 0 + "px");
+                            d3.selectAll("#my_dataviz").style("height", "calc(100vh - 42px) ");
+                            d3.selectAll("#my_dataviz").style("margin-top", 40 + "px");
 
                             break;
                         case "bottom":
                             // height -= 50; // use legend client height
-                            margin.bottom += 10;
+                            // margin.bottom += 10;
                             var legendWidth = legendElement.offsetWidth;
                             y_pos_x_label = 20;
 
@@ -475,10 +430,7 @@
 
                             // d3.select("#mainChartWindow").style("width", width);
                             //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                0
-                            );
+                            d3.select("#mainChartWindow").style("margin-left", 0);
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "auto")
@@ -495,14 +447,8 @@
                                 .style("white-space", "nowrap")
                                 .style("overflow", "hidden")
                                 .style("text-overflow", "ellipsis");
-                                d3.selectAll("#my_dataviz").style(
-                                "height",
-                                "calc(100vh - 42px)"
-                            );
-                            d3.selectAll("#my_dataviz").style(
-                                "margin-top",
-                                0 + "px"
-                            );
+                            d3.selectAll("#my_dataviz").style("height", "calc(100vh - 42px)");
+                            d3.selectAll("#my_dataviz").style("margin-top", 0 + "px");
 
                             break;
                         // For Right Legened
@@ -535,20 +481,11 @@
                                 "width",
                                 widthOld - legendWidth + yAxisWidth - 10 + "px"
                             );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                0
-                            );
+                            d3.select("#mainChartWindow").style("margin-left", 0);
                             d3.select("#xAxisLabelId").style("bottom", 0);
 
-                            d3.selectAll("#my_dataviz").style(
-                                "margin-top",
-                                0 + "px"
-                            );
-                            d3.select("#xAxisLabelId").style(
-                                "bottom",
-                                0 + "px"
-                            );
+                            d3.selectAll("#my_dataviz").style("margin-top", 0 + "px");
+                            d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                     }
                 }
 
@@ -561,10 +498,7 @@
                     .attr("width", width + 20)
                     .attr("height", height + margin.top + margin.bottom + 15)
                     .append("g")
-                    .attr(
-                        "transform",
-                        "translate(" + 0 + "," + margin.top + ")"
-                    );
+                    .attr("transform", "translate(" + 0 + "," + margin.top + ")");
 
                 // group the data: I want to draw one line per group
                 sumstat = d3
@@ -597,29 +531,17 @@
 
                 // console.log("Min Max", y_min, y_max);
                 // Add Y axis
-                y = d3
-                    .scaleLinear()
-                    .domain([y_min, y_max])
-                    .range([height, 0])
-                    .nice();
+                y = d3.scaleLinear().domain([y_min, y_max]).range([height, 0]).nice();
 
                 yAxisTicks = height / 70;
                 // svg.append("g").call(d3.axisLeft(y));
-                var yAxis = d3
-                    .axisLeft(y)
-                    .tickSize(0)
-                    .ticks(yAxisTicks)
-                    .tickFormat(d3.format(".2s"));
+                var yAxis = d3.axisLeft(y).tickSize(0).ticks(yAxisTicks).tickFormat(d3.format(".2s"));
 
                 if (gridStatus) {
                     svg.append("g")
                         .attr("class", "grid")
                         .style("stroke-width", "1")
-                        .call(
-                            make_y_gridlines(y)
-                                .tickSize(-width)
-                                .tickFormat(d3.format(".2s"))
-                        );
+                        .call(make_y_gridlines(y).tickSize(-width).tickFormat(d3.format(".2s")));
                 } else {
                     svg.append("g")
                         .attr("class", "grid")
@@ -636,10 +558,7 @@
                     .attr("width", "72")
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g") //add group to leave margin for axis
-                    .attr(
-                        "transform",
-                        "translate(" + 70 + "," + margin.top + ")"
-                    )
+                    .attr("transform", "translate(" + 70 + "," + margin.top + ")")
                     .append("g")
                     .attr("class", "y-axis")
                     .call(yAxis);
@@ -653,10 +572,7 @@
                 setLabel(
                     xAxisLabel,
                     "x_label",
-                    d3
-                        .select("#xAxisLabelId")
-                        .append("svg")
-                        .attr("width", window.innerWidth, "height", 150),
+                    d3.select("#xAxisLabelId").append("svg").attr("width", window.innerWidth, "height", 150),
                     y_pos_x_label,
                     false
                 );
@@ -726,7 +642,7 @@
                         .attr("display", function (d) {
                             var dataLabelLimit = height - window.innerHeight / 8;
                             // var labelYPosition = yScale(dataValues[i][1]);
-                            if ((y(d[2])) > dataLabelLimit) {
+                            if (y(d[2]) > dataLabelLimit) {
                                 return "none";
                             } else {
                                 return "";
@@ -753,13 +669,9 @@
                         .attr(
                             "transform",
                             "translate(" +
-                                (markerShape == constants.markerShapes.RECT
-                                    ? 0 - 2.8
-                                    : 0) +
+                                (markerShape == constants.markerShapes.RECT ? 0 - 2.8 : 0) +
                                 "," +
-                                (markerShape == constants.markerShapes.RECT
-                                    ? 0 - 2.8
-                                    : 0) +
+                                (markerShape == constants.markerShapes.RECT ? 0 - 2.8 : 0) +
                                 ")"
                         )
                         .attr("fill", function (d) {
@@ -770,9 +682,7 @@
                             return fill;
                         })
                         .attr(
-                            markerShapeConfig[markerShape] &&
-                                markerShapeConfig[markerShape]
-                                    .xPositionAttrName,
+                            markerShapeConfig[markerShape] && markerShapeConfig[markerShape].xPositionAttrName,
                             function (d, i) {
                                 this.setAttribute("data-value-x", d[0]);
                                 this.setAttribute("data-value-x1", d[1]);
@@ -783,9 +693,7 @@
                             }
                         )
                         .attr(
-                            markerShapeConfig[markerShape] &&
-                                markerShapeConfig[markerShape]
-                                    .yPositionAttrName,
+                            markerShapeConfig[markerShape] && markerShapeConfig[markerShape].yPositionAttrName,
                             function (d) {
                                 // console.log(d[2]);
                                 return y(d[2]);
@@ -861,26 +769,17 @@
                                         "</span>"
                                     );
                                 });
-                            var scrollVal =
-                                document.querySelector(
-                                    "#my_dataviz"
-                                ).scrollLeft;
+                            var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
 
                             if (
                                 x_pos - scrollVal >
                                 document.documentElement.clientWidth -
-                                    document.querySelector("#tooltip")
-                                        .clientWidth -
+                                    document.querySelector("#tooltip").clientWidth -
                                     20
                             ) {
                                 d3.select("#tooltip").style(
                                     "left",
-                                    x_pos -
-                                        scrollVal -
-                                        document.querySelector("#tooltip")
-                                            .clientWidth +
-                                        58 +
-                                        "px"
+                                    x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 58 + "px"
                                 );
 
                                 d3.select(".arrowTooltip")
@@ -892,10 +791,7 @@
                                         "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
                                     );
                             } else {
-                                d3.select("#tooltip").style(
-                                    "left",
-                                    x_pos - scrollVal + 80 + "px"
-                                );
+                                d3.select("#tooltip").style("left", x_pos - scrollVal + 80 + "px");
 
                                 d3.select(".arrowTooltip").attr(
                                     "style",
@@ -923,15 +819,11 @@
                         });
                 }
 
-
                 setYaxisWidth();
 
                 // var barWidth = document.querySelector(".bar").getBBox().width;
                 var barWidth = x.bandwidth();
-                if (
-                    chartType == constants.chartType.FIT_WIDTH &&
-                    barWidth < 40
-                ) {
+                if (chartType == constants.chartType.FIT_WIDTH && barWidth < 40) {
                     setXaxisWidth();
                 }
 
@@ -959,8 +851,7 @@
                     d3.selectAll("g .y-axis").attr("style", "display: none");
                 }
                 function setXaxisWidth() {
-                    var allYAxisTicks =
-                        document.querySelectorAll(".x-axis .tick");
+                    var allYAxisTicks = document.querySelectorAll(".x-axis .tick");
                     var maxWidth = 0;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
@@ -977,7 +868,7 @@
                     //     d3.select(".x-axis").attr("text-anchor", "right");
 
                     //     d3.selectAll(".x-axis text")
-                    //         .attr("transform", "rotate(-90)")        
+                    //         .attr("transform", "rotate(-90)")
                     //         .attr("dy", "0.3em")
 
                     //         .attr("x", "-"+extraHeight)
@@ -995,16 +886,10 @@
                 }
 
                 a = document.querySelectorAll(".x-axis text");
-                var textWidth = document
-                    .querySelector(".x-axis .tick text")
-                    .getBBox().height;
+                var textWidth = document.querySelector(".x-axis .tick text").getBBox().height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
-                    removeAxisTicks(
-                        "xAxis",
-                        dataValues,
-                        lineMainCategories.length
-                    );
+                    removeAxisTicks("xAxis", dataValues, lineMainCategories.length);
                     for (var i = 0; i < a.length; i++) {
                         if (i == 0 && barWidth < textWidth * 0.5) {
                             a[i].setAttribute("dy", "1em");
@@ -1016,8 +901,7 @@
                     }
                 }
                 if (chartType === constants.chartType.FIT_WIDTH) {
-                    var allXAxisTexts =
-                        document.querySelectorAll(".x-axis text");
+                    var allXAxisTexts = document.querySelectorAll(".x-axis text");
                     for (var i = 0; i < allXAxisTexts.length; i++) {
                         var xAxisTick = allXAxisTexts[i].innerHTML;
                         // Check added to bypass all the names with length <= 2 from getting trimmed
@@ -1027,29 +911,17 @@
 
                         if (xAxisTick) {
                             var singleCharacterLength =
-                                allXAxisTexts[i].getBBox().width /
-                                (xAxisTick && xAxisTick.length);
+                                allXAxisTexts[i].getBBox().width / (xAxisTick && xAxisTick.length);
 
-                            var numOfCharacters =
-                                (extraHeight ? extraHeight : x.bandwidth()) /
-                                singleCharacterLength;
+                            var numOfCharacters = (extraHeight ? extraHeight : x.bandwidth()) / singleCharacterLength;
 
-                            if (
-                                xAxisTick &&
-                                xAxisTick.length > numOfCharacters
-                            ) {
+                            if (xAxisTick && xAxisTick.length > numOfCharacters) {
                                 if (Math.ceil(numOfCharacters) > 3) {
                                     // console.log(xAxisTick);
                                     allXAxisTexts[i].innerHTML =
-                                        (xAxisTick &&
-                                            xAxisTick.substr(
-                                                0,
-                                                numOfCharacters - 3
-                                            )) + "...";
+                                        (xAxisTick && xAxisTick.substr(0, numOfCharacters - 3)) + "...";
                                 } else {
-                                    allXAxisTexts[i].innerHTML =
-                                        (xAxisTick && xAxisTick.substr(0, 2)) +
-                                        "...";
+                                    allXAxisTexts[i].innerHTML = (xAxisTick && xAxisTick.substr(0, 2)) + "...";
                                 }
                             }
                         }
@@ -1098,30 +970,23 @@
                     var a = document.querySelectorAll(".x-axis .tick text");
 
                     for (var i = 0; i < a.length; i++) {
-                        var singleCharacterLength =
-                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var singleCharacterLength = a[i].getBBox().width / a[i].innerHTML.length;
 
-                        var numOfCharacters = Math.floor(
-                            barWidth / singleCharacterLength
-                        );
+                        var numOfCharacters = Math.floor(barWidth / singleCharacterLength);
 
                         var tick = a[i];
 
                         var tickWidth = tick && tick.getBBox().width;
                         if (tickWidth > barWidth) {
                             var tickValue = tick.innerHTML;
-                            tickValue =
-                                tickValue &&
-                                tickValue.substr(0, numOfCharacters - 3) +
-                                    "...";
+                            tickValue = tickValue && tickValue.substr(0, numOfCharacters - 3) + "...";
                             tick.innerHTML = tickValue;
                         }
                     }
                 }
 
                 function setYaxisWidth() {
-                    var allYAxisTicks =
-                        document.querySelectorAll(".y-axis .tick");
+                    var allYAxisTicks = document.querySelectorAll(".y-axis .tick");
                     var maxWidth = 72;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
@@ -1138,14 +1003,9 @@
                     //     "margin-left",
                     //     maxWidth + "px"
                     // );
-                    document.querySelector("#my_dataviz").style["margin-left"] =
-                        maxWidth + "px !important";
+                    document.querySelector("#my_dataviz").style["margin-left"] = maxWidth + "px !important";
 
-                    yAxisDiv &&
-                        yAxisDiv.setAttribute(
-                            "transform",
-                            "translate(" + 0 + "," + 0 + ")"
-                        );
+                    yAxisDiv && yAxisDiv.setAttribute("transform", "translate(" + 0 + "," + 0 + ")");
                 }
 
                 function make_x_gridlines(x) {
@@ -1186,12 +1046,6 @@
                     .html(tooltipDataText);
             }
 
-
-            data = [[["Furniture","South",117298.7109375],["Furniture","West",252612.984375],["Furniture","Central",163797.15625],["Furniture","East",208291.125],["Office Supplies","South",125651.3125],["Office Supplies","West",220853.28125],["Office Supplies","Central",167026.515625],["Office Supplies","East",205516.15625],["Technology","South",148771.828125],["Technology","West",251991.546875],["Technology","Central",170416.28125],["Technology","East",264973.8125]],["South","Region","West","Central","East"],["Category","Sales","Region"]]
-
-            data = [[["Henderson","Furniture",8862.6796875],["Henderson","Office Supplies",4616.6083984375],["Henderson","Technology",4069.780029296875],["Los Angeles","Furniture",54000.0390625],["Los Angeles","Office Supplies",48821.53515625],["Los Angeles","Technology",73029.8046875],["Fort Lauderdale","Furniture",2077.192626953125],["Fort Lauderdale","Office Supplies",1374.555908203125],["Fort Lauderdale","Technology",1477.7840576171875],["Concord","Furniture",6161.80615234375],["Concord","Office Supplies",1127.5340576171875],["Concord","Technology",3253.06201171875],["Seattle","Furniture",40995.87890625],["Seattle","Office Supplies",36038.48828125],["Seattle","Technology",42506.37890625],["Fort Worth","Furniture",1300.2603759765625],["Fort Worth","Office Supplies",1340.1180419921875],["Fort Worth","Technology",3962.328125],["Madison","Furniture",3267.760009765625],["Madison","Office Supplies",1900.920166015625],["Madison","Technology",178.11000061035156],["West Jordan","Furniture",66.69000244140625],["West Jordan","Office Supplies",245.1599884033203],["West Jordan","Technology",0],["San Francisco","Furniture",36357.3046875],["San Francisco","Office Supplies",42253.1640625],["San Francisco","Technology",34058.640625],["Fremont","Furniture",15.920000076293945],["Fremont","Office Supplies",1023.1300659179688],["Fremont","Technology",79.95999908447266],["Philadelphia","Furniture",36495.5390625],["Philadelphia","Office Supplies",30658.1640625],["Philadelphia","Technology",41923.31640625],["Orem","Furniture",2524.81005859375],["Orem","Office Supplies",469.2779846191406],["Orem","Technology",0],["Houston","Furniture",23183.2109375],["Houston","Office Supplies",16369.5654296875],["Houston","Technology",24951.9921875],["Richardson","Furniture",190.9199981689453],["Richardson","Office Supplies",0],["Richardson","Technology",1097.5439453125],["Naperville","Furniture",602.6510009765625],["Naperville","Office Supplies",298.5240173339844],["Naperville","Technology",387.12799072265625],["Melbourne","Furniture",0],["Melbourne","Office Supplies",95.61599731445312],["Melbourne","Technology",0],["Eagan","Furniture",0],["Eagan","Office Supplies",168.3000030517578],["Eagan","Technology",45.97999954223633],["Westland","Furniture",287.6700134277344],["Westland","Office Supplies",1660.35595703125],["Westland","Technology",109.94999694824219],["Dover","Furniture",1491.06396484375],["Dover","Office Supplies",890.3400268554688],["Dover","Technology",2496.669921875],["New Albany","Furniture",96.1500015258789],["New Albany","Office Supplies",113.4000015258789],["New Albany","Technology",0],["New York City","Furniture",75691.0625],["New York City","Office Supplies",71361.0078125],["New York City","Technology",109316.0625],["Troy","Furniture",2420.498046875],["Troy","Office Supplies",862.0830078125],["Troy","Technology",1224.510009765625],["Chicago","Furniture",12495.2236328125],["Chicago","Office Supplies",13860.2275390625],["Chicago","Technology",22184.099609375],["Gilbert","Furniture",2366.174072265625],["Gilbert","Office Supplies",1272.672119140625],["Gilbert","Technology",533.5360107421875],["Springfield","Furniture",12046.1982421875],["Springfield","Office Supplies",13887.15234375],["Springfield","Technology",17120.9921875],["Jackson","Furniture",8190.6162109375],["Jackson","Office Supplies",9188.404296875],["Jackson","Technology",7584.837890625],["Memphis","Furniture",2546.53369140625],["Memphis","Office Supplies",3394.22314453125],["Memphis","Technology",1.5839999914169312],["Decatur","Furniture",2893.7109375],["Decatur","Office Supplies",943.0658569335938],["Decatur","Technology",2707.51611328125],["Durham","Furniture",335.7439880371094],["Durham","Office Supplies",528.2319946289062],["Durham","Technology",15.984000205993652],["Columbia","Furniture",9389.1484375],["Columbia","Office Supplies",12511.98828125],["Columbia","Technology",3382.18798828125],["Rochester","Furniture",2351.4560546875],["Rochester","Office Supplies",3696.593994140625],["Rochester","Technology",1926.47998046875],["Minneapolis","Furniture",3456.919921875],["Minneapolis","Office Supplies",13035.650390625],["Minneapolis","Technology",377.9700012207031],["Portland","Furniture",991.6620483398438],["Portland","Office Supplies",967.0240478515625],["Portland","Technology",2093.18310546875],["Saint Paul","Furniture",0],["Saint Paul","Office Supplies",77.87999725341797],["Saint Paul","Technology",114.94999694824219],["Aurora","Furniture",5239.98046875],["Aurora","Office Supplies",3308.08935546875],["Aurora","Technology",3108.407958984375],["Charlotte","Furniture",1794.989990234375],["Charlotte","Office Supplies",4351.98828125],["Charlotte","Technology",7546.361328125],["Orland Park","Furniture",0],["Orland Park","Office Supplies",0],["Orland Park","Technology",339.9599914550781],["Urbandale","Furniture",0],["Urbandale","Office Supplies",149.1199951171875],["Urbandale","Technology",0],["Columbus","Furniture",9730.376953125],["Columbus","Office Supplies",13733.4267578125],["Columbus","Technology",15242.4462890625],["Bristol","Furniture",240.91200256347656],["Bristol","Office Supplies",549.7999877929688],["Bristol","Technology",460.4700012207031],["Wilmington","Furniture",3135.93896484375],["Wilmington","Office Supplies",2374.74609375],["Wilmington","Technology",1786.3759765625],["Bloomington","Furniture",787.2020263671875],["Bloomington","Office Supplies",605.8720092773438],["Bloomington","Technology",174.66600036621094],["Phoenix","Furniture",3761.971435546875],["Phoenix","Office Supplies",3692.09228515625],["Phoenix","Technology",3546.194091796875],["Roseville","Furniture",89.64999389648438],["Roseville","Office Supplies",2948.98583984375],["Roseville","Technology",549.989990234375],["Independence","Furniture",0],["Independence","Office Supplies",2417.369873046875],["Independence","Technology",0],["Pasadena","Furniture",3018.15966796875],["Pasadena","Office Supplies",1627.670166015625],["Pasadena","Technology",1944.3160400390625],["Newark","Furniture",3115.07373046875],["Newark","Office Supplies",6975.35595703125],["Newark","Technology",18485.69140625],["Franklin","Furniture",7021.6806640625],["Franklin","Office Supplies",3360.376220703125],["Franklin","Technology",874.9799194335938],["Scottsdale","Furniture",293.3580017089844],["Scottsdale","Office Supplies",697.77294921875],["Scottsdale","Technology",475.1759948730469],["San Jose","Furniture",1372.549072265625],["San Jose","Office Supplies",3084.32763671875],["San Jose","Technology",1614.35205078125],["Edmond","Furniture",0],["Edmond","Office Supplies",14.619999885559082],["Edmond","Technology",944.9299926757812],["Carlsbad","Furniture",0],["Carlsbad","Office Supplies",352.29998779296875],["Carlsbad","Technology",67.04000091552734],["San Antonio","Furniture",5155.24658203125],["San Antonio","Office Supplies",4286.65625],["San Antonio","Technology",12401.625],["Monroe","Furniture",1062.4000244140625],["Monroe","Office Supplies",297.87200927734375],["Monroe","Technology",1610.1619873046875],["Fairfield","Furniture",3643.220947265625],["Fairfield","Office Supplies",4291.48095703125],["Fairfield","Technology",1549.156005859375],["Grand Prairie","Furniture",567.27001953125],["Grand Prairie","Office Supplies",159.9759979248047],["Grand Prairie","Technology",285.239990234375],["Redlands","Furniture",748.968994140625],["Redlands","Office Supplies",846.2120971679688],["Redlands","Technology",1295.8399658203125],["Hamilton","Furniture",190.84800720214844],["Hamilton","Office Supplies",137.37600708007812],["Hamilton","Technology",0],["Westfield","Furniture",161.489990234375],["Westfield","Office Supplies",103.26000213623047],["Westfield","Technology",254.97000122070312],["Akron","Furniture",433.59600830078125],["Akron","Office Supplies",1113.3878173828125],["Akron","Technology",1183.001953125],["Denver","Furniture",4088.56005859375],["Denver","Office Supplies",3633.64697265625],["Denver","Technology",4476.58642578125],["Dallas","Furniture",7306.8681640625],["Dallas","Office Supplies",6009.54931640625],["Dallas","Technology",6815.515625],["Whittier","Furniture",0],["Whittier","Office Supplies",0],["Whittier","Technology",444.76800537109375],["Saginaw","Furniture",19.760000228881836],["Saginaw","Office Supplies",244.1199951171875],["Saginaw","Technology",131.97999572753906],["Medina","Furniture",504.03802490234375],["Medina","Office Supplies",42.922000885009766],["Medina","Technology",1930.7620849609375],["Dublin","Furniture",1121.053955078125],["Dublin","Office Supplies",130.69400024414062],["Dublin","Technology",1149.4119873046875],["Detroit","Furniture",16364.0107421875],["Detroit","Office Supplies",18431.453125],["Detroit","Technology",7651.48291015625],["Tampa","Furniture",2554.986572265625],["Tampa","Office Supplies",1745.970947265625],["Tampa","Technology",895.1229858398438],["Santa Clara","Furniture",0],["Santa Clara","Office Supplies",222.19200134277344],["Santa Clara","Technology",0],["Lakeville","Furniture",2157.739990234375],["Lakeville","Office Supplies",2103.210205078125],["Lakeville","Technology",0],["San Diego","Furniture",20031.234375],["San Diego","Office Supplies",7735.5146484375],["San Diego","Technology",19754.275390625],["Brentwood","Furniture",23.8799991607666],["Brentwood","Office Supplies",3772.8759765625],["Brentwood","Technology",1293.35791015625],["Chapel Hill","Furniture",0],["Chapel Hill","Office Supplies",14.015999794006348],["Chapel Hill","Technology",0],["Morristown","Furniture",74.44999694824219],["Morristown","Office Supplies",4478.64990234375],["Morristown","Technology",480],["Cincinnati","Furniture",79.38400268554688],["Cincinnati","Office Supplies",519.60400390625],["Cincinnati","Technology",1012.9879760742188],["Inglewood","Furniture",557.6400146484375],["Inglewood","Office Supplies",1844.927978515625],["Inglewood","Technology",1076.760009765625],["Tamarac","Furniture",0],["Tamarac","Office Supplies",1413.510009765625],["Tamarac","Technology",0],["Colorado Springs","Furniture",3206.800048828125],["Colorado Springs","Office Supplies",429.1290283203125],["Colorado Springs","Technology",58.08000183105469],["Belleville","Furniture",305.55999755859375],["Belleville","Office Supplies",1346.0699462890625],["Belleville","Technology",239.97000122070312],["Taylor","Furniture",301.9599914550781],["Taylor","Office Supplies",9.84000015258789],["Taylor","Technology",41.900001525878906],["Lakewood","Furniture",4620.775390625],["Lakewood","Office Supplies",1356.092041015625],["Lakewood","Technology",12215.181640625],["Arlington","Furniture",3643.27392578125],["Arlington","Office Supplies",3773.851806640625],["Arlington","Technology",12797.40625],["Arvada","Furniture",497.135986328125],["Arvada","Office Supplies",6.263999938964844],["Arvada","Technology",0],["Hackensack","Furniture",1066.5899658203125],["Hackensack","Office Supplies",191.59999084472656],["Hackensack","Technology",197.97000122070312],["Saint Petersburg","Furniture",533.1600341796875],["Saint Petersburg","Office Supplies",798.2879638671875],["Saint Petersburg","Technology",359.343994140625],["Long Beach","Furniture",5932.6162109375],["Long Beach","Office Supplies",4726.58154296875],["Long Beach","Technology",2795.83203125],["Hesperia","Furniture",861.6614990234375],["Hesperia","Office Supplies",251.52000427246094],["Hesperia","Technology",99.98999786376953],["Murfreesboro","Furniture",200.447998046875],["Murfreesboro","Office Supplies",59.413002014160156],["Murfreesboro","Technology",77.47200012207031],["Layton","Furniture",0],["Layton","Office Supplies",4.960000038146973],["Layton","Technology",0],["Austin","Furniture",535.6840209960938],["Austin","Office Supplies",2859.300048828125],["Austin","Technology",2662.997802734375],["Lowell","Furniture",841.5400390625],["Lowell","Office Supplies",2674.6103515625],["Lowell","Technology",1321.780029296875],["Manchester","Furniture",1043.9200439453125],["Manchester","Office Supplies",824.3799438476562],["Manchester","Technology",257.9800109863281],["Harlingen","Furniture",241.33200073242188],["Harlingen","Office Supplies",230.07200622558594],["Harlingen","Technology",0],["Tucson","Furniture",2671.4501953125],["Tucson","Office Supplies",1017.115966796875],["Tucson","Technology",2624.449951171875],["Quincy","Furniture",329.9150085449219],["Quincy","Office Supplies",518.906005859375],["Quincy","Technology",427.63800048828125],["Pembroke Pines","Furniture",617.0255126953125],["Pembroke Pines","Office Supplies",193.02200317382812],["Pembroke Pines","Technology",904.3280029296875],["Des Moines","Furniture",1435.2760009765625],["Des Moines","Office Supplies",369.7279968261719],["Des Moines","Technology",3658.27392578125],["Peoria","Furniture",839.5100708007812],["Peoria","Office Supplies",546.137939453125],["Peoria","Technology",457.1839904785156],["Las Vegas","Furniture",222.92001342773438],["Las Vegas","Office Supplies",487.97198486328125],["Las Vegas","Technology",1123.1280517578125],["Warwick","Furniture",0],["Warwick","Office Supplies",174.8800048828125],["Warwick","Technology",2251.9599609375],["Miami","Furniture",1574.442626953125],["Miami","Office Supplies",3436.072021484375],["Miami","Technology",3662.560302734375],["Huntington Beach","Furniture",0],["Huntington Beach","Office Supplies",127.85999298095703],["Huntington Beach","Technology",2399.9599609375],["Richmond","Furniture",3572.310302734375],["Richmond","Office Supplies",8655.408203125],["Richmond","Technology",5910.2099609375],["Louisville","Furniture",4473.0869140625],["Louisville","Office Supplies",2669.14404296875],["Louisville","Technology",5203.57568359375],["Lawrence","Furniture",1714.89208984375],["Lawrence","Office Supplies",3067.20947265625],["Lawrence","Technology",2872.090087890625],["Canton","Furniture",28.399999618530273],["Canton","Office Supplies",789.7300415039062],["Canton","Technology",0],["New Rochelle","Furniture",692.501953125],["New Rochelle","Office Supplies",342.7859802246094],["New Rochelle","Technology",219.94000244140625],["Gastonia","Furniture",0],["Gastonia","Office Supplies",194.3560028076172],["Gastonia","Technology",700.7039794921875],["Jacksonville","Furniture",8821.3955078125],["Jacksonville","Office Supplies",6703.43701171875],["Jacksonville","Technology",29188.35546875],["Auburn","Furniture",875.2099609375],["Auburn","Office Supplies",2244.837890625],["Auburn","Technology",35.119998931884766],["Norman","Furniture",0],["Norman","Office Supplies",0],["Norman","Technology",1351.3299560546875],["Park Ridge","Furniture",254.74400329589844],["Park Ridge","Office Supplies",143.8560028076172],["Park Ridge","Technology",286.3999938964844],["Amarillo","Furniture",3048.58251953125],["Amarillo","Office Supplies",73.91999816894531],["Amarillo","Technology",650.5599975585938],["Lindenhurst","Furniture",0],["Lindenhurst","Office Supplies",55.47999954223633],["Lindenhurst","Technology",0],["Huntsville","Furniture",4104.8671875],["Huntsville","Office Supplies",1862.83203125],["Huntsville","Technology",3227.2880859375],["Fayetteville","Furniture",1352.89794921875],["Fayetteville","Office Supplies",4888.76416015625],["Fayetteville","Technology",684.2639770507812],["Costa Mesa","Furniture",725.5479736328125],["Costa Mesa","Office Supplies",273.57598876953125],["Costa Mesa","Technology",498.5459899902344],["Parker","Furniture",916.9459838867188],["Parker","Office Supplies",150.99600219726562],["Parker","Technology",0],["Atlanta","Furniture",1852.3399658203125],["Atlanta","Office Supplies",11011.939453125],["Atlanta","Technology",4333.56005859375],["Gladstone","Furniture",126.30000305175781],["Gladstone","Office Supplies",0],["Gladstone","Technology",38.040000915527344],["Great Falls","Furniture",0],["Great Falls","Office Supplies",1282.60595703125],["Great Falls","Technology",3322.973876953125],["Lakeland","Furniture",2489.54052734375],["Lakeland","Office Supplies",1825.7939453125],["Lakeland","Technology",1291.552001953125],["Montgomery","Furniture",935.97998046875],["Montgomery","Office Supplies",411.8500061035156],["Montgomery","Technology",2374.89990234375],["Mesa","Furniture",1265.97509765625],["Mesa","Office Supplies",1836.0208740234375],["Mesa","Technology",935.7439575195312],["Green Bay","Furniture",35.70000076293945],["Green Bay","Office Supplies",22.719999313354492],["Green Bay","Technology",468.8999938964844],["Anaheim","Furniture",3752.283935546875],["Anaheim","Office Supplies",3812.25],["Anaheim","Technology",422.33599853515625],["Marysville","Furniture",0],["Marysville","Office Supplies",102.18000030517578],["Marysville","Technology",0],["Salem","Furniture",1391.1500244140625],["Salem","Office Supplies",1112.534912109375],["Salem","Technology",940.5599975585938],["Laredo","Furniture",139.9199981689453],["Laredo","Office Supplies",66.9000015258789],["Laredo","Technology",817.52001953125],["Grove City","Furniture",0],["Grove City","Office Supplies",3.6480000019073486],["Grove City","Technology",119.94000244140625],["Dearborn","Furniture",362.79998779296875],["Dearborn","Office Supplies",1240.510009765625],["Dearborn","Technology",0],["Warner Robins","Furniture",392.94000244140625],["Warner Robins","Office Supplies",41.86000061035156],["Warner Robins","Technology",0],["Vallejo","Furniture",1049.199951171875],["Vallejo","Office Supplies",172.20999145507812],["Vallejo","Technology",0],["Mission Viejo","Furniture",290.6659851074219],["Mission Viejo","Office Supplies",365.32000732421875],["Mission Viejo","Technology",120],["Rochester Hills","Furniture",0],["Rochester Hills","Office Supplies",0],["Rochester Hills","Technology",132.52000427246094],["Plainfield","Furniture",0],["Plainfield","Office Supplies",4132.94970703125],["Plainfield","Technology",393.8999938964844],["Sierra Vista","Furniture",14.368000030517578],["Sierra Vista","Office Supplies",61.70399856567383],["Sierra Vista","Technology",0],["Vancouver","Furniture",24.440000534057617],["Vancouver","Office Supplies",44.02000045776367],["Vancouver","Technology",618.3759765625],["Cleveland","Furniture",911.2319946289062],["Cleveland","Office Supplies",3345.7529296875],["Cleveland","Technology",2089.199951171875],["Tyler","Furniture",82.52400207519531],["Tyler","Office Supplies",236.8660125732422],["Tyler","Technology",27.81599998474121],["Burlington","Furniture",7531.80615234375],["Burlington","Office Supplies",4152.56005859375],["Burlington","Technology",9983.7158203125],["Waynesboro","Furniture",1952.010009765625],["Waynesboro","Office Supplies",252.3000030517578],["Waynesboro","Technology",854.4600219726562],["Chester","Furniture",1074.5560302734375],["Chester","Office Supplies",775.23095703125],["Chester","Technology",118.69200134277344],["Cary","Furniture",0],["Cary","Office Supplies",243.82400512695312],["Cary","Technology",261.3840026855469],["Palm Coast","Furniture",232.7360076904297],["Palm Coast","Office Supplies",41.69200134277344],["Palm Coast","Technology",0],["Mount Vernon","Furniture",0],["Mount Vernon","Office Supplies",1511.6820068359375],["Mount Vernon","Technology",607.9500122070312],["Hialeah","Furniture",1390.135986328125],["Hialeah","Office Supplies",637.4520263671875],["Hialeah","Technology",311.36102294921875],["Oceanside","Furniture",1800.3638916015625],["Oceanside","Office Supplies",966.5340576171875],["Oceanside","Technology",1583.8399658203125],["Evanston","Furniture",258.27899169921875],["Evanston","Office Supplies",0],["Evanston","Technology",1495.52001953125],["Trenton","Furniture",211.62001037597656],["Trenton","Office Supplies",385.92498779296875],["Trenton","Technology",1167.6500244140625],["Cottage Grove","Furniture",0],["Cottage Grove","Office Supplies",24.559999465942383],["Cottage Grove","Technology",119.80000305175781],["Bossier City","Furniture",129.9199981689453],["Bossier City","Office Supplies",640.52001953125],["Bossier City","Technology",646.739990234375],["Lancaster","Furniture",928.8839721679688],["Lancaster","Office Supplies",2940.403076171875],["Lancaster","Technology",6022.17724609375],["Asheville","Furniture",0],["Asheville","Office Supplies",111.41600799560547],["Asheville","Technology",1363.9599609375],["Lake Elsinore","Furniture",283.9200134277344],["Lake Elsinore","Office Supplies",0],["Lake Elsinore","Technology",0],["Omaha","Furniture",1928.7799072265625],["Omaha","Office Supplies",1177.969970703125],["Omaha","Technology",3205.77978515625],["Edmonds","Furniture",1447.969970703125],["Edmonds","Office Supplies",414.2600402832031],["Edmonds","Technology",661.4619750976562],["Santa Ana","Furniture",649.0239868164062],["Santa Ana","Office Supplies",590.260009765625],["Santa Ana","Technology",2127.02587890625],["Milwaukee","Furniture",6649.7099609375],["Milwaukee","Office Supplies",1854.1199951171875],["Milwaukee","Technology",2906.39013671875],["Florence","Furniture",2249.77001953125],["Florence","Office Supplies",1348.050048828125],["Florence","Technology",4023.89990234375],["Lorain","Furniture",1525.27197265625],["Lorain","Office Supplies",102.91699981689453],["Lorain","Technology",386.9219970703125],["Linden","Furniture",0],["Linden","Office Supplies",0],["Linden","Technology",115.36000061035156],["Salinas","Furniture",148.2570037841797],["Salinas","Office Supplies",580.634033203125],["Salinas","Technology",0],["New Brunswick","Furniture",0],["New Brunswick","Office Supplies",14.770000457763672],["New Brunswick","Technology",0],["Garland","Furniture",8.543999671936035],["Garland","Office Supplies",59.15999984741211],["Garland","Technology",0],["Norwich","Furniture",22.200000762939453],["Norwich","Office Supplies",391.8399963378906],["Norwich","Technology",0],["Alexandria","Furniture",267.4599914550781],["Alexandria","Office Supplies",4879.7900390625],["Alexandria","Technology",372.32000732421875],["Toledo","Furniture",222.4459991455078],["Toledo","Office Supplies",1485.441162109375],["Toledo","Technology",2758.166015625],["Farmington","Furniture",545.8499755859375],["Farmington","Office Supplies",12.880000114440918],["Farmington","Technology",159.99000549316406],["Riverside","Furniture",0],["Riverside","Office Supplies",862.5780639648438],["Riverside","Technology",1081.66796875],["Torrance","Furniture",1114.27197265625],["Torrance","Office Supplies",1646.7960205078125],["Torrance","Technology",371.20001220703125],["Round Rock","Furniture",420.81280517578125],["Round Rock","Office Supplies",3959.5439453125],["Round Rock","Technology",473.6960144042969],["Boca Raton","Furniture",0],["Boca Raton","Office Supplies",44.54399871826172],["Boca Raton","Technology",18.464000701904297],["Virginia Beach","Furniture",1676.4400634765625],["Virginia Beach","Office Supplies",3314.499755859375],["Virginia Beach","Technology",761.18994140625],["Murrieta","Furniture",0],["Murrieta","Office Supplies",484.6499938964844],["Murrieta","Technology",0],["Olympia","Furniture",759.1699829101562],["Olympia","Office Supplies",59.709999084472656],["Olympia","Technology",201.5679931640625],["Washington","Furniture",1346.580078125],["Washington","Office Supplies",138.52000427246094],["Washington","Technology",1379.9200439453125],["Jefferson City","Furniture",86.62000274658203],["Jefferson City","Office Supplies",0],["Jefferson City","Technology",0],["Saint Peters","Furniture",697.1599731445312],["Saint Peters","Office Supplies",0],["Saint Peters","Technology",0],["Rockford","Furniture",880.7039794921875],["Rockford","Office Supplies",845.5560913085938],["Rockford","Technology",1439.968017578125],["Brownsville","Furniture",455.0347900390625],["Brownsville","Office Supplies",585.2479858398438],["Brownsville","Technology",251.94400024414062],["Yonkers","Furniture",851.4819946289062],["Yonkers","Office Supplies",665.9639892578125],["Yonkers","Technology",6140.22021484375],["Oakland","Furniture",3019.60595703125],["Oakland","Office Supplies",1698.1920166015625],["Oakland","Technology",1246.6199951171875],["Clinton","Furniture",1336.4610595703125],["Clinton","Office Supplies",1903.8199462890625],["Clinton","Technology",2273.969970703125],["Encinitas","Furniture",418.6090087890625],["Encinitas","Office Supplies",53.39200210571289],["Encinitas","Technology",119.9800033569336],["Roswell","Furniture",780.2000122070312],["Roswell","Office Supplies",4760.3095703125],["Roswell","Technology",1111.8099365234375],["Jonesboro","Furniture",1745.3599853515625],["Jonesboro","Office Supplies",410.04998779296875],["Jonesboro","Technology",759.9099731445312],["Antioch","Furniture",0],["Antioch","Office Supplies",19.440000534057617],["Antioch","Technology",0],["Homestead","Furniture",0],["Homestead","Office Supplies",132.552001953125],["Homestead","Technology",0],["La Porte","Furniture",582.2999877929688],["La Porte","Office Supplies",399.531982421875],["La Porte","Technology",69.9000015258789],["Lansing","Furniture",308.96002197265625],["Lansing","Office Supplies",690.39599609375],["Lansing","Technology",610.9299926757812],["Cuyahoga Falls","Furniture",8.35200023651123],["Cuyahoga Falls","Office Supplies",20.742000579833984],["Cuyahoga Falls","Technology",0],["Reno","Furniture",0],["Reno","Office Supplies",168.11801147460938],["Reno","Technology",475.9440002441406],["Harrisonburg","Furniture",4180.83984375],["Harrisonburg","Office Supplies",184.79000854492188],["Harrisonburg","Technology",23.079999923706055],["Escondido","Furniture",0],["Escondido","Office Supplies",94.5479965209961],["Escondido","Technology",0],["Royal Oak","Furniture",0],["Royal Oak","Office Supplies",35.34000015258789],["Royal Oak","Technology",0],["Rockville","Furniture",172.5],["Rockville","Office Supplies",26.81999969482422],["Rockville","Technology",270.45001220703125],["Coral Springs","Furniture",386.0320129394531],["Coral Springs","Office Supplies",438.9599914550781],["Coral Springs","Technology",0],["Buffalo","Furniture",5949.2099609375],["Buffalo","Office Supplies",3070.68603515625],["Buffalo","Technology",43.599998474121094],["Boynton Beach","Furniture",374.1519775390625],["Boynton Beach","Office Supplies",95.43299865722656],["Boynton Beach","Technology",0],["Gulfport","Furniture",86.44999694824219],["Gulfport","Office Supplies",80.04999542236328],["Gulfport","Technology",0],["Fresno","Furniture",5519.7470703125],["Fresno","Office Supplies",949.751953125],["Fresno","Technology",1419.0299072265625],["Greenville","Furniture",428.7040100097656],["Greenville","Office Supplies",54.87999725341797],["Greenville","Technology",1634.2459716796875],["Macon","Furniture",142.39999389648438],["Macon","Office Supplies",104.76000213623047],["Macon","Technology",116.8499984741211],["Cedar Rapids","Furniture",0],["Cedar Rapids","Office Supplies",0],["Cedar Rapids","Technology",278.3999938964844],["Providence","Furniture",2718.4599609375],["Providence","Office Supplies",5039.73974609375],["Providence","Technology",8222.4501953125],["Pueblo","Furniture",0],["Pueblo","Office Supplies",915.26806640625],["Pueblo","Technology",771.6700439453125],["Deltona","Furniture",186.3040008544922],["Deltona","Office Supplies",23.040000915527344],["Deltona","Technology",683.89599609375],["Murray","Furniture",191.82000732421875],["Murray","Office Supplies",147.19000244140625],["Murray","Technology",71.9280014038086],["Middletown","Furniture",209.41000366210938],["Middletown","Office Supplies",707.2000732421875],["Middletown","Technology",238],["Freeport","Furniture",435.64801025390625],["Freeport","Office Supplies",303.5019836425781],["Freeport","Technology",0],["Pico Rivera","Furniture",145.89999389648438],["Pico Rivera","Office Supplies",0],["Pico Rivera","Technology",0],["Provo","Furniture",2205.68994140625],["Provo","Office Supplies",555.5440063476562],["Provo","Technology",0],["Pleasant Grove","Furniture",0],["Pleasant Grove","Office Supplies",1738.218017578125],["Pleasant Grove","Technology",399.9599914550781],["Smyrna","Furniture",901.9559936523438],["Smyrna","Office Supplies",1683.3170166015625],["Smyrna","Technology",653.615966796875],["Parma","Furniture",3644.6201171875],["Parma","Office Supplies",235.13600158691406],["Parma","Technology",0],["Mobile","Furniture",1867.780029296875],["Mobile","Office Supplies",285.27001953125],["Mobile","Technology",3309.93994140625],["New Bedford","Furniture",0],["New Bedford","Office Supplies",83.94000244140625],["New Bedford","Technology",152.02999877929688],["Irving","Furniture",0],["Irving","Office Supplies",516.7239990234375],["Irving","Technology",88.7760009765625],["Vineland","Furniture",499.7959899902344],["Vineland","Office Supplies",60.77000045776367],["Vineland","Technology",87.4000015258789],["Glendale","Furniture",1548.719970703125],["Glendale","Office Supplies",462.12103271484375],["Glendale","Technology",907.0239868164062],["Niagara Falls","Furniture",0],["Niagara Falls","Office Supplies",34.992000579833984],["Niagara Falls","Technology",164.85000610351562],["Thomasville","Furniture",0],["Thomasville","Office Supplies",151.2919921875],["Thomasville","Technology",0],["Westminster","Furniture",554.4639892578125],["Westminster","Office Supplies",1865.22802734375],["Westminster","Technology",1406.9539794921875],["Coppell","Furniture",0],["Coppell","Office Supplies",40.09600067138672],["Coppell","Technology",95.83999633789062],["Pomona","Furniture",742.3919677734375],["Pomona","Office Supplies",440.1700134277344],["Pomona","Technology",299.94000244140625],["North Las Vegas","Furniture",2529.921875],["North Las Vegas","Office Supplies",6129.5458984375],["North Las Vegas","Technology",1141.5340576171875],["Allentown","Furniture",11.64799976348877],["Allentown","Office Supplies",819.8759765625],["Allentown","Technology",21.72800064086914],["Tempe","Furniture",307.9200134277344],["Tempe","Office Supplies",144.093994140625],["Tempe","Technology",618.2879638671875],["Laguna Niguel","Furniture",203.98300170898438],["Laguna Niguel","Office Supplies",47.040000915527344],["Laguna Niguel","Technology",39.959999084472656],["Bridgeton","Furniture",0],["Bridgeton","Office Supplies",52.40999984741211],["Bridgeton","Technology",0],["Everett","Furniture",3610.718017578125],["Everett","Office Supplies",988.14599609375],["Everett","Technology",1066.8699951171875],["Watertown","Furniture",2298.407958984375],["Watertown","Office Supplies",1746.5899658203125],["Watertown","Technology",0],["Appleton","Furniture",0],["Appleton","Office Supplies",21.559999465942383],["Appleton","Technology",1649.75],["Bellevue","Furniture",20.239999771118164],["Bellevue","Office Supplies",83.38200378417969],["Bellevue","Technology",0],["Allen","Furniture",244.00599670410156],["Allen","Office Supplies",24.720001220703125],["Allen","Technology",21.479999542236328],["El Paso","Furniture",2150.028076171875],["El Paso","Office Supplies",683.4119873046875],["El Paso","Technology",712.6240234375],["Grapevine","Furniture",0],["Grapevine","Office Supplies",41.52799987792969],["Grapevine","Technology",0],["Carrollton","Furniture",41.119998931884766],["Carrollton","Office Supplies",487.7259826660156],["Carrollton","Technology",1671.800048828125],["Kent","Furniture",198.4600067138672],["Kent","Office Supplies",1153.5618896484375],["Kent","Technology",345.53399658203125],["Lafayette","Furniture",3278.43994140625],["Lafayette","Office Supplies",3648.69970703125],["Lafayette","Technology",18109.060546875],["Tigard","Furniture",13.592000007629395],["Tigard","Office Supplies",749.7019653320312],["Tigard","Technology",630.4879760742188],["Skokie","Furniture",355.6319885253906],["Skokie","Office Supplies",173.9359893798828],["Skokie","Technology",39.263999938964844],["Plano","Furniture",2058.89453125],["Plano","Office Supplies",573.52001953125],["Plano","Technology",897.9600219726562],["Suffolk","Furniture",982.739990234375],["Suffolk","Office Supplies",615.1600341796875],["Suffolk","Technology",0],["Indianapolis","Furniture",1925.8800048828125],["Indianapolis","Office Supplies",6176.919921875],["Indianapolis","Technology",1203.6199951171875],["Bayonne","Furniture",0],["Bayonne","Office Supplies",14.460000038146973],["Bayonne","Technology",168.94000244140625],["Greensboro","Furniture",826.300048828125],["Greensboro","Office Supplies",193.3280029296875],["Greensboro","Technology",1387.1519775390625],["Baltimore","Furniture",4015.83203125],["Baltimore","Office Supplies",1637.969970703125],["Baltimore","Technology",503.0400085449219],["Kenosha","Furniture",1746.949951171875],["Kenosha","Office Supplies",14.979999542236328],["Kenosha","Technology",2144.800048828125],["Olathe","Furniture",40.560001373291016],["Olathe","Office Supplies",797.8300170898438],["Olathe","Technology",57.400001525878906],["Tulsa","Furniture",4123.57958984375],["Tulsa","Office Supplies",799.3699951171875],["Tulsa","Technology",634.02001953125],["Redmond","Furniture",211.8489990234375],["Redmond","Office Supplies",288.1059875488281],["Redmond","Technology",598.302001953125],["Raleigh","Furniture",419.4639892578125],["Raleigh","Office Supplies",1178.9720458984375],["Raleigh","Technology",2909.10400390625],["Muskogee","Furniture",262.1099853515625],["Muskogee","Office Supplies",19.670000076293945],["Muskogee","Technology",1439.9200439453125],["Meriden","Furniture",1133.3499755859375],["Meriden","Office Supplies",417.3299865722656],["Meriden","Technology",0],["Bowling Green","Furniture",140.80999755859375],["Bowling Green","Office Supplies",798.6409912109375],["Bowling Green","Technology",1137.9239501953125],["South Bend","Furniture",0],["South Bend","Office Supplies",407.1300048828125],["South Bend","Technology",831.2000122070312],["Spokane","Furniture",640.5479736328125],["Spokane","Office Supplies",309.8299865722656],["Spokane","Technology",1077.5399169921875],["Keller","Furniture",0],["Keller","Office Supplies",6],["Keller","Technology",0],["Port Orange","Furniture",0],["Port Orange","Office Supplies",7.823999881744385],["Port Orange","Technology",0],["Medford","Furniture",0],["Medford","Office Supplies",90.21800231933594],["Medford","Technology",0],["Charlottesville","Furniture",67.95999908447266],["Charlottesville","Office Supplies",34.650001525878906],["Charlottesville","Technology",0],["Missoula","Furniture",0],["Missoula","Office Supplies",487.9840087890625],["Missoula","Technology",0],["Apopka","Furniture",129.88800048828125],["Apopka","Office Supplies",774.6659545898438],["Apopka","Technology",0],["Reading","Furniture",849.8479614257812],["Reading","Office Supplies",23.86400032043457],["Reading","Technology",0],["Broomfield","Furniture",731.31201171875],["Broomfield","Office Supplies",62.19200134277344],["Broomfield","Technology",0],["Paterson","Furniture",637.3099975585938],["Paterson","Office Supplies",1323.9300537109375],["Paterson","Technology",281.9700012207031],["Oklahoma City","Furniture",2056.580078125],["Oklahoma City","Office Supplies",3363.930419921875],["Oklahoma City","Technology",1176.31005859375],["Chesapeake","Furniture",4553.97998046875],["Chesapeake","Office Supplies",662.2000122070312],["Chesapeake","Technology",780.5399780273438],["Lubbock","Furniture",25.15999984741211],["Lubbock","Office Supplies",87.4280014038086],["Lubbock","Technology",479.97601318359375],["Johnson City","Furniture",0],["Johnson City","Office Supplies",545.0799560546875],["Johnson City","Technology",220.7679901123047],["San Bernardino","Furniture",683.3319702148438],["San Bernardino","Office Supplies",295.968017578125],["San Bernardino","Technology",0],["Leominster","Furniture",0],["Leominster","Office Supplies",217.489990234375],["Leominster","Technology",0],["Bozeman","Furniture",0],["Bozeman","Office Supplies",43.65999984741211],["Bozeman","Technology",0],["Perth Amboy","Furniture",120.9800033569336],["Perth Amboy","Office Supplies",999.0999755859375],["Perth Amboy","Technology",597],["Ontario","Furniture",283.9200134277344],["Ontario","Office Supplies",0],["Ontario","Technology",0],["Rancho Cucamonga","Furniture",0],["Rancho Cucamonga","Office Supplies",231.8520050048828],["Rancho Cucamonga","Technology",0],["Moorhead","Furniture",479.8999938964844],["Moorhead","Office Supplies",0],["Moorhead","Technology",63.959999084472656],["Mesquite","Furniture",6.368000030517578],["Mesquite","Office Supplies",40.236000061035156],["Mesquite","Technology",5.544000148773193],["Stockton","Furniture",629.6400146484375],["Stockton","Office Supplies",502.1200256347656],["Stockton","Technology",95.83999633789062],["Ormond Beach","Furniture",0],["Ormond Beach","Office Supplies",2.808000087738037],["Ormond Beach","Technology",0],["Sunnyvale","Furniture",215.9759979248047],["Sunnyvale","Office Supplies",80.33399963378906],["Sunnyvale","Technology",339.8999938964844],["York","Furniture",422.0580139160156],["York","Office Supplies",395.9200134277344],["York","Technology",0],["College Station","Furniture",233.05799865722656],["College Station","Office Supplies",57.98400115966797],["College Station","Technology",0],["Saint Louis","Furniture",0],["Saint Louis","Office Supplies",174.1699981689453],["Saint Louis","Technology",111.79000091552734],["Manteca","Furniture",122.35199737548828],["Manteca","Office Supplies",329.8299865722656],["Manteca","Technology",0],["San Angelo","Furniture",638.9879760742188],["San Angelo","Office Supplies",11.64799976348877],["San Angelo","Technology",0],["Salt Lake City","Furniture",0],["Salt Lake City","Office Supplies",802.7760009765625],["Salt Lake City","Technology",0],["Knoxville","Furniture",3338.530029296875],["Knoxville","Office Supplies",500.0680236816406],["Knoxville","Technology",89.56800079345703],["Little Rock","Furniture",22.200000762939453],["Little Rock","Office Supplies",1291.1298828125],["Little Rock","Technology",2247.02001953125],["Lincoln Park","Furniture",194.32000732421875],["Lincoln Park","Office Supplies",193.28201293945312],["Lincoln Park","Technology",0],["Marion","Furniture",1842.652099609375],["Marion","Office Supplies",596.0419311523438],["Marion","Technology",930.6519775390625],["Littleton","Furniture",72.29399871826172],["Littleton","Office Supplies",0],["Littleton","Technology",0],["Bangor","Furniture",109.4800033569336],["Bangor","Office Supplies",361.70001220703125],["Bangor","Technology",693.27001953125],["Southaven","Furniture",85.9800033569336],["Southaven","Office Supplies",845.47998046875],["Southaven","Technology",523.9299926757812],["New Castle","Furniture",0],["New Castle","Office Supplies",60.689998626708984],["New Castle","Technology",23.920000076293945],["Midland","Furniture",563.9400024414062],["Midland","Office Supplies",4727.57177734375],["Midland","Technology",0],["Sioux Falls","Furniture",182.94000244140625],["Sioux Falls","Office Supplies",561.5399780273438],["Sioux Falls","Technology",392.94000244140625],["Fort Collins","Furniture",858.052001953125],["Fort Collins","Office Supplies",29.215999603271484],["Fort Collins","Technology",47.98400115966797],["Clarksville","Furniture",465.0879821777344],["Clarksville","Office Supplies",1707.2340087890625],["Clarksville","Technology",45.40800094604492],["Sacramento","Furniture",1595.4520263671875],["Sacramento","Office Supplies",5171.51806640625],["Sacramento","Technology",544.3079833984375],["Thousand Oaks","Furniture",22.719999313354492],["Thousand Oaks","Office Supplies",200.09999084472656],["Thousand Oaks","Technology",15.984000205993652],["Malden","Furniture",173.94000244140625],["Malden","Office Supplies",54.439998626708984],["Malden","Technology",0],["Holyoke","Furniture",301.9599914550781],["Holyoke","Office Supplies",0],["Holyoke","Technology",0],["Albuquerque","Furniture",0],["Albuquerque","Office Supplies",943.1220092773438],["Albuquerque","Technology",1277.0380859375],["Sparks","Furniture",0],["Sparks","Office Supplies",165.55999755859375],["Sparks","Technology",2396.39990234375],["Coachella","Furniture",0],["Coachella","Office Supplies",63.560001373291016],["Coachella","Technology",99.98999786376953],["Elmhurst","Furniture",634.1160278320312],["Elmhurst","Office Supplies",257.5119934082031],["Elmhurst","Technology",0],["Passaic","Furniture",174.28599548339844],["Passaic","Office Supplies",689.7200317382812],["Passaic","Technology",698.0800170898438],["North Charleston","Furniture",14.760000228881836],["North Charleston","Office Supplies",269.489990234375],["North Charleston","Technology",0],["Newport News","Furniture",591.3200073242188],["Newport News","Office Supplies",1130.7099609375],["Newport News","Technology",1599.9200439453125],["Jamestown","Furniture",0],["Jamestown","Office Supplies",0],["Jamestown","Technology",4708.7900390625],["Mishawaka","Furniture",647.8400268554688],["Mishawaka","Office Supplies",128.39999389648438],["Mishawaka","Technology",0],["La Quinta","Furniture",0],["La Quinta","Office Supplies",0],["La Quinta","Technology",46.31999969482422],["Tallahassee","Furniture",393.0559997558594],["Tallahassee","Office Supplies",479.0169677734375],["Tallahassee","Technology",6378.59619140625],["Nashville","Furniture",294.31201171875],["Nashville","Office Supplies",2612.470947265625],["Nashville","Technology",3164.080078125],["Bellingham","Furniture",2665.6201171875],["Bellingham","Office Supplies",25.1200008392334],["Bellingham","Technology",1099.5],["Woodstock","Furniture",845.4879760742188],["Woodstock","Office Supplies",25.802000045776367],["Woodstock","Technology",272.6099853515625],["Haltom City","Furniture",0],["Haltom City","Office Supplies",61.343997955322266],["Haltom City","Technology",207.98399353027344],["Wheeling","Furniture",1288.9500732421875],["Wheeling","Office Supplies",658.0159912109375],["Wheeling","Technology",0],["Summerville","Furniture",0],["Summerville","Office Supplies",327.8399963378906],["Summerville","Technology",79.0999984741211],["Hot Springs","Furniture",159.9199981689453],["Hot Springs","Office Supplies",55.91999816894531],["Hot Springs","Technology",29.989999771118164],["Englewood","Furniture",0],["Englewood","Office Supplies",15.479999542236328],["Englewood","Technology",108.57599639892578],["Las Cruces","Furniture",41.369998931884766],["Las Cruces","Office Supplies",57.39999771118164],["Las Cruces","Technology",0],["Hoover","Furniture",0],["Hoover","Office Supplies",499.8699951171875],["Hoover","Technology",25.979999542236328],["Frisco","Furniture",30.336000442504883],["Frisco","Office Supplies",0],["Frisco","Technology",27.167999267578125],["Vacaville","Furniture",0],["Vacaville","Office Supplies",423.2799987792969],["Vacaville","Technology",0],["Waukesha","Furniture",0],["Waukesha","Office Supplies",54.5],["Waukesha","Technology",0],["Bakersfield","Furniture",847.9679565429688],["Bakersfield","Office Supplies",327.7380065917969],["Bakersfield","Technology",201.58399963378906],["Pompano Beach","Furniture",23.68000030517578],["Pompano Beach","Office Supplies",64.38400268554688],["Pompano Beach","Technology",2.375999927520752],["Corpus Christi","Furniture",108.27999877929688],["Corpus Christi","Office Supplies",112.26399993896484],["Corpus Christi","Technology",0],["Redondo Beach","Furniture",308.4989929199219],["Redondo Beach","Office Supplies",137.84799194335938],["Redondo Beach","Technology",1513.4560546875],["Orlando","Furniture",289.5679931640625],["Orlando","Office Supplies",158.5919952392578],["Orlando","Technology",1291.9200439453125],["Orange","Furniture",0],["Orange","Office Supplies",211.1099853515625],["Orange","Technology",0],["Lake Charles","Furniture",51.959999084472656],["Lake Charles","Office Supplies",495.45001220703125],["Lake Charles","Technology",0],["Highland Park","Furniture",1838.031982421875],["Highland Park","Office Supplies",43.480003356933594],["Highland Park","Technology",153.58399963378906],["Hempstead","Furniture",754.614013671875],["Hempstead","Office Supplies",1315.028076171875],["Hempstead","Technology",519.9439697265625],["Noblesville","Furniture",2678.93994140625],["Noblesville","Office Supplies",12.5600004196167],["Noblesville","Technology",399.67999267578125],["Apple Valley","Furniture",1758.0850830078125],["Apple Valley","Office Supplies",251.75999450683594],["Apple Valley","Technology",43.17599868774414],["Mount Pleasant","Furniture",563.0800170898438],["Mount Pleasant","Office Supplies",0],["Mount Pleasant","Technology",0],["Sterling Heights","Furniture",0],["Sterling Heights","Office Supplies",110.04000091552734],["Sterling Heights","Technology",0],["Eau Claire","Furniture",1085.8699951171875],["Eau Claire","Office Supplies",319.8800048828125],["Eau Claire","Technology",239.89999389648438],["Pharr","Furniture",147.01199340820312],["Pharr","Office Supplies",727.2960205078125],["Pharr","Technology",666.4000244140625],["Billings","Furniture",0],["Billings","Office Supplies",8.288000106811523],["Billings","Technology",0],["Gresham","Furniture",1682.176025390625],["Gresham","Office Supplies",48.07999801635742],["Gresham","Technology",403.1679992675781],["Chattanooga","Furniture",640.83203125],["Chattanooga","Office Supplies",16.59200096130371],["Chattanooga","Technology",331.3789978027344],["Meridian","Furniture",41.959999084472656],["Meridian","Office Supplies",287.0920104980469],["Meridian","Technology",0],["Bolingbrook","Furniture",0],["Bolingbrook","Office Supplies",69.8280029296875],["Bolingbrook","Technology",148.47999572753906],["Maple Grove","Furniture",0],["Maple Grove","Office Supplies",882.8699951171875],["Maple Grove","Technology",0],["Woodland","Furniture",0],["Woodland","Office Supplies",24.67799949645996],["Woodland","Technology",239.98399353027344],["Missouri City","Furniture",0],["Missouri City","Office Supplies",6.369999885559082],["Missouri City","Technology",0],["Pearland","Furniture",0],["Pearland","Office Supplies",24.6200008392334],["Pearland","Technology",470.3760070800781],["San Mateo","Furniture",0],["San Mateo","Office Supplies",75.18000030517578],["San Mateo","Technology",0],["Grand Rapids","Furniture",0],["Grand Rapids","Office Supplies",428.1499938964844],["Grand Rapids","Technology",97.9800033569336],["Visalia","Furniture",0],["Visalia","Office Supplies",310.8599853515625],["Visalia","Technology",7.920000076293945],["Overland Park","Furniture",0],["Overland Park","Office Supplies",571.9600219726562],["Overland Park","Technology",34.95000076293945],["Temecula","Furniture",0],["Temecula","Office Supplies",29.200000762939453],["Temecula","Technology",779.4660034179688],["Yucaipa","Furniture",0],["Yucaipa","Office Supplies",50.79999923706055],["Yucaipa","Technology",0],["Revere","Furniture",361.9599914550781],["Revere","Office Supplies",471.29998779296875],["Revere","Technology",0],["Conroe","Furniture",0],["Conroe","Office Supplies",111.6719970703125],["Conroe","Technology",0],["Tinley Park","Furniture",22.288000106811523],["Tinley Park","Office Supplies",0],["Tinley Park","Technology",0],["Dubuque","Furniture",1408.0999755859375],["Dubuque","Office Supplies",15.239999771118164],["Dubuque","Technology",263.9599914550781],["Dearborn Heights","Furniture",180.97999572753906],["Dearborn Heights","Office Supplies",770.6099853515625],["Dearborn Heights","Technology",99.9800033569336],["Santa Fe","Furniture",0],["Santa Fe","Office Supplies",8.399999618530273],["Santa Fe","Technology",92.5199966430664],["Hickory","Furniture",0],["Hickory","Office Supplies",4.572000026702881],["Hickory","Technology",36.19200134277344],["Carol Stream","Furniture",790.5380249023438],["Carol Stream","Office Supplies",515.2720336914062],["Carol Stream","Technology",0],["Saint Cloud","Furniture",603.9199829101562],["Saint Cloud","Office Supplies",0],["Saint Cloud","Technology",727.9000244140625],["North Miami","Furniture",0],["North Miami","Office Supplies",22.128000259399414],["North Miami","Technology",0],["Plantation","Furniture",707.343994140625],["Plantation","Office Supplies",180.75599670410156],["Plantation","Technology",548.7360229492188],["Port Saint Lucie","Furniture",231.9199981689453],["Port Saint Lucie","Office Supplies",17.030000686645508],["Port Saint Lucie","Technology",0],["Rock Hill","Furniture",0],["Rock Hill","Office Supplies",11.850000381469727],["Rock Hill","Technology",0],["Odessa","Furniture",903.5460205078125],["Odessa","Office Supplies",72.5780029296875],["Odessa","Technology",0],["West Allis","Furniture",241.9600067138672],["West Allis","Office Supplies",8.520000457763672],["West Allis","Technology",0],["Chula Vista","Furniture",665.8800048828125],["Chula Vista","Office Supplies",375.739990234375],["Chula Vista","Technology",0],["Manhattan","Furniture",0],["Manhattan","Office Supplies",0],["Manhattan","Technology",273.9599914550781],["Altoona","Furniture",0],["Altoona","Office Supplies",20.451000213623047],["Altoona","Technology",0],["Thornton","Furniture",56.288002014160156],["Thornton","Office Supplies",81.9280014038086],["Thornton","Technology",627.031982421875],["Champaign","Furniture",151.9600067138672],["Champaign","Office Supplies",0],["Champaign","Technology",0],["Texarkana","Furniture",605.3400268554688],["Texarkana","Office Supplies",0],["Texarkana","Technology",48.900001525878906],["Edinburg","Furniture",0],["Edinburg","Office Supplies",88.2760009765625],["Edinburg","Technology",0],["Baytown","Furniture",0],["Baytown","Office Supplies",10.368000030517578],["Baytown","Technology",0],["Greenwood","Furniture",1424.9000244140625],["Greenwood","Office Supplies",240.15000915527344],["Greenwood","Technology",0],["Woonsocket","Furniture",52.959999084472656],["Woonsocket","Office Supplies",142.58999633789062],["Woonsocket","Technology",0],["Superior","Furniture",47.400001525878906],["Superior","Office Supplies",1126.3399658203125],["Superior","Technology",125.98999786376953],["Bedford","Furniture",0],["Bedford","Office Supplies",72.6719970703125],["Bedford","Technology",153.58399963378906],["Covington","Furniture",46.900001525878906],["Covington","Office Supplies",266.7799987792969],["Covington","Technology",100],["Broken Arrow","Furniture",1592.8499755859375],["Broken Arrow","Office Supplies",24.739999771118164],["Broken Arrow","Technology",821.9400024414062],["Miramar","Furniture",978.3359985351562],["Miramar","Office Supplies",552.8560180664062],["Miramar","Technology",0],["Hollywood","Furniture",337.0880126953125],["Hollywood","Office Supplies",349.4259948730469],["Hollywood","Technology",383.9599914550781],["Deer Park","Furniture",0],["Deer Park","Office Supplies",6.923999786376953],["Deer Park","Technology",0],["Wichita","Furniture",70.55999755859375],["Wichita","Office Supplies",529.9600219726562],["Wichita","Technology",224.75],["Mcallen","Furniture",56.68600082397461],["Mcallen","Office Supplies",398.1740417480469],["Mcallen","Technology",411.8559875488281],["Iowa City","Furniture",0],["Iowa City","Office Supplies",9.989999771118164],["Iowa City","Technology",0],["Boise","Furniture",696.4199829101562],["Boise","Office Supplies",3.303999900817871],["Boise","Technology",394.7460021972656],["Cranston","Furniture",3147.3359375],["Cranston","Office Supplies",877.5799560546875],["Cranston","Technology",0],["Port Arthur","Furniture",246.13279724121094],["Port Arthur","Office Supplies",50.92799758911133],["Port Arthur","Technology",439.99200439453125],["Citrus Heights","Furniture",129.38999938964844],["Citrus Heights","Office Supplies",0],["Citrus Heights","Technology",0],["The Colony","Furniture",0],["The Colony","Office Supplies",74.98400115966797],["The Colony","Technology",67.1760025024414],["Daytona Beach","Furniture",191.5155029296875],["Daytona Beach","Office Supplies",29.93600082397461],["Daytona Beach","Technology",50.880001068115234],["Bullhead City","Furniture",14.368000030517578],["Bullhead City","Office Supplies",7.920000076293945],["Bullhead City","Technology",0],["Portage","Furniture",0],["Portage","Office Supplies",16.280000686645508],["Portage","Technology",0],["Fargo","Furniture",0],["Fargo","Office Supplies",919.9099731445312],["Fargo","Technology",0],["Elkhart","Furniture",0],["Elkhart","Office Supplies",11.680000305175781],["Elkhart","Technology",159.75],["San Gabriel","Furniture",1790.2900390625],["San Gabriel","Office Supplies",270.7200012207031],["San Gabriel","Technology",0],["Margate","Furniture",0],["Margate","Office Supplies",15.552000045776367],["Margate","Technology",0],["Sandy Springs","Furniture",1569.800048828125],["Sandy Springs","Office Supplies",240.64999389648438],["Sandy Springs","Technology",186.5800018310547],["Mentor","Furniture",429.15399169921875],["Mentor","Office Supplies",24],["Mentor","Technology",239.9759979248047],["Lawton","Furniture",248.97999572753906],["Lawton","Office Supplies",808.510009765625],["Lawton","Technology",0],["Hampton","Furniture",1127.6600341796875],["Hampton","Office Supplies",1368.4000244140625],["Hampton","Technology",226.1999969482422],["Rome","Furniture",129.96200561523438],["Rome","Office Supplies",134.91000366210938],["Rome","Technology",269.9800109863281],["La Crosse","Furniture",270.6000061035156],["La Crosse","Office Supplies",59.86000061035156],["La Crosse","Technology",499.95001220703125],["Lewiston","Furniture",0],["Lewiston","Office Supplies",47.683998107910156],["Lewiston","Technology",67.9800033569336],["Hattiesburg","Furniture",690.47998046875],["Hattiesburg","Office Supplies",740.6599731445312],["Hattiesburg","Technology",291.70001220703125],["Danville","Furniture",25.020000457763672],["Danville","Office Supplies",1177.2340087890625],["Danville","Technology",0],["Logan","Furniture",0],["Logan","Office Supplies",197.4759979248047],["Logan","Technology",82.80000305175781],["Waterbury","Furniture",173.24000549316406],["Waterbury","Office Supplies",425.8799743652344],["Waterbury","Technology",726.9400024414062],["Athens","Furniture",186.5399932861328],["Athens","Office Supplies",198.25],["Athens","Technology",1336.02001953125],["Avondale","Furniture",0],["Avondale","Office Supplies",79.03199768066406],["Avondale","Technology",867.7760009765625],["Marietta","Furniture",182.6699981689453],["Marietta","Office Supplies",2453.280029296875],["Marietta","Technology",302.66998291015625],["Yuma","Furniture",0],["Yuma","Office Supplies",55.35199737548828],["Yuma","Technology",785.5130004882812],["Wausau","Furniture",0],["Wausau","Office Supplies",317.4800109863281],["Wausau","Technology",0],["Pasco","Furniture",975.9199829101562],["Pasco","Office Supplies",1225.1920166015625],["Pasco","Technology",0],["Oak Park","Furniture",580.8599853515625],["Oak Park","Office Supplies",10.192000389099121],["Oak Park","Technology",0],["Pensacola","Furniture",0],["Pensacola","Office Supplies",2.2139999866485596],["Pensacola","Technology",0],["League City","Furniture",766.416015625],["League City","Office Supplies",108.95199584960938],["League City","Technology",0],["Gaithersburg","Furniture",173.94000244140625],["Gaithersburg","Office Supplies",0],["Gaithersburg","Technology",231.97999572753906],["Lehi","Furniture",0],["Lehi","Office Supplies",0],["Lehi","Technology",1516.7259521484375],["Tuscaloosa","Furniture",141.9600067138672],["Tuscaloosa","Office Supplies",33.7400016784668],["Tuscaloosa","Technology",0],["Moreno Valley","Furniture",884.6799926757812],["Moreno Valley","Office Supplies",377.7860107421875],["Moreno Valley","Technology",0],["Georgetown","Furniture",42.599998474121094],["Georgetown","Office Supplies",1043.8399658203125],["Georgetown","Technology",699.97998046875],["Loveland","Furniture",0],["Loveland","Office Supplies",20.964000701904297],["Loveland","Technology",0],["Chandler","Furniture",924.8349609375],["Chandler","Office Supplies",151.9119873046875],["Chandler","Technology",0],["Helena","Furniture",63.97999954223633],["Helena","Office Supplies",39.900001525878906],["Helena","Technology",339.9599914550781],["Kirkwood","Furniture",212.94000244140625],["Kirkwood","Office Supplies",28.399999618530273],["Kirkwood","Technology",0],["Waco","Furniture",328.3992004394531],["Waco","Office Supplies",277.7080078125],["Waco","Technology",0],["Frankfort","Furniture",0],["Frankfort","Office Supplies",97.63199615478516],["Frankfort","Technology",0],["Bethlehem","Furniture",310.3900146484375],["Bethlehem","Office Supplies",1379.2440185546875],["Bethlehem","Technology",0],["Grand Island","Furniture",0],["Grand Island","Office Supplies",15.960000038146973],["Grand Island","Technology",0],["Woodbury","Furniture",0],["Woodbury","Office Supplies",607.6500244140625],["Woodbury","Technology",0],["Rogers","Furniture",0],["Rogers","Office Supplies",40.40999984741211],["Rogers","Technology",0],["Clovis","Furniture",0],["Clovis","Office Supplies",10.079999923706055],["Clovis","Technology",101.33999633789062],["Jupiter","Furniture",0],["Jupiter","Office Supplies",2.063999891281128],["Jupiter","Technology",0],["Santa Barbara","Furniture",362.135986328125],["Santa Barbara","Office Supplies",398.6099853515625],["Santa Barbara","Technology",3528.488037109375],["Cedar Hill","Furniture",0],["Cedar Hill","Office Supplies",122.3759994506836],["Cedar Hill","Technology",0],["Norfolk","Furniture",0],["Norfolk","Office Supplies",17.43000030517578],["Norfolk","Technology",0],["Draper","Furniture",25.15999984741211],["Draper","Office Supplies",0],["Draper","Technology",238.489990234375],["Ann Arbor","Furniture",0],["Ann Arbor","Office Supplies",240.1630096435547],["Ann Arbor","Technology",649.1099853515625],["La Mesa","Furniture",0],["La Mesa","Office Supplies",82.55999755859375],["La Mesa","Technology",284.9700012207031],["Pocatello","Furniture",390.3599853515625],["Pocatello","Office Supplies",511.83001708984375],["Pocatello","Technology",442.75201416015625],["Holland","Furniture",0],["Holland","Office Supplies",137.86000061035156],["Holland","Technology",0],["Milford","Furniture",663.97998046875],["Milford","Office Supplies",98.01000213623047],["Milford","Technology",199.75],["Buffalo Grove","Furniture",355.4549865722656],["Buffalo Grove","Office Supplies",0],["Buffalo Grove","Technology",475.9440002441406],["Lake Forest","Furniture",970.0559692382812],["Lake Forest","Office Supplies",655.47998046875],["Lake Forest","Technology",0],["Redding","Furniture",0],["Redding","Office Supplies",0],["Redding","Technology",333.57598876953125],["Chico","Furniture",1957.3160400390625],["Chico","Office Supplies",84.87000274658203],["Chico","Technology",7.992000102996826],["Utica","Furniture",40.47999954223633],["Utica","Office Supplies",134.6699981689453],["Utica","Technology",479.8899841308594],["Conway","Furniture",301.9599914550781],["Conway","Office Supplies",0],["Conway","Technology",0],["Cheyenne","Furniture",1603.135986328125],["Cheyenne","Office Supplies",0],["Cheyenne","Technology",0],["Owensboro","Furniture",0],["Owensboro","Office Supplies",71.18000030517578],["Owensboro","Technology",0],["Caldwell","Furniture",338.35198974609375],["Caldwell","Office Supplies",117.27999877929688],["Caldwell","Technology",0],["Kenner","Furniture",0],["Kenner","Office Supplies",17.34000015258789],["Kenner","Technology",71.9800033569336],["Nashua","Furniture",21.1200008392334],["Nashua","Office Supplies",14.819999694824219],["Nashua","Technology",0],["Bartlett","Furniture",0],["Bartlett","Office Supplies",88.95999908447266],["Bartlett","Technology",0],["Redwood City","Furniture",0],["Redwood City","Office Supplies",41.90399932861328],["Redwood City","Technology",0],["Lebanon","Furniture",0],["Lebanon","Office Supplies",248.92001342773438],["Lebanon","Technology",239.9759979248047],["Santa Maria","Furniture",0],["Santa Maria","Office Supplies",115.44000244140625],["Santa Maria","Technology",0],["Des Plaines","Furniture",724.760009765625],["Des Plaines","Office Supplies",384.61199951171875],["Des Plaines","Technology",383.8399963378906],["Longview","Furniture",24.850000381469727],["Longview","Office Supplies",94.36000061035156],["Longview","Technology",0],["Hendersonville","Furniture",72.7040023803711],["Hendersonville","Office Supplies",246.83399963378906],["Hendersonville","Technology",0],["Waterloo","Furniture",0],["Waterloo","Office Supplies",30.31999969482422],["Waterloo","Technology",0],["Cambridge","Furniture",26.719999313354492],["Cambridge","Office Supplies",99.51000213623047],["Cambridge","Technology",375.8600158691406],["Palatine","Furniture",0],["Palatine","Office Supplies",0],["Palatine","Technology",116.31199645996094],["Beverly","Furniture",0],["Beverly","Office Supplies",2583.190185546875],["Beverly","Technology",0],["Eugene","Furniture",755.135986328125],["Eugene","Office Supplies",709.8960571289062],["Eugene","Technology",0],["Oxnard","Furniture",159.91000366210938],["Oxnard","Office Supplies",1315.239990234375],["Oxnard","Technology",82.94999694824219],["Renton","Furniture",0],["Renton","Office Supplies",202.63999938964844],["Renton","Technology",1039.991943359375],["Glenview","Furniture",0],["Glenview","Office Supplies",0],["Glenview","Technology",158.37600708007812],["Delray Beach","Furniture",0],["Delray Beach","Office Supplies",194.61599731445312],["Delray Beach","Technology",47.91999816894531],["Commerce City","Furniture",0],["Commerce City","Office Supplies",146.3520050048828],["Commerce City","Technology",0],["Texas City","Furniture",790.9719848632812],["Texas City","Office Supplies",0],["Texas City","Technology",0],["Wilson","Furniture",163.13600158691406],["Wilson","Office Supplies",205.5959930419922],["Wilson","Technology",0],["Rio Rancho","Furniture",1114.1920166015625],["Rio Rancho","Office Supplies",0],["Rio Rancho","Technology",0],["Goldsboro","Furniture",0],["Goldsboro","Office Supplies",34.944000244140625],["Goldsboro","Technology",0],["Montebello","Furniture",0],["Montebello","Office Supplies",0],["Montebello","Technology",27.8799991607666],["El Cajon","Furniture",865.6160278320312],["El Cajon","Office Supplies",0],["El Cajon","Technology",0],["Beaumont","Furniture",8.62399959564209],["Beaumont","Office Supplies",23.54800033569336],["Beaumont","Technology",439.9440002441406],["West Palm Beach","Furniture",0],["West Palm Beach","Office Supplies",85.34400177001953],["West Palm Beach","Technology",55.98400115966797],["Abilene","Furniture",0],["Abilene","Office Supplies",1.3919999599456787],["Abilene","Technology",0],["Normal","Furniture",366.7439880371094],["Normal","Office Supplies",0],["Normal","Technology",0],["Saint Charles","Furniture",226.135986328125],["Saint Charles","Office Supplies",82.02399444580078],["Saint Charles","Technology",1351.489990234375],["Camarillo","Furniture",1452.7874755859375],["Camarillo","Office Supplies",14.729999542236328],["Camarillo","Technology",0],["Hillsboro","Furniture",11.031999588012695],["Hillsboro","Office Supplies",23.766000747680664],["Hillsboro","Technology",53.040000915527344],["Burbank","Furniture",111],["Burbank","Office Supplies",1856.18994140625],["Burbank","Technology",1279.968017578125],["Modesto","Furniture",161.5679931640625],["Modesto","Office Supplies",0],["Modesto","Technology",164.58200073242188],["Garden City","Furniture",0],["Garden City","Office Supplies",54.400001525878906],["Garden City","Technology",257.9800109863281],["Atlantic City","Furniture",0],["Atlantic City","Office Supplies",23.360000610351562],["Atlantic City","Technology",0],["Longmont","Furniture",749.4879760742188],["Longmont","Office Supplies",0],["Longmont","Technology",165.60000610351562],["Davis","Furniture",0],["Davis","Office Supplies",32.400001525878906],["Davis","Technology",0],["Morgan Hill","Furniture",474.3699951171875],["Morgan Hill","Office Supplies",70.63999938964844],["Morgan Hill","Technology",0],["Clifton","Furniture",254.89999389648438],["Clifton","Office Supplies",81.91999816894531],["Clifton","Technology",0],["Sheboygan","Furniture",0],["Sheboygan","Office Supplies",77.76000213623047],["Sheboygan","Technology",1.9800000190734863],["East Point","Furniture",27.420000076293945],["East Point","Office Supplies",165.97999572753906],["East Point","Technology",75],["Rapid City","Furniture",141.9600067138672],["Rapid City","Office Supplies",10.680000305175781],["Rapid City","Technology",0],["Andover","Furniture",354.8999938964844],["Andover","Office Supplies",80.94999694824219],["Andover","Technology",0],["Kissimmee","Furniture",0],["Kissimmee","Office Supplies",0],["Kissimmee","Technology",751.9840087890625],["Shelton","Furniture",0],["Shelton","Office Supplies",13.359999656677246],["Shelton","Technology",59.970001220703125],["Danbury","Furniture",27.459999084472656],["Danbury","Office Supplies",0],["Danbury","Technology",0],["Sanford","Furniture",220.70399475097656],["Sanford","Office Supplies",4.8420000076293945],["Sanford","Technology",0],["San Marcos","Furniture",10.331999778747559],["San Marcos","Office Supplies",77.3280029296875],["San Marcos","Technology",20.784000396728516],["Greeley","Furniture",11.663999557495117],["Greeley","Office Supplies",18.687999725341797],["Greeley","Technology",0],["Mansfield","Furniture",517.405029296875],["Mansfield","Office Supplies",41.47200012207031],["Mansfield","Technology",0],["Elyria","Furniture",0],["Elyria","Office Supplies",1.8240000009536743],["Elyria","Technology",0],["Twin Falls","Furniture",1128.3900146484375],["Twin Falls","Office Supplies",20.416000366210938],["Twin Falls","Technology",0],["Coral Gables","Furniture",11.567999839782715],["Coral Gables","Office Supplies",0],["Coral Gables","Technology",52.68000030517578],["Romeoville","Furniture",0],["Romeoville","Office Supplies",8.95199966430664],["Romeoville","Technology",0],["Marlborough","Furniture",206.63999938964844],["Marlborough","Office Supplies",0],["Marlborough","Technology",0],["Laurel","Furniture",27.459999084472656],["Laurel","Office Supplies",125.12999725341797],["Laurel","Technology",0],["Bryan","Furniture",528.4299926757812],["Bryan","Office Supplies",88.22600555419922],["Bryan","Technology",0],["Pine Bluff","Furniture",0],["Pine Bluff","Office Supplies",12.960000038146973],["Pine Bluff","Technology",199.9499969482422],["Aberdeen","Furniture",0],["Aberdeen","Office Supplies",25.5],["Aberdeen","Technology",0],["Hagerstown","Furniture",0],["Hagerstown","Office Supplies",43.79999923706055],["Hagerstown","Technology",0],["East Orange","Furniture",0],["East Orange","Office Supplies",345.4700012207031],["East Orange","Technology",31.799999237060547],["Arlington Heights","Furniture",0],["Arlington Heights","Office Supplies",14.112000465393066],["Arlington Heights","Technology",0],["Oswego","Furniture",0],["Oswego","Office Supplies",321.9779968261719],["Oswego","Technology",0],["Coon Rapids","Furniture",0],["Coon Rapids","Office Supplies",221.16000366210938],["Coon Rapids","Technology",281.9700012207031],["San Clemente","Furniture",0],["San Clemente","Office Supplies",90.05799865722656],["San Clemente","Technology",0],["San Luis Obispo","Furniture",0],["San Luis Obispo","Office Supplies",3.619999885559082],["San Luis Obispo","Technology",0],["Springdale","Furniture",0],["Springdale","Office Supplies",4.300000190734863],["Springdale","Technology",0],["Lodi","Furniture",0],["Lodi","Office Supplies",136.97999572753906],["Lodi","Technology",0],["Mason","Furniture",68.7040023803711],["Mason","Office Supplies",25.559999465942383],["Mason","Technology",0]],["Furniture","Category","Office Supplies","Technology"],["City","Sales","Category"]]
-            
-            drawChart(data, {"yAxisConfig":{"yaxisStatus":true,"ylabel":""},"xAxisConfig":{"xaxisStatus":true,"xlabel":""},"dataColumns":{"xAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[{"columnName":"Region","itemType":"Categorical"}]}})
         </script>
     </body>
 </html>
