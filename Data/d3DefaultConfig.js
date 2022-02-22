@@ -31,7 +31,7 @@ const constants = {
         top: 20,
         left: 70,
         right: 20,
-        bottom: 80
+        bottom: 70
     }
 };
 
@@ -61,7 +61,7 @@ const defaultD3Config = {
     defaultSpace: 30,
     dateFormat: "%Y",
     defaultMarkerStatus: true,
-    chartType: constants.chartType.STANDARD,
+    chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,
     // horizontalChartType: constants.chartType.STANDARD,
     horizontalChartType: constants.chartType.FIT_HEIGHT,
@@ -71,11 +71,11 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: false,
-        legendPosition: "right"
+        legendStatus: true,
+        legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: true,
+        labelStatus: false,
         labelFormat: constants.labelFormat.ROUND
     },
     defaultGridConfig: {
@@ -795,6 +795,13 @@ const dataConstant = {
             ]
         ],
         ["City", "Sales"]
+    ],
+    dataBarChart: [
+        [
+            ["Furniture", "Office Supplies", "Technology"],
+            [741999.0625, 719048.25, 836155.4375]
+        ],
+        ["Category", "Sales"]
     ],
     dataLineChart : [
                 [
@@ -2038,6 +2045,8 @@ const dataConstant = {
                 ],
                 ["Order Date", "Sales"],
             ]
+    ,
+    dataLineChart: [[["Furniture",741999.0625],["Office Supplies",719048.25],["Technology",836155.4375]],["Category","Sales"]]
 };
 
 // functions
@@ -2076,8 +2085,8 @@ function drawChartLineVerticle() {
             xAxisColumnDetails: [
                 {
                     itemName: "Order Date",
-                    itemType: "Date",
-                    dateFormat: "%d-%m-%Y"
+                    // itemType: "Date",
+                    // dateFormat: "%d-%m-%Y"
                 }
             ],
             yAxisColumnDetails: [
@@ -2090,8 +2099,7 @@ function drawChartLineVerticle() {
             row3ColumnDetails: [],
             colorByData: []
         },
-        dateFormat: "%d",
-        gridConfig: { gridStatus: false }
+        // dateFormat: "%d"
     });
 }
 function drawChartAreaVerticle() {
@@ -2167,15 +2175,15 @@ function redrawChartLineVerticle() {
                     xAxisColumnDetails: [
                         {
                             itemName: "Order Date",
-                            itemType: "Date",
-                            dateFormat: "%d-%m-%Y"
+                            // itemType: "Date",
+                            // dateFormat: "%d-%m-%Y"
                         }
                     ],
                     yAxisColumnDetails: [
                         {
                             itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y"
+                            // itemType: "Numerical",
+                            // dateFormat: "%Y"
                         }
                     ],
                     row3ColumnDetails: [],

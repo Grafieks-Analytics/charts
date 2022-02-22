@@ -44,7 +44,7 @@
 
         #xAxisLabelId {
             position: fixed;
-            bottom: 20px;
+            bottom: 0px;
             z-index: 100;
             height: 40px;
             /* background-color: red; */
@@ -677,15 +677,16 @@
             }
 
             let { top, right, bottom, left } = constants.chartMargins;
-            if (window.innerHeight < 400) {
-                top = top / 2 + 10;
-                right = right / 2;
-                // bottom = bottom / 2;
-            }
+            // if (window.innerHeight < 400) {
+            //     top = top / 2 + 10;
+            //     right = right / 2;
+            //     // bottom = bottom / 2;
+            // }
             var margin = { top, right, bottom, left };
-            var width = window.innerWidth - margin.left - margin.right - 50;
+            var width = window.innerWidth - margin.left - margin.right - 20;
             var y_pos_x_label = 55;
             var topLegendMargin = 0;
+
 
             var [data, keys, labels] = transformData(
                 data[0],
@@ -696,7 +697,7 @@
 
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
-            d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+            d3.select("#xAxisLabelId").style("bottom", 5 + "px");
 
             if (legendStatus) {
                 d3.select("#legend").html("").style("padding", "");
@@ -746,8 +747,21 @@
                 margin.top -
                 margin.bottom -
                 2 -
-                extraHeight;
+                extraHeight / 2;
 
+            if(extraHeight){
+                height = height - 20;   
+                if(legendStatus && (legendPosition == "top" || legendPosition == "bottom")){
+                    height -= 20;
+                }
+            }  else { 
+                if(!legendStatus){
+                    height += 10;
+                }
+                if(legendStatus && (legendPosition == "top" || legendPosition == "bottom")){
+                    height -= 15;
+                }
+            }
             // legends code starts
 
             if (legendStatus) {
@@ -766,6 +780,7 @@
                 switch (legendPosition) {
                     case "left":
                         var legendWidth = legendElement.offsetWidth;
+                        // width -= 70;
 
                         d3.select("#legend")
                             .attr("style", null)
@@ -794,7 +809,7 @@
                             "margin-left",
                             legendWidth + "px"
                         );
-                        d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 5 + "px");
 
                         break;
                     case "top":
@@ -802,7 +817,7 @@
                         margin.bottom += 20;
                         topLegendMargin += 20;
 
-                        height -= 40;
+                        height += 5;
                         // y_pos_x_label = 57
                         d3.select("#legend")
                             .attr("style", null)
@@ -837,14 +852,14 @@
                         }
                         d3.select("#legend").style("right", rightPosition);
 
-                        d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 5 + "px");
 
                         break;
                     case "bottom":
-                        height -= 70;
+                        height -= 15;
                         // y_pos_x_label = 57
 
-                        d3.select("#xAxisLabelId").style("bottom", 85 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 45 + "px");
                         // d3.select("#my_dataviz").style("bottom", 50 + "px");
                         // d3.select("#my_dataviz").style("height", 500 + "px");
                         d3.select("#mainChartWindow").attr("style", null);
@@ -888,6 +903,7 @@
                         // width -= 220;
                         // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
                         var legendWidth = legendElement.offsetWidth;
+                        // width = 70;
 
                         d3.select("#legend")
                             .attr("style", null)
@@ -906,7 +922,6 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
 
-                        // debugger;
                         d3.select("#mainChartWindow").attr("style", null);
                         d3.select("#mainChartWindow").style(
                             "width",
@@ -914,20 +929,21 @@
                             // "500px"
                         );
                         d3.select("#mainChartWindow").style("margin-left", 0);
-                        d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 5 + "px");
                 }
             }
 
-            if (legendPosition == "left" || legendPosition == "right") {
+            if (legendStatus && (legendPosition == "left" || legendPosition == "right")) {
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
+                height += 10;
             }
-            if (legendPosition == "top") {
+            if (legendStatus && legendPosition == "top") {
                 var legendHeightTop = 20;
             } else {
                 legendHeightTop = 0;
             }
-            if (legendPosition == "left") {
+            if (legendStatus && legendPosition == "left") {
                 var legendWidthLeft = legendWidth;
             } else {
                 legendWidthLeft = 0;
@@ -1027,7 +1043,7 @@
                 .selectAll("#my_dataviz")
                 .append("svg")
                 .attr("width", width)
-                .attr("height", height + margin.bottom + topLegendMargin)
+                .attr("height", height + margin.bottom + margin.top + extraHeight)
                 .append("g")
                 .attr("transform", "translate(" + 0 + "," + margin.top + ")");
 
@@ -1486,31 +1502,31 @@
 
         // window.addEventListener("resize", function () {
         //     window.clearChart && clearChart();
-        // drawChart(data, {
-        //     chartType: "FitWidth",
-        //     // xAxisConfig: { xlabel: "Category" },
-        //     // yAxisConfig: { ylabel: "Sales" },
-        //     dataColumns: {
-        //         xAxisColumnDetails: [
-        //             {
-        //                 itemName: "Category",
-        //                 itemType: "Categorical",
-        //                 dateFormat: "%Y",
-        //             },
-        //         ],
-        //         yAxisColumnDetails: [
-        //             {
-        //                 itemName: "Sales",
-        //                 itemType: "Numerical",
-        //                 dateFormat: "%Y",
-        //             },
-        //         ],
-        //         row3ColumnDetails: [],
-        //         colorByData: [
-        //             { columnName: "Sub_Category", itemType: "Categorical" },
-        //         ],
-        //     },
-        // });
+        drawChart(data, {
+            chartType: "FitWidth",
+            // xAxisConfig: { xlabel: "Category" },
+            // yAxisConfig: { ylabel: "Sales" },
+            dataColumns: {
+                xAxisColumnDetails: [
+                    {
+                        itemName: "Category",
+                        itemType: "Categorical",
+                        dateFormat: "%Y",
+                    },
+                ],
+                yAxisColumnDetails: [
+                    {
+                        itemName: "Sales",
+                        itemType: "Numerical",
+                        dateFormat: "%Y",
+                    },
+                ],
+                row3ColumnDetails: [],
+                colorByData: [
+                    { columnName: "Sub_Category", itemType: "Categorical" },
+                ],
+            },
+        });
         // });
     </script>
 </body>
