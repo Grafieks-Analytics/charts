@@ -518,7 +518,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
         // [TAG: EXCEPTION]: ALIGNING LEGEND TO THE CENTER OF CHART/WINDOW
         var leftWidth = document.querySelector('#yAxisDiv');
         leftWidth = (leftWidth && leftWidth.clientWidth) || 0;
-        rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth/2) + "px)";
+        
         // NEW CODE 
 
         //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;

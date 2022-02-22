@@ -307,6 +307,19 @@
 
                 var width = window.innerWidth - margin.left - margin.right;
                 var height = window.innerHeight - margin.top - margin.bottom - 2 - extraHeight;
+                  // [TAG: EXCEPTION]
+                // CONDITION WHEN WE HAVE VERTICAL TICKS --> RESZIE CHART
+                if (extraHeight) {
+                    height = height - extraHeight / 2 + 55;
+                    if(legendStatus && legendPosition == "top"){
+                        height += 10;
+                          d3.select("#my_dataviz")
+                    .style("height", "calc(100vh - " + 50 + "px)")
+                    }
+                    if(legendStatus && legendPosition == "bottom"){
+                        height += 25;
+                    }
+                }
 
                 var [dataValues, labels] = transformData(data, dataColumns, dateFormat);
 
@@ -447,7 +460,7 @@
                             var legendWidth = legendElement.offsetWidth;
                             y_pos_x_label = 20;
 
-                            d3.select("#xAxisLabelId").style("bottom", 60);
+                            d3.select("#xAxisLabelId").style("bottom", 40);
                             d3.select("#mainChartWindow").attr("style", null);
 
                             // d3.select("#mainChartWindow").style("width", width);
@@ -704,6 +717,21 @@
                     .attr("font-weight", yboldTick ? "bold" : "regular")
                     .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
+
+                    // [TAG: EXCEPTION]
+                // UPDATING SVG HEIGHT AND WIDTH TO fiRst G box;
+                // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS 
+                var svgMain = document.querySelector("#my_dataviz svg");
+                var firstG = svgMain.querySelector('g');
+                var gDimensions = firstG.getBBox();
+                var svgHeight = gDimensions.height;
+                var svgWidth = gDimensions.width;
+                if(legendStatus && legendPosition == "top"){
+                    svgHeight += 250;
+                }
+                svgMain.setAttribute("height", svgHeight + 300);
+                svgMain.setAttribute("width", svgWidth - 20);
+
                 if (xaxisStatus) {
                     d3.selectAll("g .x-axis").attr("style", "display: block");
                 } else {
@@ -855,7 +883,7 @@
                     row3ColumnDetails: [],
                     colorByData: []
                 },
-                legendConfig: { legendStatus: false, legendPosition: "right" }
+                legendConfig: { legendStatus: false, legendPosition: "bottom" }
             });
         </script>
     </body>
