@@ -416,6 +416,8 @@
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
             d3.select("#xAxisLabelId").style("bottom", 20);
+            d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
+            d3.selectAll("#my_dataviz").style("margin-top", "0");
 
             // append the svg object to the body of the page
             var svg = d3
@@ -424,9 +426,11 @@
                 .attr("width", width + margin.left + margin.right + 20)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
+                .attr("transform", "translate(" + (margin.left + 10) + "," + margin.top + ")");
 
             // legends code starts
+
+
 
             if (legendStatus) {
                 if (legendHeight < document.querySelector("html").offsetHeight) {
@@ -473,7 +477,7 @@
 
                         d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
                         d3.select("#mainChartWindow").style("margin-left", legendWidth + "px");
-                        d3.select("#xAxisLabelId").style("bottom", 10 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                         d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
 
                         break;
@@ -497,7 +501,7 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
-                        d3.select("#xAxisLabelId").style("bottom", 10 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                         d3.selectAll("#my_dataviz").style("height", "calc(100vh - 72px) ");
                         d3.selectAll("#my_dataviz").style("margin-top", 50 + "px");
 
@@ -512,7 +516,7 @@
                         var legendWidth = legendElement.offsetWidth;
                         y_pos_x_label = 20;
 
-                        d3.select("#xAxisLabelId").style("bottom", "60px");
+                        d3.select("#xAxisLabelId").style("bottom", "50px");
                         d3.select("#mainChartWindow").attr("style", null);
 
                         // d3.select("#mainChartWindow").style("width", width);
@@ -564,7 +568,7 @@
                         d3.select("#mainChartWindow").attr("style", null);
                         d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth - 10 + "px");
                         d3.select("#mainChartWindow").style("margin-left", 0);
-                        d3.select("#xAxisLabelId").style("bottom", 10 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                         d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
                 }
             }
@@ -839,7 +843,46 @@
             setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
         }
 
-        drawChart(data);
+        drawChart(data, {
+  "yAxisConfig": {
+    "yaxisStatus": true
+  },
+  "xAxisConfig": {
+    "xaxisStatus": true
+  },
+  "dataLabelColor": "#000000",
+  "paddingInner": 0.25,
+  "innerRadius": 0.75,
+  "chartType": "FitWidth",
+  "dataColumns": {
+    "xAxisColumnDetails": [
+      {
+        "itemName": "Quantity",
+        "itemType": "Numerical",
+        "dateFormat": "%Y"
+      }
+    ],
+    "yAxisColumnDetails": [
+      {
+        "itemName": "Profit",
+        "itemType": "Numerical",
+        "dateFormat": "%Y"
+      }
+    ],
+    "row3ColumnDetails": [],
+    "colorByData": [
+      {
+        "columnName": "Category",
+        "itemType": "Categorical"
+      }
+    ]
+  },
+  "toolTip": {},
+  "legendConfig": {
+    "legendStatus": true,
+    "legendPosition": "top"
+  }
+});
 
         // Generate Grid ends
         // });
