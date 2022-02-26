@@ -512,7 +512,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
             topPosition = 0;
         }
         // OLD CODE BEFORE REFACTORING ON 14th 
-        // rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+        rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
         
         // NEW CODE  CAN BE OPTIMIZED
         // [TAG: EXCEPTION]: ALIGNING LEGEND TO THE CENTER OF CHART/WINDOW
