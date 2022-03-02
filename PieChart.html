@@ -295,7 +295,7 @@
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")
-                        .style("top", y_pos + "px")
+                        .style("top", y_pos-47 + "px")
                         .style("display", "block")
                         // .text(d.data.key);
                         .html(function () {
@@ -456,7 +456,7 @@
         }
 
         // Initialize the plot with the first dataset
-        // drawChart(data, {});
+        drawChart(data, {});
 
         // var timer;
         // window.addEventListener("resize", function () {
