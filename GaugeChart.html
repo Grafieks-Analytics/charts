@@ -293,8 +293,9 @@
             };
 
             function drawChart(data, plottingConfiguration = {}) {
+                d3.select("#my_dataviz").html('');
                 window.data = data;
-                const [maxValue, yellowValue, redValue, readingValue] = data[0];
+                const [maxValue, yellowValue, redValue, readingValue] = data[0] || [];
 
                 gaugeSize = Math.min(window.innerWidth, window.innerHeight);
                 if (gaugeSize > 600) {
@@ -321,7 +322,7 @@
                 updateReadings(readingValue);
             }
 
-            var data = [[50044, 12000, 1000, 2000], ["Label"]];
+            // var data = [[50044, 12000, 1000, 2000], ["Label"]];
             // drawChart(data);
         </script>
     </body>
