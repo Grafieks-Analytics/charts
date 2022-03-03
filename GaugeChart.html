@@ -15,6 +15,7 @@
                 font-family: Helvetica, Arial, sans-serif;
                 margin: 32px;
                 text-align: center;
+                overflow: hidden;
             }
 
             #my_datavix g.arc {
@@ -293,7 +294,7 @@
             };
 
             function drawChart(data, plottingConfiguration = {}) {
-                d3.select("#my_dataviz").html('');
+                d3.select("#my_dataviz").html('').style('margin-top', '0px');
                 window.data = data;
                 const [maxValue, yellowValue, redValue, readingValue] = data[0] || [];
 
@@ -320,6 +321,12 @@
 
                 // every few seconds update reading values
                 updateReadings(readingValue);
+                if(window.innerHeight < 600){
+                    const documentHeight = document.documentElement.getBoundingClientRect().height;
+                    const windowHeight = window.innerHeight;
+                    const element = document.getElementById("my_dataviz");
+                    d3.select(element).style("margin-top", (windowHeight - documentHeight - 20) + "px");
+                }
             }
 
             // var data = [[50044, 12000, 1000, 2000], ["Label"]];
