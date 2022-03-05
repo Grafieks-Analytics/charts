@@ -770,10 +770,9 @@
                     console.log(legendHeightTop);
                     d3.select("#tooltip")
                         .style("left", xpos1 + "px")
-                        .style("top", ypos - 28 + legendHeightTop + "px")
+                        .style("top", ypos - 36 + legendHeightTop + "px")
                         .style("display", "block")
                         .style("position", "absolute")
-
                         .html(function () {
                             var textValue = d.y0 - d.y1;
                             if (d.y1 < 0) {
@@ -807,6 +806,9 @@
                                 "</span>"
                             );
                         });
+                        if (legendPosition == "top") {
+                    d3.select("#tooltip").style("top", ypos - 10 + legendHeightTop + "px");
+                }
                     if (
                         xpos1 - window.scrollX >
                         document.documentElement.clientWidth -
@@ -844,6 +846,7 @@
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
                 });
+                
 
             svg.append("g")
                 .attr("class", "y-axis")

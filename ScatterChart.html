@@ -702,6 +702,9 @@
                             );
                         });
                     var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                     if (legendPosition == "top") {
+                                d3.select("#tooltip").style("top", y_pos - 100 + 130 + "px");
+                            }
 
                     if (
                         x_pos - scrollVal >
@@ -728,6 +731,12 @@
                             "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                         );
                     }
+                    if (legendPosition == "left") {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 375 + "px"
+                            );
+                        }
 
                     d3.select(".scatter" + i + d[2]);
 
@@ -880,7 +889,7 @@
   "toolTip": {},
   "legendConfig": {
     "legendStatus": true,
-    "legendPosition": "top"
+    "legendPosition": "left"
   }
 });
 

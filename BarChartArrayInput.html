@@ -401,6 +401,9 @@
 
                         tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip, legendWidthLeft);
 
+                        if(legendPosition=="top"){
+                            d3.select("#tooltip").style("top", ypos - 1 + legendHeightTop + "px");
+                        }
                         d3.selectAll(".bar").style("opacity", 0.3);
                         d3.select(this).style("opacity", 1);
                     });

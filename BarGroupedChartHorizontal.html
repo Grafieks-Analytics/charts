@@ -221,6 +221,55 @@
             function make_y_gridlines(y) {
                 return d3.axisLeft(y).ticks(10);
             }
+             var data = [
+                [
+                    {
+                        Bookcases: 8016,
+                        Chairs: 6906,
+                        Furnishings: 2398,
+                        Tables: 10230,
+                        mainCategory: "Furniture",
+                    },
+                    {
+                        Appliances: 1060,
+                        Art: 2756,
+                        Binders: 2114,
+                        Envelopes: 1134,
+                        Fasteners: 160,
+                        Labels: 192,
+                        Paper: 1198,
+                        Storage: 4638,
+                        Supplies: 132,
+                        mainCategory: "OfficeSupplies",
+                    },
+                    {
+                        Accessories: 938,
+                        Phones: 8372,
+                        mainCategory: "Technology",
+                    },
+                ],
+                [
+                    [
+                        "Bookcases",
+                        "Chairs",
+                        "Labels",
+                        "Tables",
+                        "Storage",
+                        "Furnishings",
+                        "Art",
+                        "Phones",
+                        "Binders",
+                        "Appliances",
+                        "Paper",
+                        "Envelopes",
+                        "Accessories",
+                        "Fasteners",
+                        "Supplies",
+                    ],
+                ],
+                ["Category", "Sub-category", "Sales"],
+            ];
+            drawChartBarHorizontal();
         }
     </script>
 </body>
