@@ -7,12 +7,11 @@
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
 
         <link rel="stylesheet" href="Data/general.css" />
-            <style>
-        
-        #my_dataviz {
-            margin-left: 30;
-        }
-    </style>
+        <style>
+            #my_dataviz {
+                margin-left: 30;
+            }
+        </style>
     </head>
     <body>
         <div id="mainChartWindow" style="display: flex">
@@ -307,16 +306,15 @@
 
                 var width = window.innerWidth - margin.left - margin.right;
                 var height = window.innerHeight - margin.top - margin.bottom - 2 - extraHeight;
-                  // [TAG: EXCEPTION]
+                // [TAG: EXCEPTION]
                 // CONDITION WHEN WE HAVE VERTICAL TICKS --> RESZIE CHART
                 if (extraHeight) {
                     height = height - extraHeight / 2 + 55;
-                    if(legendStatus && legendPosition == "top"){
+                    if (legendStatus && legendPosition == "top") {
                         height += 10;
-                          d3.select("#my_dataviz")
-                    .style("height", "calc(100vh - " + 50 + "px)")
+                        d3.select("#my_dataviz").style("height", "calc(100vh - " + 50 + "px)");
                     }
-                    if(legendStatus && legendPosition == "bottom"){
+                    if (legendStatus && legendPosition == "bottom") {
                         height += 25;
                     }
                 }
@@ -531,7 +529,7 @@
                     .attr("width", width + margin.left + margin.right - 30)
                     .attr("height", height + margin.bottom + topLegendMargin + xAxisAdjust)
                     .append("g")
-                    .attr("transform", "translate(" + (margin.left-20) + "," + margin.top + ")");
+                    .attr("transform", "translate(" + (margin.left - 20) + "," + margin.top + ")");
 
                 const x = d3
                     .scaleBand()
@@ -656,6 +654,9 @@
                                 );
                             });
                         var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                        if (legendPosition == "top") {
+                            d3.select("#tooltip").style("top", ypos - 100 + 120 + "px");
+                        }
 
                         if (
                             xpos - scrollVal >
@@ -718,15 +719,15 @@
                     .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
 
-                    // [TAG: EXCEPTION]
+                // [TAG: EXCEPTION]
                 // UPDATING SVG HEIGHT AND WIDTH TO fiRst G box;
-                // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS 
+                // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS
                 var svgMain = document.querySelector("#my_dataviz svg");
-                var firstG = svgMain.querySelector('g');
+                var firstG = svgMain.querySelector("g");
                 var gDimensions = firstG.getBBox();
                 var svgHeight = gDimensions.height;
                 var svgWidth = gDimensions.width;
-                if(legendStatus && legendPosition == "top"){
+                if (legendStatus && legendPosition == "top") {
                     svgHeight += 250;
                 }
                 svgMain.setAttribute("height", svgHeight + 300);
@@ -870,21 +871,21 @@
                 return data;
             }
 
-            drawChart(data, {
-                yAxisConfig: { yaxisStatus: true },
-                xAxisConfig: { xaxisStatus: true },
-                dataLabelColor: "#000000",
-                paddingInner: 0.25,
-                innerRadius: 150,
-                chartType: "FitWidth",
-                dataColumns: {
-                    xAxisColumnDetails: [{ itemName: "Product_Name", itemType: "Categorical", dateFormat: "%Y" }],
-                    yAxisColumnDetails: [{ itemName: "Sales", itemType: "Numerical", dateFormat: "%Y" }],
-                    row3ColumnDetails: [],
-                    colorByData: []
-                },
-                legendConfig: { legendStatus: false, legendPosition: "bottom" }
-            });
+            // drawChart(data, {
+            //     yAxisConfig: { yaxisStatus: true },
+            //     xAxisConfig: { xaxisStatus: true },
+            //     dataLabelColor: "#000000",
+            //     paddingInner: 0.25,
+            //     innerRadius: 0.75,
+            //     chartType: "FitWidth",
+            //     dataColumns: {
+            //         xAxisColumnDetails: [{ itemName: "Category", itemType: "Categorical", dateFormat: "%Y" }],
+            //         yAxisColumnDetails: [{ itemName: "Sales", itemType: "Numerical", dateFormat: "%Y" }],
+            //         row3ColumnDetails: [],
+            //         colorByData: []
+            //     },
+            //     legendConfig: { legendStatus: true, legendPosition: "left" }
+            // });
         </script>
     </body>
 </html>

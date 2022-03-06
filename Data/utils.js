@@ -695,6 +695,7 @@ function tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip
             );
         });
     var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+    
 
     if (xpos - scrollVal > document.documentElement.clientWidth - document.querySelector("#tooltip").clientWidth) {
         d3.select("#tooltip").style(
@@ -718,7 +719,9 @@ function tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip
             "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
         );
     }
+    
 }
+  
 
 // ticks customisation
 function XAxisTicksConfig(xTickfontSize, xTickfontFamily, xboldTick, xitalicTick, xTickfontColor) {

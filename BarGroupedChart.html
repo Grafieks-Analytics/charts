@@ -580,20 +580,20 @@
                     }
                 }
 
-                // if (legendPosition == "left" || legendPosition == "right") {
-                //     var legendWidth = legendElement.offsetWidth;
-                //     width -= legendWidth-70;
-                // }
-                // if (legendPosition == "top") {
-                //     var legendHeightTop = 55;
-                // } else {
-                //     legendHeightTop = 0;
-                // }
-                // if (legendPosition == "left") {
-                //     var legendWidthLeft = legendWidth;
-                // } else {
-                //     legendWidthLeft = 0;
-                // }
+                if (legendPosition == "left" || legendPosition == "right") {
+                    var legendWidth = legendElement.offsetWidth;
+                    width -= legendWidth-70;
+                }
+                if (legendPosition == "top") {
+                    var legendHeightTop = 55;
+                } else {
+                    legendHeightTop = 0;
+                }
+                if (legendPosition == "left") {
+                    var legendWidthLeft = legendWidth;
+                } else {
+                    legendWidthLeft = 0;
+                }
 
                 //add svg with margin !important
                 //this is svg is actually group
@@ -1262,7 +1262,7 @@
                 ],
                 ["Category", "Sub-category", "Sales"],
             ];
-            drawChartBarVerticle();
+            // drawChartBarVerticle();
         </script>
     </body>
 </html>

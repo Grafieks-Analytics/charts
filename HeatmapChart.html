@@ -977,6 +977,10 @@
                                 );
                             });
                         var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                            if (legendPosition == "top") {
+                                d3.select("#tooltip").style("top", y_pos - 100 + 100 + "px");
+                            }
+                       
 
                         if (
                             x_pos - scrollVal >
@@ -1001,6 +1005,12 @@
                             d3.select(".arrowTooltip").attr(
                                 "style",
                                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        }
+                         if (legendPosition == "left") {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 280 + "px"
                             );
                         }
                     })
@@ -1029,7 +1039,7 @@
                 if (barWidth < 50) {
                     setXaxisWidth();
                 }
-                
+
                 // yAxisDiv && yAxisDiv.setAttribute("width", maxWidth);
 
                 // document.querySelector("#my_dataviz").style["margin-left"] =
@@ -1181,20 +1191,20 @@
                 svgMain.setAttribute("width", svgWidth - 20);
                 var yAxisDiv = document.querySelector("#yAxisDiv svg");
             }
-            drawChart(data, {
-                yAxisConfig: { yaxisStatus: true },
-                xAxisConfig: { xaxisStatus: true },
-                dataLabelColor: "#000000",
-                paddingInner: 0.25,
-                innerRadius: 0.75,
-                chartType: "FitWidth",
-                dataColumns: {
-                    xAxisColumnDetails: [{ itemName: "Category", itemType: "Categorical", dateFormat: "%Y" }],
-                    yAxisColumnDetails: [{ itemName: "Sub_Category", itemType: "Categorical", dateFormat: "%Y" }],
-                    row3ColumnDetails: [],
-                    colorByData: [{ columnName: "Sales", itemType: "Numerical" }]
-                }
-            });
+            // drawChart(data, {
+            //     yAxisConfig: { yaxisStatus: true },
+            //     xAxisConfig: { xaxisStatus: true },
+            //     dataLabelColor: "#000000",
+            //     paddingInner: 0.25,
+            //     innerRadius: 0.75,
+            //     chartType: "FitWidth",
+            //     dataColumns: {
+            //         xAxisColumnDetails: [{ itemName: "Category", itemType: "Categorical", dateFormat: "%Y" }],
+            //         yAxisColumnDetails: [{ itemName: "Sub_Category", itemType: "Categorical", dateFormat: "%Y" }],
+            //         row3ColumnDetails: [],
+            //         colorByData: [{ columnName: "Sales", itemType: "Numerical" }]
+            //     }
+            // });
         </script>
     </body>
 </html>

@@ -342,7 +342,6 @@
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                 width = window.innerWidth - margin.left - margin.right - 20,
                 height = window.innerHeight - margin.top - margin.bottom + 15;
-                
 
             let { gridStatus } = gridConfig;
             let { legendStatus, legendPosition } = legendConfig;
@@ -353,7 +352,7 @@
             if (!innerRadius) {
                 innerRadius = defaultD3Config.innerRadius;
             }
-            if (!toolTip || !Object.keys(toolTip).length ) {
+            if (!toolTip || !Object.keys(toolTip).length) {
                 toolTip = {
                     textColumn1: xAxisLabel,
                     textColumn2: yAxisLabel,
@@ -429,8 +428,6 @@
                 .attr("transform", "translate(" + (margin.left + 10) + "," + margin.top + ")");
 
             // legends code starts
-
-
 
             if (legendStatus) {
                 if (legendHeight < document.querySelector("html").offsetHeight) {
@@ -614,7 +611,9 @@
 
             // Add Y axis
             var y = d3.scaleLinear().domain(yRange).range([height, 0]).nice();
-            svg.append("g").call(d3.axisLeft(y).tickSizeOuter(0).tickFormat(d3.format(".2s"))).attr("class", "y-axis");
+            svg.append("g")
+                .call(d3.axisLeft(y).tickSizeOuter(0).tickFormat(d3.format(".2s")))
+                .attr("class", "y-axis");
 
             if (gridStatus) {
                 svg.append("g")
@@ -702,6 +701,9 @@
                             );
                         });
                     var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                    if (legendPosition == "top") {
+                        d3.select("#tooltip").style("top", y_pos - 100 + 130 + "px");
+                    }
 
                     if (
                         x_pos - scrollVal >
@@ -726,6 +728,12 @@
                         d3.select(".arrowTooltip").attr(
                             "style",
                             "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                        );
+                    }
+                    if (legendPosition == "left") {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 375 + "px"
                         );
                     }
 
@@ -801,20 +809,19 @@
                 .attr("fill", xTickfontColor)
                 .attr("y", 8);
 
-
-                 // [TAG: EXCEPTION]
-                // UPDATING SVG HEIGHT AND WIDTH TO fiRst G box;
-                // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS 
-                var svgMain = document.querySelector("#my_dataviz svg");
-                var firstG = svgMain.querySelector('g');
-                var gDimensions = firstG.getBBox();
-                var svgHeight = gDimensions.height;
-                var svgWidth = gDimensions.width;
-                if(legendStatus && legendPosition == "top"){
-                    svgHeight += 50;
-                }
-                svgMain.setAttribute("height", svgHeight + 30);
-                // svgMain.setAttribute("width", svgWidth - 20);
+            // [TAG: EXCEPTION]
+            // UPDATING SVG HEIGHT AND WIDTH TO fiRst G box;
+            // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS
+            var svgMain = document.querySelector("#my_dataviz svg");
+            var firstG = svgMain.querySelector("g");
+            var gDimensions = firstG.getBBox();
+            var svgHeight = gDimensions.height;
+            var svgWidth = gDimensions.width;
+            if (legendStatus && legendPosition == "top") {
+                svgHeight += 50;
+            }
+            svgMain.setAttribute("height", svgHeight + 30);
+            // svgMain.setAttribute("width", svgWidth - 20);
 
             if (xaxisStatus) {
                 d3.selectAll("g .x-axis").attr("style", "display: block");
@@ -843,46 +850,46 @@
             setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
         }
 
-        drawChart(data, {
-  "yAxisConfig": {
-    "yaxisStatus": true
-  },
-  "xAxisConfig": {
-    "xaxisStatus": true
-  },
-  "dataLabelColor": "#000000",
-  "paddingInner": 0.25,
-  "innerRadius": 0.75,
-  "chartType": "FitWidth",
-  "dataColumns": {
-    "xAxisColumnDetails": [
-      {
-        "itemName": "Quantity",
-        "itemType": "Numerical",
-        "dateFormat": "%Y"
-      }
-    ],
-    "yAxisColumnDetails": [
-      {
-        "itemName": "Profit",
-        "itemType": "Numerical",
-        "dateFormat": "%Y"
-      }
-    ],
-    "row3ColumnDetails": [],
-    "colorByData": [
-      {
-        "columnName": "Category",
-        "itemType": "Categorical"
-      }
-    ]
-  },
-  "toolTip": {},
-  "legendConfig": {
-    "legendStatus": true,
-    "legendPosition": "top"
-  }
-});
+        // drawChart(data, {
+        //     yAxisConfig: {
+        //         yaxisStatus: true
+        //     },
+        //     xAxisConfig: {
+        //         xaxisStatus: true
+        //     },
+        //     dataLabelColor: "#000000",
+        //     paddingInner: 0.25,
+        //     innerRadius: 0.75,
+        //     chartType: "FitWidth",
+        //     dataColumns: {
+        //         xAxisColumnDetails: [
+        //             {
+        //                 itemName: "Quantity",
+        //                 itemType: "Numerical",
+        //                 dateFormat: "%Y"
+        //             }
+        //         ],
+        //         yAxisColumnDetails: [
+        //             {
+        //                 itemName: "Profit",
+        //                 itemType: "Numerical",
+        //                 dateFormat: "%Y"
+        //             }
+        //         ],
+        //         row3ColumnDetails: [],
+        //         colorByData: [
+        //             {
+        //                 columnName: "Category",
+        //                 itemType: "Categorical"
+        //             }
+        //         ]
+        //     },
+        //     toolTip: {},
+        //     legendConfig: {
+        //         legendStatus: true,
+        //         legendPosition: "left"
+        //     }
+        // });
 
         // Generate Grid ends
         // });

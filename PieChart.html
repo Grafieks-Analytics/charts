@@ -295,7 +295,7 @@
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")
-                        .style("top", y_pos + "px")
+                        .style("top", y_pos-47 + "px")
                         .style("display", "block")
                         // .text(d.data.key);
                         .html(function () {
@@ -330,6 +330,15 @@
                                 "</span>"
                             );
                         });
+                         if (legendPosition == "top") {
+                                d3.select("#tooltip").style("top", y_pos - 100 + 80 + "px");
+                            }
+                         if (legendPosition == "left") {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos  - document.querySelector("#tooltip").clientWidth + 480 + "px"
+                            );
+                        }
 
                     d3.select(".arrowTooltip").attr(
                         "style",
@@ -459,7 +468,7 @@
         // drawChart(data, {});
 
         // var timer;
-        // window.addEventListener("resize", function () {
+        // window.addEventListener( "resize", function () {
         //     clearTimeout(timer);
         //     timer = setTimeout(function () {
         //         window.clearChart && clearChart();

@@ -136,14 +136,14 @@
 
                 d3Colors = d3colorPalette;
                 let chartType = defaultD3Config.chartType;
-                console.log({ chartType })
+                console.log({ chartType });
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
                 d3.selectAll("#xAxisLabelId").html("");
                 d3.select("#legend").html("").style("padding", "");
 
-                d3.selectAll("#xAxisLabelId").style('bottom',"0px");
+                d3.selectAll("#xAxisLabelId").style("bottom", "0px");
 
                 var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
@@ -181,27 +181,27 @@
                 // height = window.innerHeight - margin.top - margin.bottom - extraHeight / 2 - 20;
                 height = window.innerHeight - margin.top - margin.bottom + 10;
                 // debugger;
-                if(!extraHeight){
+                if (!extraHeight) {
                     height += 15;
                 }
-                if(extraHeight){
+                if (extraHeight) {
                     height = height - extraHeight / 2 - 30;
                 }
-                if(legendStatus && legendPosition == "top"){
+                if (legendStatus && legendPosition == "top") {
                     height -= 20;
-                } else if(legendStatus && legendPosition == "bottom"){
+                } else if (legendStatus && legendPosition == "bottom") {
                     height -= 40;
-                } else if(legendStatus && (legendPosition == "right" || legendPosition == "left")){
+                } else if (legendStatus && (legendPosition == "right" || legendPosition == "left")) {
                     height -= 20;
                 }
 
-                if(!legendStatus && !extraHeight){
+                if (!legendStatus && !extraHeight) {
                     height -= 20;
                 }
-                if(!legendStatus && extraHeight){
+                if (!legendStatus && extraHeight) {
                     height -= 15;
                 }
-                
+
                 if (chartType == constants.chartType.STANDARD) {
                     width = dataValues.length * standardThresholdWidth;
                     height = window.innerHeight - margin.top - margin.bottom - extraHeight / 2 - 30;
@@ -221,13 +221,13 @@
                 }
                 if (legendPosition == "top") {
                     var legendHeightTop = legendHeight;
-                    height -= legendHeight+20;
+                    height -= legendHeight + 20;
                 } else {
                     legendHeightTop = 0;
                 }
                 if (legendPosition == "bottom") {
                     var legendHeightTop = legendHeight;
-                    height -= legendHeight-10;
+                    height -= legendHeight - 10;
                 } else {
                     legendHeightTop = 0;
                 }
@@ -322,7 +322,7 @@
                     .call(yAxis);
 
                 if (markerStatus && curveType == constants.cureveType.LINEAR) {
-                    drawMarker(filledStatus, markerShape, toolTip);
+                    drawMarker(filledStatus, markerShape, toolTip, legendPosition);
                 }
 
                 setLabel(
@@ -426,7 +426,7 @@
                     //     var dataLabelLimit = height - window.innerHeight / 3;
                     //     label.setAttribute("display", labelYPosition > dataLabelLimit ? "none" : "");
                     // });
-                     dataLabelLineChart(svg, xAxis, yScale, dataValues, labelFormat);
+                    dataLabelLineChart(svg, xAxis, yScale, dataValues, labelFormat);
                 }
 
                 d3.select(".axis.label path").remove();
@@ -472,7 +472,8 @@
                             var singleCharacterLength =
                                 allXAxisTexts[i].getBBox().width / (xAxisTick && xAxisTick.length);
 
-                            var numOfCharacters = (extraHeight ? extraHeight+20 : xScale.bandwidth()) / singleCharacterLength;
+                            var numOfCharacters =
+                                (extraHeight ? extraHeight + 20 : xScale.bandwidth()) / singleCharacterLength;
 
                             if (xAxisTick && xAxisTick.length > numOfCharacters) {
                                 if (Math.ceil(numOfCharacters) > 3) {
@@ -504,7 +505,7 @@
                 if (extraHeightWorked && redrawn) {
                     extraHeightWorked = false;
                     redrawn = false;
-                    // var svgMain = document.querySelector('#my_dataviz svg'); 
+                    // var svgMain = document.querySelector('#my_dataviz svg');
                     // var oldheight = svgMain.getAttribute('height');
                     // var finalHeight = oldheight - extraHeight / 2;
                     // if(legendStatus && (legendPosition == "bottom" || legendPosition == "top")) {
@@ -512,10 +513,10 @@
                     // }
                     // svgMain.setAttribute('height', finalHeight);
                 }
-                
+
                 var svgMain = document.querySelector("#my_dataviz svg");
-                var svgHeight = svgMain.getAttribute('height');
-                if(legendStatus && legendPosition == "top"){
+                var svgHeight = svgMain.getAttribute("height");
+                if (legendStatus && legendPosition == "top") {
                     svgHeight += 50;
                 }
                 svgMain.setAttribute("height", svgHeight);
@@ -577,7 +578,7 @@
                 }
             }
 
-            function drawMarker(fillStatus, markerShape, toolTip) {
+            function drawMarker(fillStatus, markerShape, toolTip, legendPosition) {
                 dateformatValue = function (value) {
                     return value;
                 };
@@ -587,7 +588,15 @@
                         textColumn2: yAxisLabel
                     };
                 }
-
+                // if (legendPosition == "top") {
+                //     d3.select("#tooltip").style("top", ypos - 1 + legendHeightTop + "px");
+                // }
+                // if (legendPosition == "left") {
+                //     d3.select("#tooltip").style(
+                //         "left",
+                //         x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 280 + "px"
+                //     );
+                // }
                 let dataValues = window.chartDataValues,
                     fill = "#ffffff",
                     stroke = d3Colors[0];
@@ -709,6 +718,15 @@
                                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                             );
                         }
+                        // if (legendPosition == "top") {
+                        //     d3.select("#tooltip").style("top", y_pos - 10 + legendHeightTop + "px");
+                        // }
+                        if (legendPosition == "left") {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 348 + "px"
+                            );
+                        }
 
                         var shapeClass = ".marker-shape";
                         d3.selectAll(shapeClass).style("opacity", 0.3);
@@ -730,9 +748,9 @@
                             .attr("width", initialBoxDimension);
                     });
             }
-           
+
             // redrawChartLineVerticle();
-            drawChartLineVerticle();
+            // drawChartLineVerticle();
         </script>
     </body>
 </html>

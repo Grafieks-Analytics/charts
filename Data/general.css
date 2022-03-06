@@ -140,3 +140,8 @@ body {
 .bar.negative rect {
     fill: #e15759;
 }
+
+::-webkit-scrollbar {
+    width: .2em;
+    height: .5em
+}
