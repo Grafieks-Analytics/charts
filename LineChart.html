@@ -588,9 +588,15 @@
                         textColumn2: yAxisLabel
                     };
                 }
-                if (legendPosition == "top") {
-                    d3.select("#tooltip").style("top", ypos - 1 + legendHeightTop + "px");
-                }
+                // if (legendPosition == "top") {
+                //     d3.select("#tooltip").style("top", ypos - 1 + legendHeightTop + "px");
+                // }
+                // if (legendPosition == "left") {
+                //     d3.select("#tooltip").style(
+                //         "left",
+                //         x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 280 + "px"
+                //     );
+                // }
                 let dataValues = window.chartDataValues,
                     fill = "#ffffff",
                     stroke = d3Colors[0];
@@ -712,12 +718,15 @@
                                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                             );
                         }
-                        if (legendPosition == "top") {
-                            d3.select("#tooltip").style("top", y_pos - 10 + legendHeightTop + "px");
-                        }
-                        // if (legendPosition == "left") {
-                        //     d3.select("#tooltip").style(x_pos - scrollVal - document.querySelector("#tooltip").clientWidth - 90  + "px");
+                        // if (legendPosition == "top") {
+                        //     d3.select("#tooltip").style("top", y_pos - 10 + legendHeightTop + "px");
                         // }
+                        if (legendPosition == "left") {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 348 + "px"
+                            );
+                        }
 
                         var shapeClass = ".marker-shape";
                         d3.selectAll(shapeClass).style("opacity", 0.3);
@@ -741,7 +750,7 @@
             }
 
             // redrawChartLineVerticle();
-            drawChartLineVerticle();
+            // drawChartLineVerticle();
         </script>
     </body>
 </html>
