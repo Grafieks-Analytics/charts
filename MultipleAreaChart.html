@@ -307,7 +307,7 @@
                 d3.selectAll("#my_dataviz").html("");
                 var margin = constants.chartMargins;
                 var width = window.innerWidth - 100,
-                    height = window.innerHeight - margin.top - margin.bottom + 25 - extraHeight;
+                    height = window.innerHeight - margin.top - margin.bottom + 25 - extraHeight / 2;
 
                 console.log(JSON.stringify({ height }));
 
@@ -316,6 +316,10 @@
                 }
 
                 if (extraHeight && !legendStatus) {
+                    height -= 10;
+                }
+
+                if(extraHeight){
                     height -= 10;
                 }
 
@@ -349,8 +353,8 @@
                     }
                     var leftWidth = document.querySelector("#yAxisDiv");
                     leftWidth = (leftWidth && leftWidth.clientWidth) || 0;
-                    // rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth / 2) + "px)";
-                     rightPosition = 0;
+                    //   rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth / 2) + "px)";
+                    rightPosition = 0;
 
                     //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
                     var widthOld = document.querySelector("html").clientWidth - 72;
@@ -399,6 +403,15 @@
                             // debugger;
                             // height -= 10;
                             y_pos_x_label = 57;
+
+                            var htmlWidth = window.innerWidth;
+                            legendWidth = legendElement.offsetWidth;
+                            if (legendWidth < htmlWidth) {
+                                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                            } else {
+                                rightPosition = "0px";
+                            }
+                            
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "5px")
@@ -864,7 +877,7 @@
 
                     extraHeightWorked = true;
                     // extraHeight = maxWidth < 55 ? maxWidth : 53;
-                    extraHeight = maxWidth < 55 ? 100 : 72;
+                    extraHeight = maxWidth < 72 ? 100 : 72;
 
                     //     d3.select(".x-axis").attr("text-anchor", "right");
 
