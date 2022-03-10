@@ -388,7 +388,7 @@
                     height -= 10;
                 }
 
-                if(extraHeight){
+                if (extraHeight) {
                     height -= 10;
                 }
 
@@ -476,11 +476,11 @@
                             var htmlWidth = window.innerWidth;
                             legendWidth = legendElement.offsetWidth;
                             if (legendWidth < htmlWidth) {
-                                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                                // rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
                             } else {
                                 rightPosition = "0px";
                             }
-                            
+
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "5px")
@@ -1123,7 +1123,20 @@
                     .style("opacity", "1")
                     .html(tooltipDataText);
             }
-
+            // drawChart(data, {
+            //     yAxisConfig: { yaxisStatus: true },
+            //     xAxisConfig: { xaxisStatus: true },
+            //     dataLabelColor: "#000000",
+            //     paddingInner: 0.25,
+            //     innerRadius: 0.75,
+            //     chartType: "FitWidth",
+            //     dataColumns: {
+            //         xAxisColumnDetails: [{ itemName: "Category", itemType: "Categorical", dateFormat: "%Y" }],
+            //         yAxisColumnDetails: [{ itemName: "Sales", itemType: "Numerical", dateFormat: "%Y" }],
+            //         row3ColumnDetails: [],
+            //         colorByData: [{ columnName: "Sub_Category", itemType: "Categorical" }]
+            //     }
+            // });
         </script>
     </body>
 </html>

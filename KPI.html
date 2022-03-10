@@ -36,6 +36,7 @@
 
         <script>
             function drawChart(data, plotConfiguration = {}) {
+                window.data = data;
                 var width = window.innerWidth - 10;
                 var height = window.innerHeight - 10;
                 var margin = { top: 100 };
