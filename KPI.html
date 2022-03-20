@@ -41,7 +41,7 @@
                 var height = window.innerHeight - 10;
                 var margin = { top: 100 };
 
-                var [value, label] = data;
+                var [value, label] = data[0];
 
                 var {
                     valueFontStylings = defaultD3Config.defaultKPIStyling.value,
@@ -127,8 +127,6 @@
                     .style("color", dataLabelColorKpi);
             }
 
-            // data = [12044444.555, "Label"];
-            // drawChart(data);
         </script>
     </body>
 </html>

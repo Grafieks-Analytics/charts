@@ -36,68 +36,6 @@
     <div id="legend"></div>
 
     <script>
-        // var data = { a: 9, b: 20, c: 30, d: 8, e: 12, g: 45 };
-
-        // var data = {
-        //     Accessories: 938,
-        //     Appliances: 1060,
-        //     Art: 2756,
-        //     Binders: 2114,
-        //     Bookcases: 8016,
-        //     Chairs: 6906,
-        //     Envelopes: 1134,
-        //     Fasteners: 160,
-        //     Furnishings: 2398,
-        //     Labels: 192,
-        //     Paper: 1198,
-        //     Phones: 8372,
-        //     Storage: 4638,
-        //     Supplies: 132,
-        //     Tables: 10230,
-        // };
-        // var data = [
-        //     {
-        //         Accessories: 938,
-        //         Appliances: 1060,
-        //         Art: 2756,
-        //         Binders: 2114,
-        //         Bookcases: 8016,
-        //         Chairs: 6906,
-        //         Envelopes: 1134,
-        //         Fasteners: 160,
-        //         Furnishings: 2398,
-        //         Labels: 192,
-        //         Paper: 1198,
-        //         Phones: 8372,
-        //         Storage: 4638,
-        //         Supplies: 132,
-        //         Tables: 10230,
-        //     },
-        //     ["sub-category", "sales"],
-        // ];
-        var data = [
-            {
-                "2020-01-01": 120,
-                "2020-02-01": 120,
-                "2020-03-01": 120,
-                "2020-04-01": 120,
-
-                "2021-01-01": 120,
-                "2021-02-02": 120,
-                "2021-03-03": 120,
-                "2021-04-01": 120
-            },
-            ["order-date", "sales"]
-        ];
-
-        data = [
-            {
-                Furniture: 741999.7952914548,
-                "Office Supplies Supplies Supplies": 719047.0319998885,
-                Technology: 836154.0329775356
-            },
-            ["Category", "Sales"]
-        ];
 
         function transformData(dataValues, dataColumns = {}, dateFormat) {
             var isKey1Date = false;
@@ -179,7 +117,7 @@
 
             [xAxisLabel, yAxisLabel] = data[1];
 
-            if (!toolTip) {
+            if (!toolTip || Object.keys(toolTip).length == 0) {
                 toolTip = {
                     textColumn1: xAxisLabel,
                     textColumn2: yAxisLabel
