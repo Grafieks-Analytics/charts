@@ -255,7 +255,7 @@
                     [xAxisLabel, yAxisLabel, colorData] = [xAxisConfig.xlabel, yAxisConfig.ylabel, data[2][2]];
                 }
                 // [xAxisLabel, yAxisLabel, colorData] = data[2];
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel,

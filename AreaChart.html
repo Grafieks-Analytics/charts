@@ -31,7 +31,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var dataset = dataConstant.dataLineChart;
 
             var {
                 initialCircleRadius,
@@ -163,7 +162,7 @@
                 dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
                 // [xAxisLabel, yAxisLabel] = data[1];
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel
@@ -581,7 +580,7 @@
                 dateformatValue = function (value) {
                     return value;
                 };
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel
@@ -737,8 +736,6 @@
                     });
             }
            
-            // redrawChartLineVerticle();
-            // drawChartLineVerticle();
         </script>
     </body>
 </html>

@@ -39,234 +39,6 @@
 
     <script>
         // Categories
-        var categories = ["setosa", "versicolor", "virginica", "default"];
-        //Read the data
-        var data = [
-            [
-                ["5.1", "1.4", "setosa"],
-                ["4.9", "1.4", "setosa"],
-                ["4.7", "1.3", "setosa"],
-                ["4.6", "1.5", "setosa"],
-                ["5", "1.4", "setosa"],
-                ["5.4", "1.7", "setosa"],
-                ["4.6", "1.4", "setosa"],
-                ["5", "1.5", "setosa"],
-                ["4.4", "1.4", "setosa"],
-                ["4.9", "1.5", "setosa"],
-                ["5.4", "1.5", "setosa"],
-                ["4.8", "1.6", "setosa"],
-                ["4.8", "1.4", "setosa"],
-                ["4.3", "1.1", "setosa"],
-                ["5.8", "1.2", "setosa"],
-                ["5.7", "1.5", "setosa"],
-                ["5.4", "1.3", "setosa"],
-                ["5.1", "1.4", "setosa"],
-                ["5.7", "1.7", "setosa"],
-                ["5.1", "1.5", "setosa"],
-                ["5.4", "1.7", "setosa"],
-                ["5.1", "1.5", "setosa"],
-                ["4.6", "1", "setosa"],
-                ["5.1", "1.7", "setosa"],
-                ["4.8", "1.9", "setosa"],
-                ["5", "1.6", "setosa"],
-                ["5", "1.6", "setosa"],
-                ["5.2", "1.5", "setosa"],
-                ["5.2", "1.4", "setosa"],
-                ["4.7", "1.6", "setosa"],
-                ["4.8", "1.6", "setosa"],
-                ["5.4", "1.5", "setosa"],
-                ["5.2", "1.5", "setosa"],
-                ["5.5", "1.4", "setosa"],
-                ["4.9", "1.5", "setosa"],
-                ["5", "1.2", "setosa"],
-                ["5.5", "1.3", "setosa"],
-                ["4.9", "1.4", "setosa"],
-                ["4.4", "1.3", "setosa"],
-                ["5.1", "1.5", "setosa"],
-                ["5", "1.3", "setosa"],
-                ["4.5", "1.3", "setosa"],
-                ["4.4", "1.3", "setosa"],
-                ["5", "1.6", "setosa"],
-                ["5.1", "1.9", "setosa"],
-                ["4.8", "1.4", "setosa"],
-                ["5.1", "1.6", "setosa"],
-                ["4.6", "1.4", "setosa"],
-                ["5.3", "1.5", "setosa"],
-                ["5", "1.4", "setosa"],
-                ["7", "4.7", "versicolor"],
-                ["6.4", "4.5", "versicolor"],
-                ["6.9", "4.9", "versicolor"],
-                ["5.5", "4", "versicolor"],
-                ["6.5", "4.6", "versicolor"],
-                ["5.7", "4.5", "versicolor"],
-                ["6.3", "4.7", "versicolor"],
-                ["4.9", "3.3", "versicolor"],
-                ["6.6", "4.6", "versicolor"],
-                ["5.2", "3.9", "versicolor"],
-                ["5", "3.5", "versicolor"],
-                ["5.9", "4.2", "versicolor"],
-                ["6", "4", "versicolor"],
-                ["6.1", "4.7", "versicolor"],
-                ["5.6", "3.6", "versicolor"],
-                ["6.7", "4.4", "versicolor"],
-                ["5.6", "4.5", "versicolor"],
-                ["5.8", "4.1", "versicolor"],
-                ["6.2", "4.5", "versicolor"],
-                ["5.6", "3.9", "versicolor"],
-                ["5.9", "4.8", "versicolor"],
-                ["6.1", "4", "versicolor"],
-                ["6.3", "4.9", "versicolor"],
-                ["6.1", "4.7", "versicolor"],
-                ["6.4", "4.3", "versicolor"],
-                ["6.6", "4.4", "versicolor"],
-                ["6.8", "4.8", "versicolor"],
-                ["6.7", "5", "versicolor"],
-                ["6", "4.5", "versicolor"],
-                ["5.7", "3.5", "versicolor"],
-                ["5.5", "3.8", "versicolor"],
-                ["5.5", "3.7", "versicolor"],
-                ["5.8", "3.9", "versicolor"],
-                ["6", "5.1", "versicolor"],
-                ["5.4", "4.5", "versicolor"],
-                ["6", "4.5", "versicolor"],
-                ["6.7", "4.7", "versicolor"],
-                ["6.3", "4.4", "versicolor"],
-                ["5.6", "4.1", "versicolor"],
-                ["5.5", "4", "versicolor"],
-                ["5.5", "4.4", "versicolor"],
-                ["6.1", "4.6", "versicolor"],
-                ["5.8", "4", "versicolor"],
-                ["5", "3.3", "versicolor"],
-                ["5.6", "4.2", "versicolor"],
-                ["5.7", "4.2", "versicolor"],
-                ["5.7", "4.2", "versicolor"],
-                ["6.2", "4.3", "versicolor"],
-                ["5.1", "3", "versicolor"],
-                ["5.7", "4.1", "versicolor"],
-                ["6.3", "6", "virginica"],
-                ["5.8", "5.1", "virginica"],
-                ["7.1", "5.9", "virginica"],
-                ["6.3", "5.6", "virginica"],
-                ["6.5", "5.8", "virginica"],
-                ["7.6", "6.6", "virginica"],
-                ["4.9", "4.5", "virginica"],
-                ["7.3", "6.3", "virginica"],
-                ["6.7", "5.8", "virginica"],
-                ["7.2", "6.1", "virginica"],
-                ["6.5", "5.1", "virginica"],
-                ["6.4", "5.3", "virginica"],
-                ["6.8", "5.5", "virginica"],
-                ["5.7", "5", "virginica"],
-                ["5.8", "5.1", "virginica"],
-                ["6.4", "5.3", "virginica"],
-                ["6.5", "5.5", "virginica"],
-                ["7.7", "6.7", "virginica"],
-                ["7.7", "6.9", "virginica"],
-                ["6", "5", "virginica"],
-                ["6.9", "5.7", "virginica"],
-                ["5.6", "4.9", "virginica"],
-                ["7.7", "6.7", "virginica"],
-                ["6.3", "4.9", "virginica"],
-                ["6.7", "5.7", "virginica"],
-                ["7.2", "6", "virginica"],
-                ["6.2", "4.8", "virginica"],
-                ["6.1", "4.9", "virginica"],
-                ["6.4", "5.6", "virginica"],
-                ["7.2", "5.8", "virginica"],
-                ["7.4", "6.1", "virginica"],
-                ["7.9", "6.4", "virginica"],
-                ["6.4", "5.6", "virginica"],
-                ["6.3", "5.1", "virginica"],
-                ["6.1", "5.6", "virginica"],
-                ["7.7", "6.1", "virginica"],
-                ["6.3", "5.6", "virginica"],
-                ["6.4", "5.5", "virginica"],
-                ["6", "4.8", "virginica"],
-                ["6.9", "5.4", "virginica"],
-                ["6.7", "5.6", "virginica"],
-                ["6.9", "5.1", "virginica"],
-                ["5.8", "5.1", "virginica"],
-                ["6.8", "5.9", "virginica"],
-                ["6.7", "5.7", "virginica"],
-                ["6.7", "5.2", "virginica"],
-                ["6.3", "5", "virginica"],
-                ["6.5", "5.2", "virginica"],
-                ["6.2", "5.4", "virginica"],
-                ["5.9", "5.1", "virginica"]
-            ],
-            ["Sepal_Length", "Sepal_Width", "Petal_Length"],
-            categories
-        ];
-
-        // When only numericals are passed
-        // Send
-        data = [
-            [
-                [0, 0], // This element is fixed
-                [2121, 10] // Sum of population, sum of id
-            ],
-            ["population", "id"]
-        ];
-
-        // when categorical is also passed with numerical
-        data = [
-            [
-                [524, 10, "India"], // Group them on the basis of categorical
-                [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"]
-            ],
-            ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"]
-        ];
-
-        // when categorical is also passed with numerical
-        data = [
-            [
-                [524, 10, "India"], // Group them on the basis of categorical
-                [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"]
-            ],
-            ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"]
-        ];
-        data = [
-            [
-                [-3298, 8016, "Bookcases"],
-                [228, 6906, "Chairs"],
-                [90, 192, "Labels"],
-                [-602, 10230, "Tables"],
-                [298, 4638, "Storage"],
-                [36, 2398, "Furnishings"],
-                [346, 2756, "Art"],
-                [1350, 8372, "Phones"],
-                [258, 2114, "Binders"],
-                [10, 1060, "Appliances"],
-                [518, 1198, "Paper"],
-                [394, 1134, "Envelopes"],
-                [12, 938, "Accessories"],
-                [60, 160, "Fasteners"],
-                [36, 132, "Supplies"]
-            ],
-            ["Profit", "Sales", "Sub_Category"],
-            [
-                "Bookcases",
-                "Chairs",
-                "Labels",
-                "Tables",
-                "Storage",
-                "Furnishings",
-                "Art",
-                "Phones",
-                "Binders",
-                "Appliances",
-                "Paper",
-                "Envelopes",
-                "Accessories",
-                "Fasteners",
-                "Supplies"
-            ]
-        ];
-
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             d3.selectAll("#my_dataviz").html("");
@@ -274,6 +46,7 @@
             // xAxisLabel = data[1][0];
             // yAxisLabel = data[1][1];
             colorData = data[1][2];
+            const colorValues = data[2] || [];
 
             let {
                 d3colorPalette,
@@ -623,7 +396,7 @@
             }
 
             // Color scale: give me a specie name, I return a color
-            var color = d3.scaleOrdinal().domain(categories).range(d3Colors);
+            var color = d3.scaleOrdinal().domain(colorValues).range(d3Colors);
 
             // Add dots
             svg.append("g")
@@ -673,16 +446,21 @@
                                 textValue = d.y1 - d.y0;
                             }
 
-                            return (
-                                "<div class='arrowTooltip'></div>" +
-                                "<span style='color:grey;''>" +
+                            let colorDataToolTip = "<span style='color:grey;''>" +
                                 toolTip.colorData +
                                 ":" +
-                                "</span>" +
+                                "</span>"  + 
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 d[2] +
                                 "</span>" +
-                                "<br/> <br/>" +
+                                "<br/> <br/>";
+                            if(!toolTip.colorData){
+                                colorDataToolTip = ''
+                            }
+
+                            return (
+                                "<div class='arrowTooltip'></div>" +
+                                 colorDataToolTip +
                                 "<span style='color:grey;''>" +
                                 toolTip.textColumn1 +
                                 ":&nbsp;&nbsp;" +
