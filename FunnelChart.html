@@ -19,16 +19,17 @@
                 padding: 8px;
             }
    
-            body {
+            /* body {
                 font: 10px sans-serif;
-            }
+            } */
             .arc path {
                 stroke: #fff;
             }
              #my_dataviz {
             margin-left: 0px;
             overflow: hidden;
-            height: calc(100vh - 40px)
+            height: calc(100vh - 60px);
+            margin-top:20px;
         }
 
         </style>
@@ -40,73 +41,7 @@
         <div id="legend"></div>
 
         <script>
-            var data = [
-                [
-                    {
-                        key: "Bookcases",
-                        value: 8016,
-                    },
-                    {
-                        key: "Chairs",
-                        value: 6906,
-                    },
-                    {
-                        key: "Labels",
-                        value: 192,
-                    },
-                    {
-                        key: "Tables",
-                        value: 10230,
-                    },
-                    {
-                        key: "Storage",
-                        value: 4638,
-                    },
-                    {
-                        key: "Furnishings",
-                        value: 2398,
-                    },
-                    {
-                        key: "Art",
-                        value: 2756,
-                    },
-                    {
-                        key: "Phones",
-                        value: 8372,
-                    },
-                    {
-                        key: "Binders",
-                        value: 2114,
-                    },
-                    {
-                        key: "Appliances",
-                        value: 1060,
-                    },
-                    {
-                        key: "Paper",
-                        value: 1198,
-                    },
-                    {
-                        key: "Envelopes",
-                        value: 1134,
-                    },
-                    {
-                        key: "Accessories",
-                        value: 938,
-                    },
-                    {
-                        key: "Fasteners",
-                        value: 160,
-                    },
-                    {
-                        key: "Supplies",
-                        value: 132,
-                    },
-                ],
-                ["Sub_Category", "Sales"],
-            ];
-
-            var chart = new D3Funnel("#my_dataviz");
+           var chart = new D3Funnel("#my_dataviz");
 
             function drawChart(data, plottingConfiguration = {}) {
                 try {
@@ -175,7 +110,7 @@
                             fontFamily: dataLabelfontFamily,
                         },
                     };
-                    if (!toolTip) {
+                    if (!toolTip || Object.keys(toolTip).length == 0) {
                         toolTip = {
                             textColumn1: label[0],
                             textColumn2: label[1],
@@ -520,7 +455,7 @@
                 }
             }
 
-            // drawChart(data);
+            // drawChart(data) ;
         </script>
     </body>
 </html>

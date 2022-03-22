@@ -471,7 +471,7 @@ function make_y_gridlines(y) {
 // legend
 function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin, height, data) {
     if (!data) {
-        data = [window.data[1][0]];
+        data = window.data && [window.data[1][0]];
     }
     var legendElement = document.querySelector("#legend");
     var legendHeight = legendElement.offsetHeight;
@@ -518,7 +518,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
         // [TAG: EXCEPTION]: ALIGNING LEGEND TO THE CENTER OF CHART/WINDOW
         var leftWidth = document.querySelector('#yAxisDiv');
         leftWidth = (leftWidth && leftWidth.clientWidth) || 0;
-        rightPosition = "calc(50vw - " + (legendWidth / 2 + leftWidth/2) + "px)";
+        
         // NEW CODE 
 
         //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
@@ -695,6 +695,7 @@ function tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip
             );
         });
     var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+    
 
     if (xpos - scrollVal > document.documentElement.clientWidth - document.querySelector("#tooltip").clientWidth) {
         d3.select("#tooltip").style(
@@ -718,7 +719,9 @@ function tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip
             "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
         );
     }
+    
 }
+  
 
 // ticks customisation
 function XAxisTicksConfig(xTickfontSize, xTickfontFamily, xboldTick, xitalicTick, xTickfontColor) {

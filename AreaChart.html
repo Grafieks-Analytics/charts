@@ -31,7 +31,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var dataset = dataConstant.dataLineChart;
 
             var {
                 initialCircleRadius,
@@ -163,7 +162,7 @@
                 dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
                 // [xAxisLabel, yAxisLabel] = data[1];
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel
@@ -322,7 +321,7 @@
                     .call(yAxis);
 
                 if (markerStatus && curveType == constants.cureveType.LINEAR) {
-                    drawMarker(filledStatus, markerShape, toolTip);
+                    drawMarker(filledStatus, markerShape, toolTip, legendPosition);
                 }
 
                 setLabel(
@@ -577,11 +576,11 @@
                 }
             }
 
-            function drawMarker(fillStatus, markerShape, toolTip) {
+            function drawMarker(fillStatus, markerShape, toolTip, legendPosition) {
                 dateformatValue = function (value) {
                     return value;
                 };
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel
@@ -709,6 +708,12 @@
                                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                             );
                         }
+                        if (legendPosition == "left") {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 348 + "px"
+                            );
+                        }
 
                         var shapeClass = ".marker-shape";
                         d3.selectAll(shapeClass).style("opacity", 0.3);
@@ -731,8 +736,6 @@
                     });
             }
            
-            // redrawChartLineVerticle();
-            drawChartLineVerticle();
         </script>
     </body>
 </html>

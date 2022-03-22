@@ -955,7 +955,7 @@
                 dateformatValue = function (value) {
                     return value;
                 };
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: yAxisLabel,
                         textColumn2: xAxisLabel,
@@ -1117,29 +1117,8 @@
                             .attr("width", initialBoxDimension);
                     });
             }
-            drawChart(dataset, {
-                chartType: "FitWidth",
-                xAxisConfig: { xlabel: "Sales" },
-                yAxisConfig: { ylabel: "Category" },
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Category",
-                            itemType: "Categorical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [],
-                },
-            });
+
+            
         </script>
     </body>
 </html>

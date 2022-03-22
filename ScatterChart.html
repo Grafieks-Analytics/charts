@@ -39,234 +39,6 @@
 
     <script>
         // Categories
-        var categories = ["setosa", "versicolor", "virginica", "default"];
-        //Read the data
-        var data = [
-            [
-                ["5.1", "1.4", "setosa"],
-                ["4.9", "1.4", "setosa"],
-                ["4.7", "1.3", "setosa"],
-                ["4.6", "1.5", "setosa"],
-                ["5", "1.4", "setosa"],
-                ["5.4", "1.7", "setosa"],
-                ["4.6", "1.4", "setosa"],
-                ["5", "1.5", "setosa"],
-                ["4.4", "1.4", "setosa"],
-                ["4.9", "1.5", "setosa"],
-                ["5.4", "1.5", "setosa"],
-                ["4.8", "1.6", "setosa"],
-                ["4.8", "1.4", "setosa"],
-                ["4.3", "1.1", "setosa"],
-                ["5.8", "1.2", "setosa"],
-                ["5.7", "1.5", "setosa"],
-                ["5.4", "1.3", "setosa"],
-                ["5.1", "1.4", "setosa"],
-                ["5.7", "1.7", "setosa"],
-                ["5.1", "1.5", "setosa"],
-                ["5.4", "1.7", "setosa"],
-                ["5.1", "1.5", "setosa"],
-                ["4.6", "1", "setosa"],
-                ["5.1", "1.7", "setosa"],
-                ["4.8", "1.9", "setosa"],
-                ["5", "1.6", "setosa"],
-                ["5", "1.6", "setosa"],
-                ["5.2", "1.5", "setosa"],
-                ["5.2", "1.4", "setosa"],
-                ["4.7", "1.6", "setosa"],
-                ["4.8", "1.6", "setosa"],
-                ["5.4", "1.5", "setosa"],
-                ["5.2", "1.5", "setosa"],
-                ["5.5", "1.4", "setosa"],
-                ["4.9", "1.5", "setosa"],
-                ["5", "1.2", "setosa"],
-                ["5.5", "1.3", "setosa"],
-                ["4.9", "1.4", "setosa"],
-                ["4.4", "1.3", "setosa"],
-                ["5.1", "1.5", "setosa"],
-                ["5", "1.3", "setosa"],
-                ["4.5", "1.3", "setosa"],
-                ["4.4", "1.3", "setosa"],
-                ["5", "1.6", "setosa"],
-                ["5.1", "1.9", "setosa"],
-                ["4.8", "1.4", "setosa"],
-                ["5.1", "1.6", "setosa"],
-                ["4.6", "1.4", "setosa"],
-                ["5.3", "1.5", "setosa"],
-                ["5", "1.4", "setosa"],
-                ["7", "4.7", "versicolor"],
-                ["6.4", "4.5", "versicolor"],
-                ["6.9", "4.9", "versicolor"],
-                ["5.5", "4", "versicolor"],
-                ["6.5", "4.6", "versicolor"],
-                ["5.7", "4.5", "versicolor"],
-                ["6.3", "4.7", "versicolor"],
-                ["4.9", "3.3", "versicolor"],
-                ["6.6", "4.6", "versicolor"],
-                ["5.2", "3.9", "versicolor"],
-                ["5", "3.5", "versicolor"],
-                ["5.9", "4.2", "versicolor"],
-                ["6", "4", "versicolor"],
-                ["6.1", "4.7", "versicolor"],
-                ["5.6", "3.6", "versicolor"],
-                ["6.7", "4.4", "versicolor"],
-                ["5.6", "4.5", "versicolor"],
-                ["5.8", "4.1", "versicolor"],
-                ["6.2", "4.5", "versicolor"],
-                ["5.6", "3.9", "versicolor"],
-                ["5.9", "4.8", "versicolor"],
-                ["6.1", "4", "versicolor"],
-                ["6.3", "4.9", "versicolor"],
-                ["6.1", "4.7", "versicolor"],
-                ["6.4", "4.3", "versicolor"],
-                ["6.6", "4.4", "versicolor"],
-                ["6.8", "4.8", "versicolor"],
-                ["6.7", "5", "versicolor"],
-                ["6", "4.5", "versicolor"],
-                ["5.7", "3.5", "versicolor"],
-                ["5.5", "3.8", "versicolor"],
-                ["5.5", "3.7", "versicolor"],
-                ["5.8", "3.9", "versicolor"],
-                ["6", "5.1", "versicolor"],
-                ["5.4", "4.5", "versicolor"],
-                ["6", "4.5", "versicolor"],
-                ["6.7", "4.7", "versicolor"],
-                ["6.3", "4.4", "versicolor"],
-                ["5.6", "4.1", "versicolor"],
-                ["5.5", "4", "versicolor"],
-                ["5.5", "4.4", "versicolor"],
-                ["6.1", "4.6", "versicolor"],
-                ["5.8", "4", "versicolor"],
-                ["5", "3.3", "versicolor"],
-                ["5.6", "4.2", "versicolor"],
-                ["5.7", "4.2", "versicolor"],
-                ["5.7", "4.2", "versicolor"],
-                ["6.2", "4.3", "versicolor"],
-                ["5.1", "3", "versicolor"],
-                ["5.7", "4.1", "versicolor"],
-                ["6.3", "6", "virginica"],
-                ["5.8", "5.1", "virginica"],
-                ["7.1", "5.9", "virginica"],
-                ["6.3", "5.6", "virginica"],
-                ["6.5", "5.8", "virginica"],
-                ["7.6", "6.6", "virginica"],
-                ["4.9", "4.5", "virginica"],
-                ["7.3", "6.3", "virginica"],
-                ["6.7", "5.8", "virginica"],
-                ["7.2", "6.1", "virginica"],
-                ["6.5", "5.1", "virginica"],
-                ["6.4", "5.3", "virginica"],
-                ["6.8", "5.5", "virginica"],
-                ["5.7", "5", "virginica"],
-                ["5.8", "5.1", "virginica"],
-                ["6.4", "5.3", "virginica"],
-                ["6.5", "5.5", "virginica"],
-                ["7.7", "6.7", "virginica"],
-                ["7.7", "6.9", "virginica"],
-                ["6", "5", "virginica"],
-                ["6.9", "5.7", "virginica"],
-                ["5.6", "4.9", "virginica"],
-                ["7.7", "6.7", "virginica"],
-                ["6.3", "4.9", "virginica"],
-                ["6.7", "5.7", "virginica"],
-                ["7.2", "6", "virginica"],
-                ["6.2", "4.8", "virginica"],
-                ["6.1", "4.9", "virginica"],
-                ["6.4", "5.6", "virginica"],
-                ["7.2", "5.8", "virginica"],
-                ["7.4", "6.1", "virginica"],
-                ["7.9", "6.4", "virginica"],
-                ["6.4", "5.6", "virginica"],
-                ["6.3", "5.1", "virginica"],
-                ["6.1", "5.6", "virginica"],
-                ["7.7", "6.1", "virginica"],
-                ["6.3", "5.6", "virginica"],
-                ["6.4", "5.5", "virginica"],
-                ["6", "4.8", "virginica"],
-                ["6.9", "5.4", "virginica"],
-                ["6.7", "5.6", "virginica"],
-                ["6.9", "5.1", "virginica"],
-                ["5.8", "5.1", "virginica"],
-                ["6.8", "5.9", "virginica"],
-                ["6.7", "5.7", "virginica"],
-                ["6.7", "5.2", "virginica"],
-                ["6.3", "5", "virginica"],
-                ["6.5", "5.2", "virginica"],
-                ["6.2", "5.4", "virginica"],
-                ["5.9", "5.1", "virginica"]
-            ],
-            ["Sepal_Length", "Sepal_Width", "Petal_Length"],
-            categories
-        ];
-
-        // When only numericals are passed
-        // Send
-        data = [
-            [
-                [0, 0], // This element is fixed
-                [2121, 10] // Sum of population, sum of id
-            ],
-            ["population", "id"]
-        ];
-
-        // when categorical is also passed with numerical
-        data = [
-            [
-                [524, 10, "India"], // Group them on the basis of categorical
-                [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"]
-            ],
-            ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"]
-        ];
-
-        // when categorical is also passed with numerical
-        data = [
-            [
-                [524, 10, "India"], // Group them on the basis of categorical
-                [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"]
-            ],
-            ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"]
-        ];
-        data = [
-            [
-                [-3298, 8016, "Bookcases"],
-                [228, 6906, "Chairs"],
-                [90, 192, "Labels"],
-                [-602, 10230, "Tables"],
-                [298, 4638, "Storage"],
-                [36, 2398, "Furnishings"],
-                [346, 2756, "Art"],
-                [1350, 8372, "Phones"],
-                [258, 2114, "Binders"],
-                [10, 1060, "Appliances"],
-                [518, 1198, "Paper"],
-                [394, 1134, "Envelopes"],
-                [12, 938, "Accessories"],
-                [60, 160, "Fasteners"],
-                [36, 132, "Supplies"]
-            ],
-            ["Profit", "Sales", "Sub_Category"],
-            [
-                "Bookcases",
-                "Chairs",
-                "Labels",
-                "Tables",
-                "Storage",
-                "Furnishings",
-                "Art",
-                "Phones",
-                "Binders",
-                "Appliances",
-                "Paper",
-                "Envelopes",
-                "Accessories",
-                "Fasteners",
-                "Supplies"
-            ]
-        ];
-
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             d3.selectAll("#my_dataviz").html("");
@@ -274,6 +46,7 @@
             // xAxisLabel = data[1][0];
             // yAxisLabel = data[1][1];
             colorData = data[1][2];
+            const colorValues = data[2] || [];
 
             let {
                 d3colorPalette,
@@ -341,7 +114,7 @@
             // set the dimensions and margins of the graph
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                 width = window.innerWidth - margin.left - margin.right - 20,
-                height = window.innerHeight - margin.top - margin.bottom - 30;
+                height = window.innerHeight - margin.top - margin.bottom + 15;
 
             let { gridStatus } = gridConfig;
             let { legendStatus, legendPosition } = legendConfig;
@@ -352,7 +125,7 @@
             if (!innerRadius) {
                 innerRadius = defaultD3Config.innerRadius;
             }
-            if (!toolTip || !Object.keys(toolTip).length ) {
+            if (!toolTip || !Object.keys(toolTip).length) {
                 toolTip = {
                     textColumn1: xAxisLabel,
                     textColumn2: yAxisLabel,
@@ -365,7 +138,7 @@
             d3.selectAll("#yAxisDiv").html("");
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
-            d3.select("#xAxisLabelId").style("bottom", 20);
+            d3.select("#xAxisLabelId").style("bottom", 0);
 
             // // set the dimensions and margins of the graph
             // var margin = { top: 10, right: 30, bottom: 30, left: 60 },
@@ -415,6 +188,8 @@
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
             d3.select("#xAxisLabelId").style("bottom", 20);
+            d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
+            d3.selectAll("#my_dataviz").style("margin-top", "0");
 
             // append the svg object to the body of the page
             var svg = d3
@@ -423,7 +198,7 @@
                 .attr("width", width + margin.left + margin.right + 20)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
+                .attr("transform", "translate(" + (margin.left + 10) + "," + margin.top + ")");
 
             // legends code starts
 
@@ -472,7 +247,7 @@
 
                         d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
                         d3.select("#mainChartWindow").style("margin-left", legendWidth + "px");
-                        d3.select("#xAxisLabelId").style("bottom", 10 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                         d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
 
                         break;
@@ -496,7 +271,7 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
-                        d3.select("#xAxisLabelId").style("bottom", 10 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                         d3.selectAll("#my_dataviz").style("height", "calc(100vh - 72px) ");
                         d3.selectAll("#my_dataviz").style("margin-top", 50 + "px");
 
@@ -511,7 +286,7 @@
                         var legendWidth = legendElement.offsetWidth;
                         y_pos_x_label = 20;
 
-                        d3.select("#xAxisLabelId").style("bottom", "60px");
+                        d3.select("#xAxisLabelId").style("bottom", "50px");
                         d3.select("#mainChartWindow").attr("style", null);
 
                         // d3.select("#mainChartWindow").style("width", width);
@@ -563,7 +338,7 @@
                         d3.select("#mainChartWindow").attr("style", null);
                         d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth - 10 + "px");
                         d3.select("#mainChartWindow").style("margin-left", 0);
-                        d3.select("#xAxisLabelId").style("bottom", 10 + "px");
+                        d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                         d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
                 }
             }
@@ -609,7 +384,9 @@
 
             // Add Y axis
             var y = d3.scaleLinear().domain(yRange).range([height, 0]).nice();
-            svg.append("g").call(d3.axisLeft(y).tickSizeOuter(0).tickFormat(d3.format(".2s"))).attr("class", "y-axis");
+            svg.append("g")
+                .call(d3.axisLeft(y).tickSizeOuter(0).tickFormat(d3.format(".2s")))
+                .attr("class", "y-axis");
 
             if (gridStatus) {
                 svg.append("g")
@@ -619,7 +396,7 @@
             }
 
             // Color scale: give me a specie name, I return a color
-            var color = d3.scaleOrdinal().domain(categories).range(d3Colors);
+            var color = d3.scaleOrdinal().domain(colorValues).range(d3Colors);
 
             // Add dots
             svg.append("g")
@@ -669,16 +446,21 @@
                                 textValue = d.y1 - d.y0;
                             }
 
-                            return (
-                                "<div class='arrowTooltip'></div>" +
-                                "<span style='color:grey;''>" +
+                            let colorDataToolTip = "<span style='color:grey;''>" +
                                 toolTip.colorData +
                                 ":" +
-                                "</span>" +
+                                "</span>"  + 
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 d[2] +
                                 "</span>" +
-                                "<br/> <br/>" +
+                                "<br/> <br/>";
+                            if(!toolTip.colorData){
+                                colorDataToolTip = ''
+                            }
+
+                            return (
+                                "<div class='arrowTooltip'></div>" +
+                                 colorDataToolTip +
                                 "<span style='color:grey;''>" +
                                 toolTip.textColumn1 +
                                 ":&nbsp;&nbsp;" +
@@ -697,6 +479,9 @@
                             );
                         });
                     var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                    if (legendPosition == "top") {
+                        d3.select("#tooltip").style("top", y_pos - 100 + 130 + "px");
+                    }
 
                     if (
                         x_pos - scrollVal >
@@ -721,6 +506,12 @@
                         d3.select(".arrowTooltip").attr(
                             "style",
                             "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                        );
+                    }
+                    if (legendPosition == "left") {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 375 + "px"
                         );
                     }
 
@@ -795,6 +586,21 @@
                 .attr("font-style", xitalicTick ? "italic" : "regular")
                 .attr("fill", xTickfontColor)
                 .attr("y", 8);
+
+            // [TAG: EXCEPTION]
+            // UPDATING SVG HEIGHT AND WIDTH TO fiRst G box;
+            // **NOTE: THIS IS NOT SAME FOR ALL THE CHARTS
+            var svgMain = document.querySelector("#my_dataviz svg");
+            var firstG = svgMain.querySelector("g");
+            var gDimensions = firstG.getBBox();
+            var svgHeight = gDimensions.height;
+            var svgWidth = gDimensions.width;
+            if (legendStatus && legendPosition == "top") {
+                svgHeight += 50;
+            }
+            svgMain.setAttribute("height", svgHeight + 30);
+            // svgMain.setAttribute("width", svgWidth - 20);
+
             if (xaxisStatus) {
                 d3.selectAll("g .x-axis").attr("style", "display: block");
             } else {
@@ -822,7 +628,46 @@
             setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
         }
 
-        drawChart(data);
+        // drawChart(data, {
+        //     yAxisConfig: {
+        //         yaxisStatus: true
+        //     },
+        //     xAxisConfig: {
+        //         xaxisStatus: true
+        //     },
+        //     dataLabelColor: "#000000",
+        //     paddingInner: 0.25,
+        //     innerRadius: 0.75,
+        //     chartType: "FitWidth",
+        //     dataColumns: {
+        //         xAxisColumnDetails: [
+        //             {
+        //                 itemName: "Quantity",
+        //                 itemType: "Numerical",
+        //                 dateFormat: "%Y"
+        //             }
+        //         ],
+        //         yAxisColumnDetails: [
+        //             {
+        //                 itemName: "Profit",
+        //                 itemType: "Numerical",
+        //                 dateFormat: "%Y"
+        //             }
+        //         ],
+        //         row3ColumnDetails: [],
+        //         colorByData: [
+        //             {
+        //                 columnName: "Category",
+        //                 itemType: "Categorical"
+        //             }
+        //         ]
+        //     },
+        //     toolTip: {},
+        //     legendConfig: {
+        //         legendStatus: true,
+        //         legendPosition: "left"
+        //     }
+        // });
 
         // Generate Grid ends
         // });

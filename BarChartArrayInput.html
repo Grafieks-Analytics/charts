@@ -26,8 +26,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var data = dataConstant.dataBarChart;
-
             //  draw function defination starts
             function drawChart(data, plottingConfiguration = {}) {
                 if (!redrawn) {
@@ -401,6 +399,9 @@
 
                         tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip, legendWidthLeft);
 
+                        if(legendPosition=="top"){
+                            d3.select("#tooltip").style("top", ypos - 1 + legendHeightTop + "px");
+                        }
                         d3.selectAll(".bar").style("opacity", 0.3);
                         d3.select(this).style("opacity", 1);
                     });
@@ -529,12 +530,7 @@
 
                 removeDataLabels();
             }
-            //  draw function defination starts
-
-            // redraw chart
-            // redrawChartBarVerticle();
-
-            drawChartBarVerticle();
+            
         </script>
         <!-- javascripts ends -->
     </body>
