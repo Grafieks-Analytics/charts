@@ -83,6 +83,7 @@
         }
 
         function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
             let {
                 d3colorPalette = defaultD3Config.d3ColorPalette,
                 paddingInner,
@@ -101,7 +102,7 @@
             window.dataLabelfontSize = dataLabelfontSize;
 
             d3Colors = d3colorPalette;
-            var data = transformData(data, dataColumns, dateFormat);
+            data = transformData(data, dataColumns, dateFormat);
             // set the dimensions and margins of the graph
             var margin = constants.chartMargins;
             var width = window.innerWidth;
