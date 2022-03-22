@@ -165,6 +165,7 @@
             }
 
             function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
                 let {
                     dateFormat = defaultD3Config.dateFormat,
                     dateFormat1 = defaultD3Config.dateFormat,
