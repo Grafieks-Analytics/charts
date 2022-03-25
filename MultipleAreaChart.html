@@ -405,17 +405,10 @@
                             y_pos_x_label = 57;
 
                             var htmlWidth = window.innerWidth;
-                            legendWidth = legendElement.offsetWidth;
-                            if (legendWidth < htmlWidth) {
-                                // rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
-                            } else {
-                                rightPosition = "0px";
-                            }
-                            
-                            d3.select("#legend")
+                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "5px")
-                                .style("right", rightPosition)
+                               
                                 .style("bottom", "auto")
                                 .style("left", "auto")
                                 .style("display", "flex")
@@ -427,18 +420,28 @@
                                 .style("white-space", "nowrap")
                                 .style("overflow", "hidden")
                                 .style("text-overflow", "ellipsis");
+                            legendWidth = legendElement.offsetWidth;
+                            if (legendWidth < htmlWidth) {
+                                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                                d3.select("#legend") .style("right", rightPosition)
+                            } else {
+                                rightPosition = "0px";
+                            }
+
+                           
                             // d3.select("#xAxisLabelId").style("bottom", 20);
                             d3.select("#xAxisLabelId").style("bottom", 0 + "px");
                             d3.selectAll("#my_dataviz").style("height", "calc(100vh - 42px) ");
                             d3.selectAll("#my_dataviz").style("margin-top", 40 + "px");
 
+
                             break;
                         case "bottom":
                             // height -= 50; // use legend client height
                             // margin.bottom += 10;
-                            var legendWidth = legendElement.offsetWidth;
+                            // var legendWidth = legendElement.offsetWidth;
                             y_pos_x_label = 20;
-
+                            htmlWidth = window.innerWidth;
                             d3.select("#xAxisLabelId").style("bottom", "40px");
                             d3.select("#mainChartWindow").attr("style", null);
 
@@ -448,7 +451,7 @@
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "auto")
-                                .style("right", rightPosition)
+
                                 .style("bottom", "0px")
                                 // .style("left", margin.left + "px")
                                 .style("display", "flex")
@@ -463,6 +466,14 @@
                                 .style("text-overflow", "ellipsis");
                             d3.selectAll("#my_dataviz").style("height", "calc(100vh - 42px)");
                             d3.selectAll("#my_dataviz").style("margin-top", 0 + "px");
+                            legendWidth = legendElement.offsetWidth;
+                            if (legendWidth < htmlWidth) {
+                                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                                d3.select("#legend").style("right", rightPosition);
+                                console.log({ rightPosition });
+                            } else {
+                                rightPosition = "0px";
+                            }
 
                             break;
                         // For Right Legened
