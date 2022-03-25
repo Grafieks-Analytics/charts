@@ -88,7 +88,6 @@ body {
 
 #yAxisDiv {
     position: fixed;
-    background: #fff;
     width: 72px;
 }
 #my_dataviz {
@@ -97,7 +96,6 @@ body {
 
 #xAxisDiv {
     position: fixed;
-    background: #fff;
 }
 
 .text-center {

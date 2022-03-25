@@ -69,74 +69,6 @@
                 defaultLineCurve
             } = defaultD3Config;
 
-            data = [
-                [
-                    ["Furniture", "Bookcases", 8016],
-                    ["Furniture", "Chairs", 6906],
-                    ["Furniture", "Labels", 0],
-                    ["Furniture", "Tables", 10230],
-                    ["Furniture", "Storage", 0],
-                    ["Furniture", "Furnishings", 2398],
-                    ["Furniture", "Art", 0],
-                    ["Furniture", "Phones", 0],
-                    ["Furniture", "Binders", 0],
-                    ["Furniture", "Appliances", 0],
-                    ["Furniture", "Paper", 0],
-                    ["Furniture", "Envelopes", 0],
-                    ["Furniture", "Accessories", 0],
-                    ["Furniture", "Fasteners", 0],
-                    ["Furniture", "Supplies", 0],
-                    ["Office Supplies", "Bookcases", 0],
-                    ["Office Supplies", "Chairs", 0],
-                    ["Office Supplies", "Labels", 192],
-                    ["Office Supplies", "Tables", 0],
-                    ["Office Supplies", "Storage", 4638],
-                    ["Office Supplies", "Furnishings", 0],
-                    ["Office Supplies", "Art", 2756],
-                    ["Office Supplies", "Phones", 0],
-                    ["Office Supplies", "Binders", 2114],
-                    ["Office Supplies", "Appliances", 1060],
-                    ["Office Supplies", "Paper", 1198],
-                    ["Office Supplies", "Envelopes", 1134],
-                    ["Office Supplies", "Accessories", 0],
-                    ["Office Supplies", "Fasteners", 160],
-                    ["Office Supplies", "Supplies", 132],
-                    ["Technology", "Bookcases", 0],
-                    ["Technology", "Chairs", 0],
-                    ["Technology", "Labels", 0],
-                    ["Technology", "Tables", 0],
-                    ["Technology", "Storage", 0],
-                    ["Technology", "Furnishings", 0],
-                    ["Technology", "Art", 0],
-                    ["Technology", "Phones", 8372],
-                    ["Technology", "Binders", 0],
-                    ["Technology", "Appliances", 0],
-                    ["Technology", "Paper", 0],
-                    ["Technology", "Envelopes", 0],
-                    ["Technology", "Accessories", 938],
-                    ["Technology", "Fasteners", 0],
-                    ["Technology", "Supplies", 0]
-                ],
-                [
-                    "Bookcases",
-                    "Sub_Category",
-                    "Chairs",
-                    "Labels",
-                    "Tables",
-                    "Storage",
-                    "Furnishings",
-                    "Art",
-                    "Phones",
-                    "Binders",
-                    "Appliances",
-                    "Paper",
-                    "Envelopes",
-                    "Accessories",
-                    "Fasteners",
-                    "Supplies"
-                ],
-                ["Category", "Sales", "Sub_Category"]
-            ];
 
             function transformData(dataValue, dataColumns, dateFormat, dateFormat1) {
                 json = {};
@@ -324,7 +256,7 @@
                     [xAxisLabel, yAxisLabel, colorData] = [xAxisConfig.xlabel, yAxisConfig.ylabel, data[2][2]];
                 }
                 // [xAxisLabel, yAxisLabel, colorData] = data[2];
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel,
@@ -1133,20 +1065,7 @@
                     .style("opacity", "1")
                     .html(tooltipDataText);
             }
-            // drawChart(data, {
-            //     yAxisConfig: { yaxisStatus: true },
-            //     xAxisConfig: { xaxisStatus: true },
-            //     dataLabelColor: "#000000",
-            //     paddingInner: 0.25,
-            //     innerRadius: 0.75,
-            //     chartType: "FitWidth",
-            //     dataColumns: {
-            //         xAxisColumnDetails: [{ itemName: "Category", itemType: "Categorical", dateFormat: "%Y" }],
-            //         yAxisColumnDetails: [{ itemName: "Sales", itemType: "Numerical", dateFormat: "%Y" }],
-            //         row3ColumnDetails: [],
-            //         colorByData: [{ columnName: "Sub_Category", itemType: "Categorical" }]
-            //     }
-            // });
+           
         </script>
     </body>
 </html>

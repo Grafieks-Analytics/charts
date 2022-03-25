@@ -87,58 +87,6 @@
             // var extraHeight = 0;
 
             // Color Pallets - Set 3
-            const d3colors = [
-                "#8DD3C9",
-                "#FFFFAA",
-                "#B8BED6",
-                "#F98171",
-                "#78B5D1",
-                "#FFB15B",
-                "#B4E061",
-                "#FDCDE5",
-                "#DAD9D4",
-                "#BD7FBE",
-                "#CDE9C1",
-                "#FFEA77",
-            ];
-
-            // var dataset = [
-            //     [
-            //         ["01-01-1998", 30.5621003042803618],
-            //         ["01-01-1999", 50.9164824306094999],
-            //         ["01-01-2000", 40.6363092398355727],
-            //         ["01-01-2001", 10.6302204824674538],
-            //         ["01-01-2002", 20.2485817228091547],
-            //         ["01-01-2003", 32.13664898092621325],
-            //     ],
-            //     ["Countries", "Population"],
-            // ];
-
-            var dataset = [
-                [
-                    ["Furniture", 27550],
-                    ["Office Supplies", 13384],
-                    ["Technology", 9310],
-                ],
-                ["Category", "Sales"],
-            ];
-            // var dataset = [
-            //     [
-            //         ["a", 1],
-            //         ["b", 4],
-            //         ["c", 5],
-            //     ],
-            //     ["username", "is_active"],
-            // ];
-
-            // var dataset = [
-            //     [
-            //         ["Furniture", 741999.0625],
-            //         ["OfficeSupplies", 719048.25],
-            //         ["Technology", 836155.4375],
-            //     ],
-            //     ["Category", "Sales"],
-            // ];
 
             var lineStroke = 3;
             var {
@@ -958,7 +906,7 @@
                 dateformatValue = function (value) {
                     return value;
                 };
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: yAxisLabel,
                         textColumn2: xAxisLabel,
@@ -1120,29 +1068,7 @@
                             .attr("width", initialBoxDimension);
                     });
             }
-            // drawChart(dataset, {
-            //     chartType: "FitWidth",
-            //     xAxisConfig: { xlabel: "Sales" },
-            //     yAxisConfig: { ylabel: "Category" },
-            //     dataColumns: {
-            //         xAxisColumnDetails: [
-            //             {
-            //                 itemName: "Sales",
-            //                 itemType: "Numerical",
-            //                 dateFormat: "%Y",
-            //             },
-            //         ],
-            //         yAxisColumnDetails: [
-            //             {
-            //                 itemName: "Category",
-            //                 itemType: "Categorical",
-            //                 dateFormat: "%Y",
-            //             },
-            //         ],
-            //         row3ColumnDetails: [],
-            //         colorByData: [],
-            //     },
-            // });
+        
         </script>
     </body>
 </html>

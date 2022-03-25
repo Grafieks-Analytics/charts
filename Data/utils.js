@@ -471,7 +471,7 @@ function make_y_gridlines(y) {
 // legend
 function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin, height, data) {
     if (!data) {
-        data = [window.data[1][0]];
+        data = window.data && [window.data[1][0]];
     }
     var legendElement = document.querySelector("#legend");
     var legendHeight = legendElement.offsetHeight;

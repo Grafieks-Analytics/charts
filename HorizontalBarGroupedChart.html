@@ -342,7 +342,7 @@
                     minHeight = 0;
                 }
 
-                if (!toolTip) {
+                if (!toolTip || Object.keys(toolTip).length == 0) {
                     toolTip = {
                         textColumn1: labels[0],
                         textColumn2: labels[1],
@@ -1095,56 +1095,7 @@
             //     },
             // ];
 
-            var data = [
-                [
-                    {
-                        Bookcases: -8016,
-                        Chairs: 6906,
-                        Furnishings: -2398,
-                        Tables: 10230,
-                        mainCategory: "Furniture",
-                    },
-                    {
-                        Appliances: 1060,
-                        Art: 2756,
-                        Binders: 2114,
-                        Envelopes: 1134,
-                        Fasteners: 160,
-                        Labels: 192,
-                        Paper: 1198,
-                        Storage: 4638,
-                        Supplies: 132,
-                        mainCategory: "Office Supplies",
-                    },
-                    {
-                        Accessories: 938,
-                        Phones: 8372,
-                        mainCategory: "Technology",
-                    },
-                ],
-                [
-                    [
-                        "Bookcases",
-                        "Chairs",
-                        "Labels",
-                        "Tables",
-                        "Storage",
-                        "Furnishings",
-                        "Art",
-                        "Phones",
-                        "Binders",
-                        "Appliances",
-                        "Paper",
-                        "Envelopes",
-                        "Accessories",
-                        "Fasteners",
-                        "Supplies",
-                    ],
-                ],
-                ["Category", "Sub-category", "Sales"],
-            ];
-
-            // drawChart(data, {"yAxisConfig":{"yaxisStatus":true},"xAxisConfig":{"xaxisStatus":true},"dataLabelColor":"#000000","paddingInner":0.25,"innerRadius":0.75,"chartType":"FitWidth","dataColumns":{"xAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"},{"itemName":"Sub-Category","itemType":"Categorical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]}})
-        </script>
+    
+            </script>
     </body>
 </html>
