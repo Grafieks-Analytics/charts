@@ -92,11 +92,23 @@
 
         data = [
             {
-                Furniture: 741999.7952914548,
-                "Office Supplies Supplies Supplies": 719047.0319998885,
-                Technology: 836154.0329775356
+                Accessories: 938,
+                Appliances: 1060,
+                Art: 2756,
+                Binders: 2114,
+                Bookcases: 8016,
+                Chairs: 6906,
+                Envelopes: 1134,
+                Fasteners: 160,
+                Furnishings: 2398,
+                Labels: 192,
+                Paper: 1198,
+                Phones: 8372,
+                Storage: 4638,
+                Supplies: 132,
+                Tables: 10230
             },
-            ["Category", "Sales"]
+            ["Sub_Category", "Sales"]
         ];
 
         function transformData(dataValues, dataColumns = {}, dateFormat) {
@@ -223,7 +235,7 @@
 
             if (labelStatus && (legendPosition == "top" || legendPosition == "bottom")) {
                 radius = Math.abs(radius - (Math.min(radius * 0.3), 57));
-                if(radius < 25){
+                if (radius < 25) {
                     radius = 25;
                 }
             } else if (labelStatus && (legendPosition == "right" || legendPosition == "left")) {
@@ -232,7 +244,6 @@
             }
             innerRadius = radius * innerRadius;
             innerRadius = 0;
-            
 
             d3.selectAll("#my_dataviz").html("");
             // append the svg object to the div called 'my_dataviz'
@@ -295,7 +306,7 @@
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")
-                        .style("top", y_pos-47 + "px")
+                        .style("top", y_pos - 47 + "px")
                         .style("display", "block")
                         // .text(d.data.key);
                         .html(function () {
@@ -330,15 +341,15 @@
                                 "</span>"
                             );
                         });
-                         if (legendPosition == "top") {
-                                d3.select("#tooltip").style("top", y_pos - 100 + 80 + "px");
-                            }
-                         if (legendPosition == "left") {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos  - document.querySelector("#tooltip").clientWidth + 480 + "px"
-                            );
-                        }
+                    if (legendPosition == "top") {
+                        d3.select("#tooltip").style("top", y_pos - 100 + 80 + "px");
+                    }
+                    if (legendPosition == "left") {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos - document.querySelector("#tooltip").clientWidth + 480 + "px"
+                        );
+                    }
 
                     d3.select(".arrowTooltip").attr(
                         "style",
@@ -455,7 +466,7 @@
             if (legendWidth <= window.innerWidth - 50) {
                 console.log(window.innerWidth);
                 console.log({ legendWidth });
-                rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
+                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
             } else {
                 rightPosition = 0;
             }
