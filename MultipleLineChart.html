@@ -536,7 +536,9 @@
                 var xAxisValues = dataValues.map((d) => d[0]);
 
                 // Add X axis --> it is a date format
-                x = d3.scaleBand().domain(xAxisValues).range([0, width]);
+                x = d3.scaleBand().domain(xAxisValues).range([0, width])
+                    .padding(0.5)
+                    .paddingInner(0.5);
 
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
@@ -843,7 +845,7 @@
 
                 // var barWidth = document.querySelector(".bar").getBBox().width;
                 var barWidth = x.bandwidth();
-                if (chartType == constants.chartType.FIT_WIDTH && barWidth < 40) {
+                if (chartType == constants.chartType.FIT_WIDTH && barWidth < 50) {
                     setXaxisWidth();
                 }
 
