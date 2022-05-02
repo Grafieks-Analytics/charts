@@ -61,12 +61,15 @@ text.shadow {
 }
 
 .tooltip {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
     border: 1px solid lavender;
     background: #fff;
     box-shadow: -8px 4px 20px 3px rgba(0, 0, 0, 0.2);
     padding: 10px;
     position: absolute;
     border-radius: 4px;
+    z-index: 10000000000;
 }
 
 .tooltip-row {
@@ -74,4 +77,16 @@ text.shadow {
     justify-content: space-between;
     gap: 10px;
     padding: 4px 0;
+}
+
+.tooltip-heading {
+    color: grey;
+}
+
+.legend {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 8px 4px;
+    position: fixed;
+    z-index: -1;
 }

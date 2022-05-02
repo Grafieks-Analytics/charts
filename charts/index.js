@@ -3,7 +3,17 @@ const d3 = require("d3");
 const barChartGeneration = require("./modules/barChart");
 
 const CONSTANTS = require("./constants");
-const { makeYaxisGridLines, setInitialConfig, isAxisBasedChart, clearChart, showTooltip } = require("./utils");
+
+const {
+    setInitialConfig,
+    isAxisBasedChart,
+    clearChart,
+    setTooltipHandler,
+    setLengend,
+    setGrids,
+    setYAxisLabel,
+    setXAxisLabel
+} = require("./utils");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -84,19 +94,55 @@ const { makeYaxisGridLines, setInitialConfig, isAxisBasedChart, clearChart, show
     const drawChart = (data, plotConfiguration = {}) => {
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
 
         grafieks.plotConfiguration = plotConfiguration;
         const {
             chartName,
-            yAxisConfig: { ylabel, yLabelfontSize, yaxisStatus, yaxisFontFamily } = {},
-            xAxisConfig: { xlabel, xLabelfontSize, xaxisStatus, xaxisFontFamily } = {},
+            yAxisConfig: { yLabelfontSize, yaxisStatus } = {},
+            xAxisConfig: { xLabelfontSize, xaxisStatus } = {},
             gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus } = {},
-            d3colorPalette = CONSTANTS.d3ColorPalette
+            legendConfig: {
+                legendStatus = CONSTANTS.defaultValues.legendStatus,
+                legendPosition = CONSTANTS.LEGEND_POSITION.RIGHT
+            } = {}
         } = plotConfiguration;
 
         plotConfiguration.isAxisBasedChart = isAxisBasedChart(chartName);
+
+        let legendHeight = 0;
+        let legendWidth = 0;
+        if (
+            legendStatus &&
+            (legendPosition === CONSTANTS.LEGEND_POSITION.RIGHT || legendPosition === CONSTANTS.LEGEND_POSITION.LEFT)
+        ) {
+            legendWidth = CONSTANTS.defaultValues.legendWidth;
+        } else if (legendStatus) {
+            legendHeight = CONSTANTS.defaultValues.legendHeight;
+        }
+
+        // Set Height and Width of the chart
+        const width = window.innerWidth - legendWidth;
+        const height = window.innerHeight - legendHeight;
+
+        // Store the values to charts config
+        // Same value to be reused further
+        grafieks.chartsConfig.width = width;
+        grafieks.chartsConfig.height = height;
+
+        const chartsMargins = { ...CONSTANTS.chartsMargins };
+
+        // If xAxisLabel needs to be shown then add the 1.5 times the fontSize of xLabel to bottom margin
+        if (xaxisStatus) {
+            chartsMargins.bottom = chartsMargins.bottom + xLabelfontSize * 1.5;
+        }
+
+        // If yAxisLabel needs to be shown then add the 1.5 times the fontSize of yLabel to bottom margin
+        if (yaxisStatus) {
+            chartsMargins.left = chartsMargins.left + yLabelfontSize * 1.5;
+        }
+
+        // Setting margins to grafieks object to use it further
+        grafieks.chartsConfig.margins = chartsMargins;
 
         // Function to get the chart's svg
         let getChartSvg = function () {};
@@ -112,33 +158,13 @@ const { makeYaxisGridLines, setInitialConfig, isAxisBasedChart, clearChart, show
         const svg = getChartSvg();
 
         // Setting xAxis labels
-        // Move this to a function later
         if (xaxisStatus) {
-            svg.append("g")
-                .attr("class", "x-axis-label")
-                .attr("transform", `translate(${width / 2},${height - xLabelfontSize / 2})`)
-                .append("text")
-                .attr("fill", "black")
-                .attr("font-size", xLabelfontSize)
-                .attr("font-family", xaxisFontFamily || CONSTANTS.fontFamily)
-                .attr("text-anchor", "middle")
-                .text(xlabel);
+            setXAxisLabel(svg);
         }
 
         // Setting yAxis labels
-        // Move this to a function later
         if (yaxisStatus) {
-            svg.append("g")
-                .attr("class", "y-axis-label")
-                .append("text")
-                .attr("fill", "black")
-                .attr("transform", "rotate(-90)")
-                .attr("x", -(height / 2))
-                .attr("y", yLabelfontSize)
-                .style("text-anchor", "middle")
-                .attr("font-size", yLabelfontSize)
-                .attr("font-family", yaxisFontFamily || CONSTANTS.fontFamily)
-                .text(ylabel);
+            setYAxisLabel(svg);
         }
 
         const chartsDiv = d3.select(".charts-div");
@@ -149,17 +175,15 @@ const { makeYaxisGridLines, setInitialConfig, isAxisBasedChart, clearChart, show
             // Add multiple conditions only for the axis based chart
             // grids can only be there in axis based charts
             if (gridStatus) {
-                const chartsMargins = grafieks.chartsConfig.margins;
-                svg.append("g")
-                    .lower() // lower() Works like Prepend in jquery
-                    .attr("class", "grid")
-                    .attr("transform", `translate(${chartsMargins.left},0)`)
-                    .style("stroke-width", "1")
-                    .call(makeYaxisGridLines(grafieks.utils.yScale));
+                setGrids(svg);
             }
         }
 
-        showTooltip();
+        // Set Tooltip Handler
+        setTooltipHandler();
+
+        // Set Lenged
+        setLengend();
     };
 
     grafieks.drawChart = drawChart;

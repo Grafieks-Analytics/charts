@@ -91,11 +91,22 @@ module.exports = {
         NONE: "none"
     },
 
-    fontSize: 12,
-    fontFamily: "MS Sans Serif",
-    fontColor: "black",
-
     defaultValues: {
-        gridStatus: true
+        fontSize: 12,
+        fontFamily: "MS Sans Serif",
+        fontColor: "black",
+
+        gridStatus: true,
+        legendStatus: true,
+
+        legendWidth: 100,
+        legendHeight: 50
+    },
+
+    LEGEND_POSITION: {
+        TOP: "top",
+        BOTTOM: "bottom",
+        LEFT: "left",
+        RIGHT: "right"
     }
 };

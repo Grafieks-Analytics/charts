@@ -18,11 +18,15 @@ const setInitialConfig = () => {
     // width
     // height
     grafieks.chartsConfig = { margins: CONSTANTS.chartsMargins };
+
+    // legend config; Will have margins to be used in tooltip
+    grafieks.legend = {};
 };
 
 const getSvg = () => {
-    const { width, height, lengends: { legendWidth = 0, legenedHeight = 0 } = {} } = window.grafieks.chartsConfig;
-    return d3.create("svg").attr("viewBox", [0, 0, width - legendWidth, height - legenedHeight]);
+    const { width, height } = window.grafieks.chartsConfig;
+    return d3.create("svg").attr("width", width).attr("height", height);
+    //.attr("viewBox", [0, 0, width, height]);
 };
 
 const getAxisWidth = () => {
@@ -118,7 +122,7 @@ const isElementInViewport = (element) => {
     );
 };
 
-const showTooltip = () => {
+const setTooltipHandler = () => {
     // Show tooltip on mouseover
     // Move this to function and move it to utils
 
@@ -139,10 +143,13 @@ const showTooltip = () => {
             const pointers = d3.pointer(event, this);
             const [xpos, ypos] = pointers;
 
+            const topValue = ypos - 16 + (window.grafieks.legend.topMargin || 0);
+            const leftValue = xpos + 16 - (window.grafieks.legend.leftMargin || 0);
+
             // Set the tooltip position
             d3.select(".tooltip")
-                .style("top", ypos - 16 + "px")
-                .style("left", xpos + 16 + "px");
+                .style("top", topValue + "px")
+                .style("left", leftValue + "px");
 
             d3.select(".tooltip .leftArrow").style("display", "block");
             d3.select(".tooltip .rightArrow").style("display", "none");
@@ -173,6 +180,130 @@ const showTooltip = () => {
         });
 };
 
+const setLengend = () => {
+    const {
+        legendConfig: {
+            legendStatus = CONSTANTS.defaultValues.legendStatus,
+            legendPosition = CONSTANTS.LEGEND_POSITION.RIGHT
+        } = {}
+    } = window.grafieks.plotConfiguration;
+
+    if (legendStatus) {
+        switch (legendPosition) {
+            case CONSTANTS.LEGEND_POSITION.RIGHT:
+                d3.select(".legend")
+                    .style("top", "0px")
+                    .style("right", "0px")
+                    .style("left", null)
+                    .style("height", "100%")
+                    .style("width", "100px");
+
+                grafieks.legend.topMargin = 0;
+                grafieks.legend.leftMargin = 0;
+
+                break;
+            case CONSTANTS.LEGEND_POSITION.LEFT:
+                d3.select(".legend")
+                    .style("top", "0px")
+                    .style("left", "0px")
+                    .style("right", null)
+                    .style("height", "100%")
+                    .style("width", "100px");
+
+                grafieks.legend.topMargin = 0;
+                grafieks.legend.leftMargin = 100;
+
+                break;
+            case CONSTANTS.LEGEND_POSITION.TOP:
+                d3.select(".legend")
+                    .style("top", "0px")
+                    .style("left", null)
+                    .style("right", null)
+                    .style("height", CONSTANTS.defaultValues.legendHeight + "px")
+                    .style("width", "100%");
+
+                grafieks.legend.topMargin = CONSTANTS.defaultValues.legendHeight;
+                grafieks.legend.leftMargin = 0;
+
+                break;
+            case CONSTANTS.LEGEND_POSITION.BOTTOM:
+                d3.select(".legend")
+                    .style("top", "0px")
+                    .style("left", null)
+                    .style("right", null)
+                    .style("height", CONSTANTS.defaultValues.legendHeight + "px")
+                    .style("width", "100%");
+
+                grafieks.legend.topMargin = 0;
+                grafieks.legend.leftMargin = 0;
+                break;
+        }
+    } else {
+        grafieks.legend.topMargin = 0;
+        grafieks.legend.leftMargin = 0;
+    }
+
+    d3.select(".main-div")
+        .style("margin-left", grafieks.legend.leftMargin + "px")
+        .style("margin-top", grafieks.legend.topMargin + "px");
+};
+
+const setXAxisLabel = (svg) => {
+    const { width, height } = window.grafieks.chartsConfig;
+    const {
+        xAxisConfig: {
+            xlabel,
+            xLabelfontSize = CONSTANTS.defaultValues.fontSize,
+            xaxisFontFamily = CONSTANTS.defaultValues.fontFamily
+        } = {}
+    } = window.grafieks.plotConfiguration;
+
+    // TODO: Center the xAxis label
+    svg.append("g")
+        .attr("class", "x-axis-label")
+        .attr("transform", `translate(${width / 2},${height - xLabelfontSize / 2})`)
+        .append("text")
+        .attr("fill", "black")
+        .attr("font-size", xLabelfontSize)
+        .attr("font-family", xaxisFontFamily)
+        .attr("text-anchor", "middle")
+        .text(xlabel);
+};
+
+const setYAxisLabel = (svg) => {
+    const { height } = window.grafieks.chartsConfig;
+    const {
+        yAxisConfig: {
+            ylabel,
+            yLabelfontSize = CONSTANTS.defaultValues.fontSize,
+            yaxisFontFamily = CONSTANTS.defaultValues.fontFamily
+        } = {}
+    } = window.grafieks.plotConfiguration;
+
+    // TODO: Center the yAxis label
+    svg.append("g")
+        .attr("class", "y-axis-label")
+        .append("text")
+        .attr("fill", "black")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -(height / 2))
+        .attr("y", yLabelfontSize)
+        .style("text-anchor", "middle")
+        .attr("font-size", yLabelfontSize)
+        .attr("font-family", yaxisFontFamily || CONSTANTS.defaultValues.fontFamily)
+        .text(ylabel);
+};
+
+const setGrids = (svg) => {
+    const chartsMargins = grafieks.chartsConfig.margins;
+    svg.append("g")
+        .lower() // lower() Works like Prepend in jquery
+        .attr("class", "grid")
+        .attr("transform", `translate(${chartsMargins.left},0)`)
+        .style("stroke-width", "1")
+        .call(makeYaxisGridLines(window.grafieks.utils.yScale));
+};
+
 module.exports = {
     setInitialConfig,
     getSvg,
@@ -187,5 +318,9 @@ module.exports = {
     getXScale,
     getYRange,
     getXRange,
-    showTooltip
+    setTooltipHandler,
+    setLengend,
+    setGrids,
+    setYAxisLabel,
+    setXAxisLabel
 };
