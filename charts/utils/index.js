@@ -144,7 +144,7 @@ const setTooltipHandler = () => {
             const [xpos, ypos] = pointers;
 
             const topValue = ypos - 16 + (window.grafieks.legend.topMargin || 0);
-            const leftValue = xpos + 16 - (window.grafieks.legend.leftMargin || 0);
+            const leftValue = xpos + 16 + (window.grafieks.legend.leftMargin || 0);
 
             // Set the tooltip position
             d3.select(".tooltip")
@@ -168,7 +168,7 @@ const setTooltipHandler = () => {
             if (!isElementInViewport(d3.select(".tooltip").node())) {
                 d3.select(".tooltip .leftArrow").style("display", "none");
                 d3.select(".tooltip .rightArrow").style("display", "block");
-                const toolTipRight = window.innerWidth - xpos;
+                const toolTipRight = window.innerWidth - xpos - (window.grafieks.legend.leftMargin || 0);
                 tooltipBox.style.right = toolTipRight + 16 + "px";
                 tooltipBox.style.left = null;
             }
