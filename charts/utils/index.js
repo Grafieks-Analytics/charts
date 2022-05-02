@@ -1,5 +1,5 @@
 const d3 = require("d3");
-const { axisBasedCharts, chartsMargins } = require("../constants");
+const CONSTANTS = require("../constants");
 
 const setInitialConfig = () => {
     const grafieks = (window.grafieks = window.grafieks || {}); // Setting grafieks's empty object to window
@@ -17,7 +17,7 @@ const setInitialConfig = () => {
     // margins
     // width
     // height
-    grafieks.chartsConfig = { margins: chartsMargins };
+    grafieks.chartsConfig = { margins: CONSTANTS.chartsMargins };
 };
 
 const getSvg = () => {
@@ -41,15 +41,11 @@ const clearChart = () => {
 };
 
 const makeYaxisGridLines = (scale) => {
-    return d3
-        .axisLeft(scale)
-        .ticks(window.innerHeight / 70)
-        .tickSize(-getAxisWidth())
-        .tickFormat(d3.format(".2s"));
+    return d3.axisLeft(scale).ticks(getNumberOfTicks()).tickSize(-getAxisWidth()).tickFormat(d3.format(".2s"));
 };
 
 const isAxisBasedChart = (chartName) => {
-    return axisBasedCharts.includes(chartName);
+    return CONSTANTS.axisBasedCharts.includes(chartName);
 };
 
 const getMinimumValue = (array) => {
@@ -87,25 +83,92 @@ const getXRange = () => {
     return [chartsMargins.left, width - chartsMargins.right];
 };
 
+const formTooltipRow = (heading, value) => {
+    if (!isNaN(value)) {
+        value = (+value).toFixed(2);
+    }
+    return `<div class="tooltip-row">
+                <span class="tooltip-heading">${heading}:</span>
+                <span class="tooltip-value">${value}</span>
+            </div>`;
+};
+
+const getToolTopValues = (element) => {
+    const dataValues = element.dataset;
+    const dataLabels = window.grafieks.dataUtils.dataLabels;
+    let tooltipHtmlValue = [];
+    switch (window.grafieks.plotConfiguration.chartName) {
+        case CONSTANTS.BAR_CHART:
+            tooltipHtmlValue.push(formTooltipRow(dataLabels[0], dataValues.valueX1));
+            tooltipHtmlValue.push(formTooltipRow(dataLabels[1], dataValues.valueY1));
+            break;
+    }
+
+    return tooltipHtmlValue.join("");
+};
+
+const isElementInViewport = (element) => {
+    const rect = element.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) /* or $(window).height() */ &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+    );
+};
+
 const showTooltip = () => {
     // Show tooltip on mouseover
     // Move this to function and move it to utils
 
+    const tooltip = d3.select(".tooltip");
+    tooltip.append("span").attr("class", "leftArrow");
+    tooltip.append("div").attr("class", "tooltip-text");
+    tooltip.append("span").attr("class", "rightArrow");
+
     d3.selectAll(".visualPlotting")
-        .on("mouseout", function (d, i) {
+        .on("mouseout", function () {
             d3.select(".tooltip").style("display", "none");
             d3.selectAll(".visualPlotting").style("opacity", 1);
         })
-        .on("mouseover mousemove", function (d, i) {
-            // let xpos = d3.pointer(this)[0] + margin.left;
-            // let ypos = d3.pointer(this)[1];
+        .on("mouseover mousemove", function (event) {
+            d3.select(".tooltip").style("display", "block");
 
-            // let xValue = this.getAttribute("data-value-x");
-            // let yValue = this.getAttribute("data-value-y");
+            // Get the x and y values for the mouse position
+            const pointers = d3.pointer(event, this);
+            const [xpos, ypos] = pointers;
 
-            // tooltip Ui fix
+            // Set the tooltip position
+            d3.select(".tooltip")
+                .style("top", ypos - 16 + "px")
+                .style("left", xpos + 16 + "px");
 
+            d3.select(".tooltip .leftArrow").style("display", "block");
+            d3.select(".tooltip .rightArrow").style("display", "none");
+
+            // Get the tooltip values
+            // Based on chart names
+            const tooltipValue = getToolTopValues(this);
+
+            // Set the tooltip text
+            d3.select(".tooltip .tooltip-text").html(tooltipValue);
+
+            const tooltipBox = d3.select(".tooltip").node();
+            tooltipBox.style.right = null;
+
+            // Check if tooltip is in viewport
+            if (!isElementInViewport(d3.select(".tooltip").node())) {
+                d3.select(".tooltip .leftArrow").style("display", "none");
+                d3.select(".tooltip .rightArrow").style("display", "block");
+                const toolTipRight = window.innerWidth - xpos;
+                tooltipBox.style.right = toolTipRight + 16 + "px";
+                tooltipBox.style.left = null;
+            }
+
+            // Fade all the other lines
             d3.selectAll(".visualPlotting").style("opacity", 0.3);
+            // Mark the current line
             d3.select(this).style("opacity", 1);
         });
 };

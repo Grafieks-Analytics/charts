@@ -93,5 +93,9 @@ module.exports = {
 
     fontSize: 12,
     fontFamily: "MS Sans Serif",
-    fontColor: "black"
+    fontColor: "black",
+
+    defaultValues: {
+        gridStatus: true
+    }
 };

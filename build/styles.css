@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-body { 
+body {
     margin: 0px;
     padding: 0px;
     overflow: hidden;
@@ -36,4 +36,42 @@ text.shadow {
 .y-axis path,
 .domain {
     stroke: lightgray;
+}
+
+.leftArrow {
+    border: solid;
+    border-color: white transparent;
+    border-width: 10px 6px 0 6px;
+    content: "";
+    left: -10px;
+    top: 10px;
+    transform: rotate(90deg) !important;
+    position: absolute;
+}
+
+.rightArrow {
+    border: solid;
+    border-color: white transparent;
+    border-width: 10px 6px 0 6px;
+    content: "";
+    right: -10px;
+    top: 10px;
+    transform: rotate(270deg) !important;
+    position: absolute;
+}
+
+.tooltip {
+    border: 1px solid lavender;
+    background: #fff;
+    box-shadow: -8px 4px 20px 3px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    position: absolute;
+    border-radius: 4px;
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 4px 0;
 }

@@ -19,7 +19,7 @@ const { makeYaxisGridLines, setInitialConfig, isAxisBasedChart, clearChart, show
         let plotConfiguration = {
             chartName: "barChart",
             yAxisConfig: { yaxisStatus: true, ylabel: "Sales" },
-            xAxisConfig: { xaxisStatus: true, xlabel: "Product_Name" },
+            xAxisConfig: { xaxisStatus: true, xlabel: "Sub-Category" },
             dataLabelColor: "#000000",
             paddingInner: 0.25,
             innerRadius: 0.75,
@@ -92,7 +92,7 @@ const { makeYaxisGridLines, setInitialConfig, isAxisBasedChart, clearChart, show
             chartName,
             yAxisConfig: { ylabel, yLabelfontSize, yaxisStatus, yaxisFontFamily } = {},
             xAxisConfig: { xlabel, xLabelfontSize, xaxisStatus, xaxisFontFamily } = {},
-            gridConfig: { gridStatus = false } = {},
+            gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus } = {},
             d3colorPalette = CONSTANTS.d3ColorPalette
         } = plotConfiguration;
 

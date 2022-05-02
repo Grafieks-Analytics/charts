@@ -8,10 +8,10 @@ const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs"));
 
 const CONSTANTS = require("./core/contants");
-require('dotenv').config();
+require("dotenv").config();
 
 let buildPath = `./${CONSTANTS.BUILD_PATH}/`;
-var buildMode = process.env.MODE || CONSTANTS.DEVELOPMENT_MODE;
+var buildMode = process.env.MODE == CONSTANTS.PRODUCTION_MODE ? CONSTANTS.PRODUCTION_MODE : CONSTANTS.DEVELOPMENT_MODE;
 
 (function () {
     return new Promise((resolve, reject) => {

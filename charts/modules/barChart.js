@@ -62,13 +62,15 @@ const barChartGeneration = () => {
     grafieks.utils.yScale = yScale;
     grafieks.utils.xScale = xScale;
 
-    const xAxis = (g) =>
-        g
-            .attr("transform", `translate(0,${height - chartsMargins.bottom})`)
+    const xAxis = (options = {}, g) => {
+        const chartsMargins = window.grafieks.chartsConfig.margins;
+        const { textAnchor = "middle", translateY = height - chartsMargins.bottom } = options;
+        return g
+            .attr("transform", `translate(0,${translateY})`)
             .call(d3.axisBottom(grafieks.utils.xScale).tickSizeOuter(0))
             .selectAll("text")
-            .style("text-anchor", "middle");
-
+            .style("text-anchor", textAnchor);
+    };
     // .attr("dx", "-.8em")
     // .attr("dy", "-0.5em")
     // .attr("transform", "rotate(-90)");
@@ -77,8 +79,7 @@ const barChartGeneration = () => {
         g.attr("transform", `translate(${chartsMargins.left},0)`).call(
             d3
                 .axisLeft(grafieks.utils.yScale)
-                .tickSize(0)
-                // .tickSize(-utils.getAxisWidth())
+                .tickSize(0) // To remove the tick marks (The dashed solid lines)
                 .ticks(utils.getNumberOfTicks())
                 .tickFormat(d3.format(".2s"))
         );
@@ -86,7 +87,7 @@ const barChartGeneration = () => {
     const svg = utils.getSvg();
     // .call(zoom);
 
-    svg.append("g").attr("class", "x-axis").call(xAxis);
+    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
 
     svg.append("g")
