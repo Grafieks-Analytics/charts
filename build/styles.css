@@ -44,7 +44,7 @@ text.shadow {
     border-width: 10px 6px 0 6px;
     content: "";
     left: -10px;
-    top: 10px;
+    top: calc(50% - 5px);
     transform: rotate(90deg) !important;
     position: absolute;
 }
@@ -55,7 +55,7 @@ text.shadow {
     border-width: 10px 6px 0 6px;
     content: "";
     right: -10px;
-    top: 10px;
+    top: calc(50% - 5px);
     transform: rotate(270deg) !important;
     position: absolute;
 }
