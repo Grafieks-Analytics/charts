@@ -99,8 +99,8 @@ module.exports = {
         gridStatus: true,
         legendStatus: true,
 
-        legendWidth: 100,
-        legendHeight: 50
+        legendWidth: 120,
+        legendHeight: 30
     },
 
     LEGEND_POSITION: {

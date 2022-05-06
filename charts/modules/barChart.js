@@ -14,6 +14,8 @@ const barChartGeneration = () => {
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
 
+    grafieks.legend.data = [dataLabels[0]];
+
     const { height } = grafieks.chartsConfig;
 
     const minValue = utils.getMinimumValue(dataValues[1]);
