@@ -120,3 +120,7 @@ text.shadow {
     justify-content: center;
     gap: 6px;
 }
+
+.grid text {
+    display: none;
+}

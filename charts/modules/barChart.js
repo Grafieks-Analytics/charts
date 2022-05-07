@@ -37,16 +37,23 @@ const barChartGeneration = () => {
 
     const xAxis = (options = {}, g) => {
         const chartsMargins = window.grafieks.chartsConfig.margins;
-        const { textAnchor = "middle", translateY = height - chartsMargins.bottom } = options;
-        return g
-            .attr("transform", `translate(0,${translateY})`)
+        let { textAnchor = "middle", translateY = height - chartsMargins.bottom } = options;
+        // Adding rotating margin to xAxis so that when it is rotated things are visible fine
+        const ticks = g
+            .attr("transform", `translate(0,${translateY - (chartsMargins.rotatingMargin || 0)})`)
             .call(d3.axisBottom(grafieks.utils.xScale).tickSizeOuter(0))
-            .selectAll("text")
-            .style("text-anchor", textAnchor);
+            .selectAll("text");
+
+        // If ticking config is vertical -> rotating the tick to 90 degrees
+        if (grafieks.chartsConfig.ticksStyle == CONSTANTS.TICK_VERTICAL) {
+            ticks.attr("dx", "-.8em").attr("dy", "-0.5em").attr("transform", "rotate(-90)");
+            textAnchor = "end";
+        }
+
+        ticks.attr("text-anchor", textAnchor);
+
+        return ticks;
     };
-    // .attr("dx", "-.8em")
-    // .attr("dy", "-0.5em")
-    // .attr("transform", "rotate(-90)");
 
     const yAxis = (g) => {
         const chartsMargins = window.grafieks.chartsConfig.margins;

@@ -32,6 +32,58 @@ const isElementInViewport = (element) => {
     );
 };
 
+const isTickTextOverflowing = () => {
+    /*
+        Here we check if the tick text is overflowing the rotating margin.
+        - tick length should not exceed xAxiis length
+    */
+    const tickText = d3.selectAll(".x-axis .tick text");
+    const tickNodes = tickText.nodes();
+    const xScale = window.grafieks.utils.xScale;
+    let isOverflowing = false;
+    const tickNodeLength = tickNodes.length;
+    let rotatingMargin = grafieks.chartsConfig.margins.rotatingMargin || 0;
+    const barsWidth = xScale.bandwidth();
+
+    for (var i = 0; i < tickNodeLength; i++) {
+        const tick = tickNodes[i];
+        const textLength = tick.getComputedTextLength();
+        if (rotatingMargin < textLength) {
+            rotatingMargin = Math.min(textLength, CONSTANTS.defaultValues.maxRotationMargin);
+        }
+        if (isOverflowing) {
+            continue;
+        }
+        if (textLength > barsWidth) {
+            isOverflowing = true;
+        }
+    }
+    grafieks.chartsConfig.margins.rotatingMargin = rotatingMargin - 5;
+    return isOverflowing;
+};
+
+const getClippedTickText = (tick, tickNodeLength) => {
+    const text = tick.innerHTML;
+    const singleLetterLength = tickNodeLength / text.length;
+    const totalEligibleCharacters = Math.floor(grafieks.chartsConfig.margins.rotatingMargin / singleLetterLength);
+    if (text.length - totalEligibleCharacters > 3) {
+        return text.substr(0, totalEligibleCharacters + 2) + "...";
+    }
+    return text;
+};
+
+const modifyAndHideTicks = () => {
+    const tickTexts = d3.selectAll(".x-axis .tick text").nodes();
+    tickTexts.forEach((tick) => {
+        // TODO: Hide Ticks if they overlap
+        // To check if the tick is overlapping, width of vertical tick (height of the tick)
+        const tickNodeLength = tick.getComputedTextLength();
+        if (tickNodeLength > grafieks.chartsConfig.margins.rotatingMargin) {
+            tick.innerHTML = getClippedTickText(tick, tickNodeLength);
+        }
+    });
+};
+
 const makeYaxisGridLines = (scale) => {
     return d3.axisLeft(scale).ticks(getNumberOfTicks()).tickSize(-getAxisWidth()).tickFormat(d3.format(".2s"));
 };
@@ -94,8 +146,9 @@ const getXScale = (domain, range, options = {}) => {
 
 const getYRange = () => {
     const { height, margins: chartsMargins } = window.grafieks.chartsConfig;
-    return [height - chartsMargins.bottom, chartsMargins.top];
+    return [height - chartsMargins.bottom - (chartsMargins.rotatingMargin || 0), chartsMargins.top];
 };
+
 const getYScale = (domain, range) => {
     return d3.scaleLinear().domain(domain).nice().range(range);
 };
@@ -325,7 +378,7 @@ const setXAxisLabel = (svg) => {
 };
 
 const setYAxisLabel = (svg) => {
-    const { height } = window.grafieks.chartsConfig;
+    const { height, margins: chartsMargins } = window.grafieks.chartsConfig;
     const {
         yAxisConfig: {
             ylabel,
@@ -340,7 +393,7 @@ const setYAxisLabel = (svg) => {
         .append("text")
         .attr("fill", "black")
         .attr("transform", "rotate(-90)")
-        .attr("x", -(height / 2))
+        .attr("x", -(height / 2 - (chartsMargins.rotatingMargin || 0)))
         .attr("y", yLabelfontSize)
         .style("text-anchor", "middle")
         .attr("font-size", yLabelfontSize)
@@ -368,5 +421,7 @@ module.exports = {
     setLengend,
     setGrids,
     setYAxisLabel,
-    setXAxisLabel
+    setXAxisLabel,
+    isTickTextOverflowing,
+    modifyAndHideTicks
 };

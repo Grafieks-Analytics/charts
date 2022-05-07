@@ -12,7 +12,9 @@ const {
     setLengend,
     setGrids,
     setYAxisLabel,
-    setXAxisLabel
+    setXAxisLabel,
+    isTickTextOverflowing,
+    modifyAndHideTicks
 } = require("./utils");
 
 (function () {
@@ -155,7 +157,31 @@ const {
                 return console.log("No chart generator function found for this chart");
         }
 
-        const svg = getChartSvg();
+        // Clear the chart before drawing anything
+        clearChart();
+
+        // SVG element is the chart for particular chart
+        let svg = getChartSvg();
+        const chartsDiv = d3.select(".charts-div");
+        chartsDiv.node().appendChild(svg.node());
+
+        // Checking if text is overflowing
+        const isOverFlowing = isTickTextOverflowing();
+        grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
+
+        if (isOverFlowing) {
+            /*
+                Rotate the x-axis labels to vertical. To perform this action, we need to
+                - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
+                - Change yAxis Scale (Rotating Margin is added to yScale in range)
+                - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
+            */
+            svg.node().remove();
+            grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
+            svg = getChartSvg();
+            chartsDiv.node().appendChild(svg.node());
+            modifyAndHideTicks();
+        }
 
         // Setting xAxis labels
         if (xaxisStatus) {
@@ -166,10 +192,6 @@ const {
         if (yaxisStatus) {
             setYAxisLabel(svg);
         }
-
-        const chartsDiv = d3.select(".charts-div");
-        clearChart();
-        chartsDiv.node().appendChild(svg.node());
 
         if (plotConfiguration.isAxisBasedChart) {
             // Add multiple conditions only for the axis based chart

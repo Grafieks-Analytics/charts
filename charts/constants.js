@@ -100,7 +100,8 @@ module.exports = {
         legendStatus: true,
 
         legendWidth: 120,
-        legendHeight: 30
+        legendHeight: 30,
+        maxRotationMargin: 70 // Maximum height allowed for ticks after rotation
     },
 
     LEGEND_POSITION: {
@@ -108,5 +109,8 @@ module.exports = {
         BOTTOM: "bottom",
         LEFT: "left",
         RIGHT: "right"
-    }
+    },
+
+    TICK_VERTICAL: "verticalTicks",
+    TICK_HORIZONTAL: "horizontalTicks"
 };
