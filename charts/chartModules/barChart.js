@@ -4,7 +4,7 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const barChartGeneration = () => {
+const barChartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
@@ -67,9 +67,6 @@ const barChartGeneration = () => {
                 .tickFormat(d3.format(".2s"))
         );
     };
-
-    const svg = utils.getSvg();
-    // .call(zoom);
 
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);

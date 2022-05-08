@@ -2,7 +2,7 @@ const d3 = require("d3");
 const CONSTANTS = require("./constants");
 
 // Utility functions
-const { setInitialConfig, isAxisBasedChart, clearChart } = require("./utils");
+const { setInitialConfig, isAxisBasedChart, clearChart, getSvg } = require("./utils");
 
 // Features Modules
 const { setYAxisLabel, setXAxisLabel } = require("./modules/axisLabels");
@@ -161,11 +161,12 @@ const barChartGeneration = require("./chartModules/barChart");
         clearChart();
 
         // SVG element is the chart for particular chart
-        let svg = getChartSvg();
+        let svg = getChartSvg(getSvg());
+
         const chartsDiv = d3.select(".charts-div");
         chartsDiv.node().appendChild(svg.node());
 
-        // Checking if text is overflowing
+        // Checking if tick text is overflowing
         const isOverFlowing = isTickTextOverflowing();
 
         if (isOverFlowing) {
@@ -177,24 +178,24 @@ const barChartGeneration = require("./chartModules/barChart");
             */
             svg.node().remove();
             grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
-            svg = getChartSvg();
+            svg = getChartSvg(getSvg());
             chartsDiv.node().appendChild(svg.node());
             modifyAndHideTicks();
         }
 
-        // Setting xAxis labels
-        if (xaxisStatus) {
-            setXAxisLabel(svg);
-        }
-
-        // Setting yAxis labels
-        if (yaxisStatus) {
-            setYAxisLabel(svg);
-        }
-
         if (plotConfiguration.isAxisBasedChart) {
             // Add multiple conditions only for the axis based chart
-            // grids can only be there in axis based charts
+
+            // Setting xAxis labels
+            if (xaxisStatus) {
+                setXAxisLabel(svg);
+            }
+
+            // Setting yAxis labels
+            if (yaxisStatus) {
+                setYAxisLabel(svg);
+            }
+
             if (gridStatus) {
                 setGrids(svg);
             }
