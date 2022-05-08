@@ -207,7 +207,7 @@ const barChartGeneration = require("./chartModules/barChart");
         setLengend();
 
         // Set data labels
-        setDataLabels();
+        setDataLabels(svg);
     };
 
     grafieks.drawChart = drawChart;
