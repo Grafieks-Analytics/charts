@@ -160,6 +160,8 @@ const {
         // Clear the chart before drawing anything
         clearChart();
 
+        grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
+
         // SVG element is the chart for particular chart
         let svg = getChartSvg();
         const chartsDiv = d3.select(".charts-div");
@@ -167,7 +169,6 @@ const {
 
         // Checking if text is overflowing
         const isOverFlowing = isTickTextOverflowing();
-        grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
 
         if (isOverFlowing) {
             /*

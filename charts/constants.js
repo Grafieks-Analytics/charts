@@ -57,7 +57,7 @@ module.exports = {
         chartNames.HORIZONTAL_GROUP_BAR_CHART
     ],
 
-    chartsMargins: { top: 20, right: 20, bottom: 30, left: 40 },
+    chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
 
     d3SequentialDefaultTheme: ["#ffffff", "#08306b"],
     d3ColorPalette: [

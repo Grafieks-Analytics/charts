@@ -42,7 +42,7 @@ const isTickTextOverflowing = () => {
     const xScale = window.grafieks.utils.xScale;
     let isOverflowing = false;
     const tickNodeLength = tickNodes.length;
-    let rotatingMargin = grafieks.chartsConfig.margins.rotatingMargin || 0;
+    let rotatingMargin = grafieks.chartsConfig.margins.rotatingMargin;
     const barsWidth = xScale.bandwidth();
 
     for (var i = 0; i < tickNodeLength; i++) {
@@ -58,7 +58,9 @@ const isTickTextOverflowing = () => {
             isOverflowing = true;
         }
     }
-    grafieks.chartsConfig.margins.rotatingMargin = rotatingMargin - 5;
+    if (isOverflowing) {
+        grafieks.chartsConfig.margins.rotatingMargin = rotatingMargin - 5;
+    }
     return isOverflowing;
 };
 
@@ -146,7 +148,7 @@ const getXScale = (domain, range, options = {}) => {
 
 const getYRange = () => {
     const { height, margins: chartsMargins } = window.grafieks.chartsConfig;
-    return [height - chartsMargins.bottom - (chartsMargins.rotatingMargin || 0), chartsMargins.top];
+    return [height - chartsMargins.bottom - chartsMargins.rotatingMargin, chartsMargins.top];
 };
 
 const getYScale = (domain, range) => {
@@ -393,7 +395,7 @@ const setYAxisLabel = (svg) => {
         .append("text")
         .attr("fill", "black")
         .attr("transform", "rotate(-90)")
-        .attr("x", -(height / 2 - (chartsMargins.rotatingMargin || 0)))
+        .attr("x", -(height / 2 - chartsMargins.rotatingMargin))
         .attr("y", yLabelfontSize)
         .style("text-anchor", "middle")
         .attr("font-size", yLabelfontSize)
