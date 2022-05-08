@@ -1,21 +1,19 @@
 const d3 = require("d3");
-
-const barChartGeneration = require("./modules/barChart");
-
 const CONSTANTS = require("./constants");
 
-const {
-    setInitialConfig,
-    isAxisBasedChart,
-    clearChart,
-    setTooltipHandler,
-    setLengend,
-    setGrids,
-    setYAxisLabel,
-    setXAxisLabel,
-    isTickTextOverflowing,
-    modifyAndHideTicks
-} = require("./utils");
+// Utility functions
+const { setInitialConfig, isAxisBasedChart, clearChart } = require("./utils");
+
+// Features Modules
+const { setYAxisLabel, setXAxisLabel } = require("./modules/axisLabels");
+const { setTooltipHandler } = require("./modules/tooltip");
+const { setLengend } = require("./modules/legend");
+const { setGrids } = require("./modules/grids");
+const { isTickTextOverflowing, modifyAndHideTicks } = require("./modules/ticks");
+const { setDataLabels } = require("./modules/datalabels");
+
+// Chart modules
+const barChartGeneration = require("./chartModules/barChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -96,8 +94,8 @@ const {
     const drawChart = (data, plotConfiguration = {}) => {
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
-
         grafieks.plotConfiguration = plotConfiguration;
+
         const {
             chartName,
             yAxisConfig: { yLabelfontSize, yaxisStatus } = {},
@@ -145,6 +143,8 @@ const {
 
         // Setting margins to grafieks object to use it further
         grafieks.chartsConfig.margins = chartsMargins;
+        // Setting default tick style to horizontal
+        grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
 
         // Function to get the chart's svg
         let getChartSvg = function () {};
@@ -159,8 +159,6 @@ const {
 
         // Clear the chart before drawing anything
         clearChart();
-
-        grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
 
         // SVG element is the chart for particular chart
         let svg = getChartSvg();
@@ -207,10 +205,14 @@ const {
 
         // Set Lenged
         setLengend();
+
+        // Set data labels
+        setDataLabels();
     };
 
     grafieks.drawChart = drawChart;
 
+    // On Resize replot the graph
     window.addEventListener("resize", function () {
         drawChart(grafieks.dataUtils.rawData, grafieks.plotConfiguration);
     });
