@@ -1,6 +1,5 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
-const { getDistanceBetweenElements } = require("../utils");
 
 const isTickTextOverflowing = () => {
     /*
@@ -48,8 +47,12 @@ const modifyAndHideTicks = () => {
     const tickTexts = d3.selectAll(".x-axis .tick text").nodes();
     const barsWidth = window.grafieks.utils.xScale.bandwidth();
     tickTexts.forEach((tick, i) => {
-        const singleTickSpace = Math.floor(tick.getBBox().height / barsWidth);
-        if (i % singleTickSpace != 0) {
+        const verticalTickWidth = tick.getBBox().height;
+        // if barsWidth > verticalTickWidth => Tick is eligible to be shown;
+        // Calculate the space when a tick will not collide with other ticks = i % Math.floor(verticalTickWidth / barsWidth)
+        // Remove all the other ticks which are coming in between this space.
+        // i % Math.floor(verticalTickWidth / barsWidth) != 0 => Tick is not eligible to be shown; because it will overlap with other ticks
+        if (barsWidth < verticalTickWidth && i % Math.floor(verticalTickWidth / barsWidth) != 0) {
             tick.remove();
             return;
         }

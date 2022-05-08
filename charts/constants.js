@@ -96,8 +96,8 @@ module.exports = {
         fontFamily: "MS Sans Serif",
         fontColor: "black",
 
-        gridStatus: true,
-        legendStatus: true,
+        gridStatus: false,
+        legendStatus: false,
         labelStatus: false,
 
         legendWidth: 120,
