@@ -28,6 +28,26 @@ const getAxisWidth = () => {
     return window.innerWidth - margins.left - margins.right;
 };
 
+const getDistance = (x1, x2, y1, y2) => {
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+};
+
+const getDistanceBetweenElements = (rect1, rect2) => {
+    if (!rect1 || !rect2) return 0;
+    rect1 = rect1.getClientRects()[0];
+    rect2 = rect2.getClientRects()[0];
+    let { x: x1, y: y1, width: width1, height: height1 } = rect1;
+    x1 = x1 + width1 / 2;
+    y1 = y1 + height1 / 2;
+
+    let { x: x2, y: y2, width: width2, height: height2 } = rect2;
+    x2 = x2 + width2 / 2;
+    y2 = y2 + height2 / 2;
+
+    const distanceValue = getDistance(x1, x2, y1, y2);
+    return distanceValue;
+};
+
 const getMaximumValue = (array) => {
     let maxValue = d3.max(array);
     if (maxValue < 0) {
@@ -114,5 +134,6 @@ module.exports = {
     getXScale,
     getYRange,
     getXRange,
-    isElementInViewport
+    isElementInViewport,
+    getDistanceBetweenElements
 };

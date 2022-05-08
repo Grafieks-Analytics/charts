@@ -1,5 +1,6 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
+const { getDistanceBetweenElements } = require("../utils");
 
 const isTickTextOverflowing = () => {
     /*
@@ -43,6 +44,29 @@ const getClippedTickText = (tick, tickNodeLength) => {
     return text;
 };
 
+function removeDataLabelsByDistance() {
+    var labels = document.querySelectorAll(".x-axis .tick text");
+    var lastTickShown = labels[0];
+    var lastTickShown1 = null;
+    var lastTickShown2 = null;
+    labels.forEach((label, i) => {
+        if (!i) return;
+        if (
+            getDistanceBetweenElements(label, lastTickShown) < CONSTANTS.defaultValues.maxDistanceBetweenTicks ||
+            (lastTickShown1 &&
+                getDistanceBetweenElements(label, lastTickShown1) < CONSTANTS.defaultValues.maxDistanceBetweenTicks) ||
+            (lastTickShown2 &&
+                getDistanceBetweenElements(label, lastTickShown2) < CONSTANTS.defaultValues.maxDistanceBetweenTicks)
+        ) {
+            label.remove();
+        } else {
+            lastTickShown2 = lastTickShown1;
+            lastTickShown1 = lastTickShown;
+            lastTickShown = label;
+        }
+    });
+}
+
 const modifyAndHideTicks = () => {
     const tickTexts = d3.selectAll(".x-axis .tick text").nodes();
     tickTexts.forEach((tick) => {
@@ -53,6 +77,7 @@ const modifyAndHideTicks = () => {
             tick.innerHTML = getClippedTickText(tick, tickNodeLength);
         }
     });
+    removeDataLabelsByDistance();
 };
 
 module.exports = {

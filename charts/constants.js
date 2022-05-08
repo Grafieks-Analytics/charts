@@ -102,7 +102,10 @@ module.exports = {
         legendWidth: 120,
         legendHeight: 30,
         maxRotationMargin: 70, // Maximum height allowed for ticks after rotation
-        dataLabelFormat: "symbol"
+        dataLabelFormat: "symbol",
+
+        maxDistanceBetweenTicks: 18,
+        maxDistanceBetweenLabels: 40
     },
 
     LEGEND_POSITION: {
