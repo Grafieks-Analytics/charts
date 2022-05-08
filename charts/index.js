@@ -98,13 +98,14 @@ const barChartGeneration = require("./chartModules/barChart");
 
         const {
             chartName,
-            yAxisConfig: { yLabelfontSize, yaxisStatus } = {},
-            xAxisConfig: { xLabelfontSize, xaxisStatus } = {},
+            yAxisConfig: { yLabelfontSize = CONSTANTS.defaultValues.fontSize, yaxisStatus = true } = {},
+            xAxisConfig: { xLabelfontSize = CONSTANTS.defaultValues.fontSize, xaxisStatus = true } = {},
             gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus } = {},
             legendConfig: {
                 legendStatus = CONSTANTS.defaultValues.legendStatus,
                 legendPosition = CONSTANTS.LEGEND_POSITION.RIGHT
-            } = {}
+            } = {},
+            labelConfig: { labelStatus = CONSTANTS.defaultValues.labelStatus } = {}
         } = plotConfiguration;
 
         plotConfiguration.isAxisBasedChart = isAxisBasedChart(chartName);
@@ -208,7 +209,9 @@ const barChartGeneration = require("./chartModules/barChart");
         setLengend();
 
         // Set data labels
-        setDataLabels(svg);
+        if (labelStatus) {
+            setDataLabels(svg);
+        }
     };
 
     grafieks.drawChart = drawChart;

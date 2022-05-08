@@ -44,40 +44,21 @@ const getClippedTickText = (tick, tickNodeLength) => {
     return text;
 };
 
-function removeDataLabelsByDistance() {
-    var labels = document.querySelectorAll(".x-axis .tick text");
-    var lastTickShown = labels[0];
-    var lastTickShown1 = null;
-    var lastTickShown2 = null;
-    labels.forEach((label, i) => {
-        if (!i) return;
-        if (
-            getDistanceBetweenElements(label, lastTickShown) < CONSTANTS.defaultValues.maxDistanceBetweenTicks ||
-            (lastTickShown1 &&
-                getDistanceBetweenElements(label, lastTickShown1) < CONSTANTS.defaultValues.maxDistanceBetweenTicks) ||
-            (lastTickShown2 &&
-                getDistanceBetweenElements(label, lastTickShown2) < CONSTANTS.defaultValues.maxDistanceBetweenTicks)
-        ) {
-            label.remove();
-        } else {
-            lastTickShown2 = lastTickShown1;
-            lastTickShown1 = lastTickShown;
-            lastTickShown = label;
-        }
-    });
-}
-
 const modifyAndHideTicks = () => {
     const tickTexts = d3.selectAll(".x-axis .tick text").nodes();
-    tickTexts.forEach((tick) => {
-        // TODO: Hide Ticks if they overlap
+    const barsWidth = window.grafieks.utils.xScale.bandwidth();
+    tickTexts.forEach((tick, i) => {
+        const singleTickSpace = Math.floor(tick.getBBox().height / barsWidth);
+        if (i % singleTickSpace != 0) {
+            tick.remove();
+            return;
+        }
         // To check if the tick is overlapping, width of vertical tick (height of the tick)
         const tickNodeLength = tick.getComputedTextLength();
         if (tickNodeLength > grafieks.chartsConfig.margins.rotatingMargin) {
             tick.innerHTML = getClippedTickText(tick, tickNodeLength);
         }
     });
-    removeDataLabelsByDistance();
 };
 
 module.exports = {

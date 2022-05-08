@@ -98,6 +98,7 @@ module.exports = {
 
         gridStatus: true,
         legendStatus: true,
+        labelStatus: false,
 
         legendWidth: 120,
         legendHeight: 30,
