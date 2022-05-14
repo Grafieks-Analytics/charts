@@ -117,6 +117,9 @@ const setInitialConfig = () => {
 
     // legend config; Will have margins to be used in tooltip
     grafieks.legend = {};
+
+    // flags to be set in flags key
+    grafieks.flags = {};
 };
 
 // Setter functions ends

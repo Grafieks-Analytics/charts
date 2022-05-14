@@ -11,6 +11,7 @@ const { setLengend } = require("./modules/legend");
 const { setGrids } = require("./modules/grids");
 const { isTickTextOverflowing, modifyAndHideTicks } = require("./modules/ticks");
 const { setDataLabels } = require("./modules/datalabels");
+const { transformData } = require("./modules/dataTransformation");
 
 // Chart modules
 const barChartGeneration = require("./chartModules/barChart");
@@ -36,10 +37,10 @@ const barChartGeneration = require("./chartModules/barChart");
             dataColumns: {
                 xAxisColumnDetails: [
                     {
-                        itemName: "Product_Name",
+                        itemName: "Order Date",
                         tableValue: "`sample_superstore`.`Product_Name`",
-                        itemType: "Categorical",
-                        dateFormat: "%Y"
+                        itemType: "Date",
+                        dateFormat: "%d"
                     }
                 ],
                 yAxisColumnDetails: [
@@ -94,6 +95,9 @@ const barChartGeneration = require("./chartModules/barChart");
     const drawChart = (data, plotConfiguration = {}) => {
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
+        if (!grafieks.flags.isDataTransformed) {
+            transformData();
+        }
         grafieks.plotConfiguration = plotConfiguration;
 
         const {
