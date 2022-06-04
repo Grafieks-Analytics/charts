@@ -25,80 +25,13 @@ const barChartGeneration = require("./chartModules/barChart");
     // Expose utility functions to window
     grafieks.utils.clearChart = clearChart;
 
-    // Temp function. Will be removed later
-    grafieks.utils.getPlotConfiguration = function () {
-        let plotConfiguration = {
-            chartName: "barChart",
-            yAxisConfig: { yaxisStatus: true, ylabel: "Sales" },
-            xAxisConfig: { xaxisStatus: true, xlabel: "Sub-Category" },
-            dataLabelColor: "#000000",
-            paddingInner: 0.25,
-            innerRadius: 0.75,
-            dataColumns: {
-                xAxisColumnDetails: [
-                    {
-                        itemName: "Order Date",
-                        tableValue: "`sample_superstore`.`Product_Name`",
-                        itemType: "Date",
-                        dateFormat: "%d"
-                    }
-                ],
-                yAxisColumnDetails: [
-                    {
-                        itemName: "Sales",
-                        tableValue: "`sample_superstore`.`Sales`",
-                        itemType: "Numerical",
-                        dateFormat: "%Y"
-                    }
-                ],
-                row3ColumnDetails: [],
-                colorByData: []
-            },
-            xLabelfontSize: 12,
-            xTickfontFamily: "Courier",
-            xTickfontSize: 12,
-
-            yLabelfontSize: 12,
-            yTickfontFamily: "Courier",
-            yTickfontSize: 12
-        };
-
-        plotConfiguration = {
-            ...plotConfiguration,
-            xAxisConfig: {
-                xLabelfontSize: plotConfiguration.xLabelfontSize || CONSTANTS.fontSize,
-                xTickfontFamily: plotConfiguration.xTickfontFamily || CONSTANTS.fontFamily,
-                xTickfontSize: plotConfiguration.xTickfontSize || CONSTANTS.fontSize,
-                ...plotConfiguration.xAxisConfig
-            },
-            yAxisConfig: {
-                yLabelfontSize: plotConfiguration.yLabelfontSize || CONSTANTS.fontSize,
-                yTickfontFamily: plotConfiguration.yTickfontFamily || CONSTANTS.fontFamily,
-                yTickfontSize: plotConfiguration.yTickfontSize || CONSTANTS.fontSize,
-                ...plotConfiguration.yAxisConfig
-            }
-        };
-
-        delete plotConfiguration.xLabelfontSize;
-        delete plotConfiguration.xTickfontFamily;
-        delete plotConfiguration.xTickfontSize;
-        delete plotConfiguration.yLabelfontSize;
-        delete plotConfiguration.yTickfontFamily;
-        delete plotConfiguration.yTickfontSize;
-
-        return plotConfiguration;
-    };
-
-    // Temp function. Will be removed later
-    grafieks.plotConfiguration = grafieks.utils.getPlotConfiguration();
-
     const drawChart = (data, plotConfiguration = {}) => {
+        grafieks.plotConfiguration = plotConfiguration;
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
         if (!grafieks.flags.isDataTransformed) {
             transformData();
         }
-        grafieks.plotConfiguration = plotConfiguration;
 
         const {
             chartName,
@@ -222,6 +155,6 @@ const barChartGeneration = require("./chartModules/barChart");
 
     // On Resize replot the graph
     window.addEventListener("resize", function () {
-        drawChart(grafieks.dataUtils.rawData, grafieks.plotConfiguration);
+        drawChart(grafieks.dataUtils.rawData, window.grafieks && window.grafieks.plotConfiguration);
     });
 })();

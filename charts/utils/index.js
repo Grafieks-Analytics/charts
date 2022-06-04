@@ -119,7 +119,9 @@ const setInitialConfig = () => {
     grafieks.legend = {};
 
     // flags to be set in flags key
-    grafieks.flags = {};
+    grafieks.flags = {
+        isDataTransformed: false
+    };
 };
 
 // Setter functions ends

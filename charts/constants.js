@@ -1,41 +1,41 @@
 const chartNames = {
-    BAR_CHART: "barChart",
-    HORIZONTAL_BAR_CHART: "horizontalBarChart",
-    STACKED_BAR_CHART: "stackedBarChart",
-    HORIZONTAL_STACKED_BAR_CHART: "horizontalStackedBarChart",
+    BAR_CHART: "Bar Chart",
+    HORIZONTAL_BAR_CHART: "Horizontal Bar Chart",
+    STACKED_BAR_CHART: "Stacked Bar Chart",
+    HORIZONTAL_STACKED_BAR_CHART: "Horizontal Stacked Bar Chart",
 
-    GROUP_BAR_CHART: "groupBarChart",
-    HORIZONTAL_GROUP_BAR_CHART: "horizontalGroupBarChart",
+    GROUP_BAR_CHART: "Group Bar Chart",
+    HORIZONTAL_GROUP_BAR_CHART: "Horizontal Group Bar Chart",
 
-    LINE_CHART: "lineChart",
-    HORIZONTAL_LINE_CHART: "horizontalLineChart",
-    MULTIPLE_LINE_CHART: "multipleLineChart",
-    HORIZONTAL_MULTIPLE_LINE_CHART: "horizontalMultipleLineChart",
+    LINE_CHART: "Line Chart",
+    HORIZONTAL_LINE_CHART: "Horizontal Line Chart",
+    MULTIPLE_LINE_CHART: "Multiple Line Chart",
+    HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multiple Line Chart",
 
-    AREA_CHART: "areaChart",
-    HORIZONTAL_AREA_CHART: "horizontalAreaChart",
-    STACKED_AREA_CHART: "stackedAreaChart",
-    HORIZONTAL_STACKED_AREA_CHART: "horizontalStackedAreaChart",
+    AREA_CHART: "Area Chart",
+    HORIZONTAL_AREA_CHART: "Horizontal Area Chart",
+    STACKED_AREA_CHART: "Stacked Area Chart",
+    HORIZONTAL_STACKED_AREA_CHART: "Horizontal Stacked Area Chart",
 
-    PIE_CHART: "pieChart",
-    DONUT_CHART: "donutChart",
+    PIE_CHART: "Pie Chart",
+    DONUT_CHART: "Donut Chart",
 
-    SCATTER_CHART: "scatterChart",
-    HEAT_MAP: "heatMap",
-    WATERFALL_CHART: "waterfallChart",
+    SCATTER_CHART: "Scatter Chart",
+    HEAT_MAP: "Heat Map",
+    WATERFALL_CHART: "Waterfall Chart",
 
-    TREE_CHART: "treeChart",
-    TREEMAP_CHART: "treemapChart",
+    TREE_CHART: "Tree Chart",
+    TREEMAP_CHART: "Treemap Chart",
 
-    SANKEY_CHART: "sankeyChart",
-    RADAR_CHART: "radarChart",
-    SUNBURST_CHART: "sunburstChart",
+    SANKEY_CHART: "Sankey Chart",
+    RADAR_CHART: "Radar Chart",
+    SUNBURST_CHART: "Sunburst Chart",
 
-    GAUGE_CHART: "gaugeChart",
-    PIVOT: "pivot",
-    TABLE: "table",
-    KPI: "kpi",
-    FUNNEL_CHART: "funnelChart"
+    GAUGE_CHART: "Gauge Chart",
+    PIVOT: "Pivot",
+    TABLE: "Table",
+    KPI: "KPI",
+    FUNNEL_CHART: "Funnel Chart"
 };
 
 module.exports = {

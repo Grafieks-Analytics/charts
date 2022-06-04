@@ -8,7 +8,36 @@ const isDateFormat = (itemType) => {
     return false;
 };
 
+function sortByMonth(arr, dateFormat) {
+    var months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+    var shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    if (dateFormat == "%b") {
+        months = shortMonths;
+    }
+
+    return arr.sort(function (a, b) {
+        return months.indexOf(a) - months.indexOf(b);
+    });
+}
+
 const sortDates = (datesArray, dateFormat) => {
+    if (dateFormat == "%b" || dateFormat == "%B") {
+        return sortByMonth(datesArray, dateFormat);
+    }
     datesArray.sort(function (a, b) {
         if (dateFormat == "%d") {
             // Setting date value in accending order
@@ -43,7 +72,6 @@ const formattedDateValues = (dataValues, dateFormat) => {
 
             const dates = Object.keys(newDataSet);
             const sortedDates = sortDates(dates, dateFormat);
-            console.log({ sortedDates });
 
             const values = sortedDates.map((d) => newDataSet[d]);
 

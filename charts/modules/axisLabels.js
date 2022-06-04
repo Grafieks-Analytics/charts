@@ -3,13 +3,15 @@ const CONSTANTS = require("../constants");
 
 const setXAxisLabel = (svg) => {
     const { width, height } = window.grafieks.chartsConfig;
-    const {
-        xAxisConfig: {
-            xlabel,
-            xLabelfontSize = CONSTANTS.defaultValues.fontSize,
-            xaxisFontFamily = CONSTANTS.defaultValues.fontFamily
-        } = {}
+    let {
+        xAxisConfig: { xlabel } = {},
+        xLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        xaxisFontFamily = CONSTANTS.defaultValues.fontFamily
     } = window.grafieks.plotConfiguration;
+
+    if (!xlabel) {
+        xlabel = grafieks.dataUtils.dataLabels[0];
+    }
 
     // TODO: Center the xAxis label
     svg.append("g")
@@ -25,13 +27,15 @@ const setXAxisLabel = (svg) => {
 
 const setYAxisLabel = (svg) => {
     const { height, margins: chartsMargins } = window.grafieks.chartsConfig;
-    const {
-        yAxisConfig: {
-            ylabel,
-            yLabelfontSize = CONSTANTS.defaultValues.fontSize,
-            yaxisFontFamily = CONSTANTS.defaultValues.fontFamily
-        } = {}
+    let {
+        yAxisConfig: { ylabel } = {},
+        yLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        yaxisFontFamily = CONSTANTS.defaultValues.fontFamily
     } = window.grafieks.plotConfiguration;
+
+    if (!ylabel) {
+        ylabel = grafieks.dataUtils.dataLabels[1];
+    }
 
     // TODO: Center the yAxis label
     svg.append("g")
