@@ -17,10 +17,18 @@ const getToolTopValues = (element) => {
     const dataValues = element.dataset;
     const dataLabels = window.grafieks.dataUtils.dataLabels;
     let tooltipHtmlValue = [];
+    const { toolTip = {} } = window.grafieks.plotConfiguration;
     switch (window.grafieks.plotConfiguration.chartName) {
         case CONSTANTS.BAR_CHART:
-            tooltipHtmlValue.push(formTooltipRow(dataLabels[0], dataValues.valueX1));
-            tooltipHtmlValue.push(formTooltipRow(dataLabels[1], dataValues.valueY1));
+            let { textColumn1: xLabelName, textColumn2: yLabelName } = toolTip;
+            if (!xLabelName) {
+                xLabelName = dataLabels[0];
+            }
+            if (!yLabelName) {
+                yLabelName = dataLabels[1];
+            }
+            tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
+            tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
             break;
     }
 
@@ -49,7 +57,7 @@ const setTooltipHandler = () => {
             const [xpos, ypos] = pointers;
 
             const topValue = ypos - 30 + (window.grafieks.legend.topMargin || 0);
-            const leftValue = xpos + 16 + (window.grafieks.legend.leftMargin || 0);
+            const leftValue = xpos + 20 + (window.grafieks.legend.leftMargin || 0);
 
             // Set the tooltip position
             d3.select(".tooltip")

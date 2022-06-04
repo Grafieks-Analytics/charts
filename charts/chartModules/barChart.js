@@ -38,6 +38,11 @@ const barChartGeneration = (svg) => {
     grafieks.utils.xScale = xScale;
 
     const xAxis = (options = {}, g) => {
+        const {
+            xTickfontSize = CONSTANTS.defaultValues.fontSize,
+            xTickfontFamily = CONSTANTS.defaultValues.fontFamily,
+            xTickfontColor = CONSTANTS.defaultValues.fontColor
+        } = window.grafieks.plotConfiguration;
         const chartsMargins = window.grafieks.chartsConfig.margins;
         let { textAnchor = "middle", translateY = height - chartsMargins.bottom } = options;
         // Adding rotating margin to xAxis so that when it is rotated things are visible fine
@@ -48,34 +53,56 @@ const barChartGeneration = (svg) => {
 
         // If ticking config is vertical -> rotating the tick to 90 degrees
         if (grafieks.chartsConfig.ticksStyle == CONSTANTS.TICK_VERTICAL) {
-            ticks.attr("dx", "-.8em").attr("dy", "-0.5em").attr("transform", "rotate(-90)");
+            ticks
+                .attr("dx", "-.8em")
+                .attr("dy", `-0.${xTickfontSize / 2}em`)
+                .attr("transform", "rotate(-90)");
             textAnchor = "end";
         }
 
         ticks.attr("text-anchor", textAnchor);
+        ticks.attr("font-size", xTickfontSize);
+        ticks.attr("font-family", xTickfontFamily);
+        ticks.attr("fill", xTickfontColor);
 
         return ticks;
     };
 
     const yAxis = (g) => {
         const chartsMargins = window.grafieks.chartsConfig.margins;
-        return g.attr("transform", `translate(${chartsMargins.left},0)`).call(
-            d3
-                .axisLeft(grafieks.utils.yScale)
-                .tickSize(0) // To remove the tick marks (The dashed solid lines)
-                .ticks(utils.getNumberOfTicks())
-                .tickFormat(d3.format(".2s"))
-        );
+
+        const {
+            yTickfontSize = CONSTANTS.defaultValues.fontSize,
+            yTickfontFamily = CONSTANTS.defaultValues.fontFamily,
+            yTickfontColor = CONSTANTS.defaultValues.fontColor
+        } = window.grafieks.plotConfiguration;
+
+        const ticks = g
+            .attr("transform", `translate(${chartsMargins.left},0)`)
+            .call(
+                d3
+                    .axisLeft(grafieks.utils.yScale)
+                    .tickSize(0) // To remove the tick marks (The dashed solid lines)
+                    .ticks(utils.getNumberOfTicks())
+                    .tickFormat(d3.format(".2s"))
+            )
+            .selectAll("text");
+
+        ticks.attr("font-size", yTickfontSize);
+        ticks.attr("font-family", yTickfontFamily);
+        ticks.attr("fill", yTickfontColor);
+
+        return ticks;
     };
 
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
 
-    const { d3ColorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+    const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 
     svg.append("g")
         .attr("class", "bars")
-        .attr("fill", d3ColorPalette[0])
+        .attr("fill", d3colorPalette[0])
         .selectAll("rect")
         .data(dataValues[0])
         .join("rect")

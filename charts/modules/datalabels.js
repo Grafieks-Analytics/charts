@@ -45,6 +45,12 @@ const setDataLabels = (svg) => {
     const visualPlotting = svg.selectAll(".visualPlotting");
     const visualPlottingNodes = visualPlotting.nodes();
 
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+    } = grafieks.plotConfiguration;
+
     svg.append("g")
         .attr("class", "data-label")
         .selectAll("text")
@@ -52,9 +58,9 @@ const setDataLabels = (svg) => {
         .join("text")
         .attr("class", "label-text")
         .attr("text-anchor", "middle")
-        .attr("font-size", CONSTANTS.defaultValues.fontSize)
-        .attr("font-family", CONSTANTS.defaultValues.fontFamily)
-        .attr("fill", CONSTANTS.defaultValues.fontColor)
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
         .attr("x", function (_, i) {
             return +visualPlottingNodes[i].getAttribute("x") + +visualPlottingNodes[i].getAttribute("width") / 2;
         })
