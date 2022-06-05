@@ -1,0 +1,126 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+text.shadow {
+    stroke: white;
+    stroke-width: 4px;
+    opacity: 1;
+}
+.grid line {
+    stroke: lightgray;
+    stroke-opacity: 0.6;
+    shape-rendering: crispEdges;
+}
+.grid path {
+    stroke-width: 0;
+}
+.x-axis line,
+.y-axis line {
+    display: none;
+}
+
+.x-axis path,
+.y-axis path,
+.domain {
+    stroke: lightgray;
+}
+
+.leftArrow {
+    border: solid;
+    border-color: white transparent;
+    border-width: 10px 6px 0 6px;
+    content: "";
+    left: -10px;
+    top: calc(50% - 5px);
+    transform: rotate(90deg) !important;
+    position: absolute;
+}
+
+.rightArrow {
+    border: solid;
+    border-color: white transparent;
+    border-width: 10px 6px 0 6px;
+    content: "";
+    right: -10px;
+    top: calc(50% - 5px);
+    transform: rotate(270deg) !important;
+    position: absolute;
+}
+
+.tooltip {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    border: 1px solid lavender;
+    background: #fff;
+    box-shadow: -8px 4px 20px 3px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    position: absolute;
+    border-radius: 4px;
+    z-index: 10000000000;
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 4px 0;
+}
+
+.tooltip-heading {
+    color: grey;
+}
+
+.legend {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 6px 4px;
+    position: fixed;
+    z-index: -1;
+}
+
+.legend-column {
+    display: flex;
+}
+
+.legendBox {
+    width: 15px;
+    height: 15px;
+    margin-right: 6px;
+}
+
+.outerLegendDivHorizontal {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.outerLegendDivVertical {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.grid text {
+    display: none;
+}
