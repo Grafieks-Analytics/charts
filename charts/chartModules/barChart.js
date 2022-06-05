@@ -53,10 +53,11 @@ const barChartGeneration = (svg) => {
 
         // If ticking config is vertical -> rotating the tick to 90 degrees
         if (grafieks.chartsConfig.ticksStyle == CONSTANTS.TICK_VERTICAL) {
-            ticks
-                .attr("dx", "-.8em")
-                .attr("dy", `-0.${xTickfontSize / 2}em`)
-                .attr("transform", "rotate(-90)");
+            let xTickfontSizeTemp = xTickfontSize / 2;
+            if (xTickfontSize < 16) {
+                xTickfontSizeTemp -= 2;
+            }
+            ticks.attr("dx", "-.8em").attr("dy", `-0.${xTickfontSizeTemp}em`).attr("transform", "rotate(-90)");
             textAnchor = "end";
         }
 

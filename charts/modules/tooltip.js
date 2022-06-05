@@ -61,6 +61,7 @@ const setTooltipHandler = () => {
 
             // Set the tooltip position
             d3.select(".tooltip")
+                .style("opacity", 1)
                 .style("top", topValue + "px")
                 .style("left", leftValue + "px");
 

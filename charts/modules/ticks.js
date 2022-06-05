@@ -38,12 +38,12 @@ const getClippedTickText = (tick, tickNodeLength) => {
     const singleLetterLength = tickNodeLength / text.length;
     const totalEligibleCharacters = Math.floor(grafieks.chartsConfig.margins.rotatingMargin / singleLetterLength);
     // If the text is longer than the total eligible characters, then we need to clip the text
-    // if (text.length - totalEligibleCharacters > 3) {
-    //     return text.substr(0, totalEligibleCharacters + 2) + "...";
-    // }
-    if (text.length - totalEligibleCharacters > 0) {
-        return text.substr(0, totalEligibleCharacters - 1) + "...";
+    if (text.length - totalEligibleCharacters > 3) {
+        return text.substr(0, totalEligibleCharacters + 2) + "...";
     }
+    // if (text.length - totalEligibleCharacters > 0) {
+    //     return text.substr(0, totalEligibleCharacters - 1) + "...";
+    // }
     return text;
 };
 
