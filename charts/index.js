@@ -15,6 +15,7 @@ const { transformData } = require("./modules/dataTransformation");
 
 // Chart modules
 const barChartGeneration = require("./chartModules/barChart");
+const lineChartGeneration = require("./chartModules/lineChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -87,9 +88,21 @@ const barChartGeneration = require("./chartModules/barChart");
         // Function to get the chart's svg
         let getChartSvg = function () {};
 
+        // TODO: Move  these functions to other file and map with chartName
+        /*
+            {
+                BAR_CHART: barChartGeneration
+            }
+        */
         switch (chartName) {
             case CONSTANTS.BAR_CHART:
                 getChartSvg = barChartGeneration;
+                break;
+            case CONSTANTS.AREA_CHART:
+            case CONSTANTS.LINE_CHART:
+                // Line and Area Charts are same, only difference is of area function and line function and fill of lower area
+                // A condition is added to in corporate these things in a single chart generation function
+                getChartSvg = lineChartGeneration;
                 break;
             default:
                 return console.log("No chart generator function found for this chart");

@@ -50,17 +50,60 @@ const sortDates = (datesArray, dateFormat) => {
     return datesArray;
 };
 
-const formattedDateValues = (dataValues, dateFormat) => {
-    const timeFormat = d3.timeFormat(dateFormat);
+const transformData = () => {
+    const grafieks = window.grafieks;
+    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+        grafieks.plotConfiguration;
 
-    const { chartName } = window.grafieks.plotConfiguration;
+    grafieks.flags.isDataTransformed = true;
 
-    let transformedData;
+    const data = grafieks.dataUtils.rawData;
+    const [dataValues] = data;
+
+    let transformedData, timeFormat, dates, xAxisData, yAxisData;
+    let newDataSet = {};
+    let dateFormat = "%Y";
+    let sortedDates = [];
 
     switch (chartName) {
         case CONSTANTS.BAR_CHART:
-            const newDataSet = {};
-            const [xAxisData, yAxisData] = dataValues;
+            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+                return;
+            }
+
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            timeFormat = d3.timeFormat(dateFormat);
+
+            [xAxisData, yAxisData] = dataValues || [];
+            xAxisData.forEach((d, i) => {
+                const dateValue = timeFormat(new Date(d));
+                if (!newDataSet[dateValue]) {
+                    newDataSet[dateValue] = 0;
+                }
+                newDataSet[dateValue] += yAxisData[i];
+            });
+
+            dates = Object.keys(newDataSet);
+            sortedDates = sortDates(dates, dateFormat);
+
+            const values = sortedDates.map((d) => newDataSet[d]);
+
+            transformedData = [sortedDates, values];
+
+            grafieks.dataUtils.rawData[0] = transformedData;
+            return;
+
+        case CONSTANTS.LINE_CHART:
+        case CONSTANTS.AREA_CHART:
+            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+                return;
+            }
+
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            timeFormat = d3.timeFormat(dateFormat);
+
+            xAxisData = dataValues.map((d) => d[0]);
+            yAxisData = dataValues.map((d) => d[1]);
 
             xAxisData.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));
@@ -70,33 +113,12 @@ const formattedDateValues = (dataValues, dateFormat) => {
                 newDataSet[dateValue] += yAxisData[i];
             });
 
-            const dates = Object.keys(newDataSet);
-            const sortedDates = sortDates(dates, dateFormat);
+            dates = Object.keys(newDataSet);
+            sortedDates = sortDates(dates, dateFormat);
 
-            const values = sortedDates.map((d) => newDataSet[d]);
+            transformedData = sortedDates.map((d) => [d, newDataSet[d]]);
 
-            transformedData = [sortedDates, values];
-            break;
-    }
-
-    return transformedData;
-};
-
-const transformData = () => {
-    const grafieks = window.grafieks;
-    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
-        grafieks.plotConfiguration;
-
-    grafieks.flags.isDataTransformed = true;
-
-    switch (chartName) {
-        case CONSTANTS.BAR_CHART:
-            const data = grafieks.dataUtils.rawData;
-            const [dataValues] = data;
-
-            if (isDateFormat(xAxisColumnDetails[0].itemType)) {
-                grafieks.dataUtils.rawData[0] = formattedDateValues(dataValues, xAxisColumnDetails[0].dateFormat);
-            }
+            grafieks.dataUtils.rawData[0] = transformedData;
 
             return;
         default:
