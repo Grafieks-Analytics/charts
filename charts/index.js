@@ -21,6 +21,7 @@ const multiLineChart = require("./chartModules/multilineChart");
 const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
 const kpiChart = require("./chartModules/kpiChart");
+const funnelChart = require("./chartModules/funnelChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -93,6 +94,9 @@ const kpiChart = require("./chartModules/kpiChart");
         // Function to get the chart's svg
         let getChartSvg = function () {};
 
+        // Clear the chart before drawing anything
+        clearChart();
+
         // TODO: Move  these functions to other file and map with chartName
         /*
             {
@@ -122,15 +126,15 @@ const kpiChart = require("./chartModules/kpiChart");
             case CONSTANTS.WATERFALL_CHART:
                 getChartSvg = waterfallChart;
                 break;
+            case CONSTANTS.FUNNEL_CHART:
+                funnelChart();
+                return;
             case CONSTANTS.KPI_CHART:
                 kpiChart();
                 return;
             default:
                 return console.log("No chart generator function found for this chart");
         }
-
-        // Clear the chart before drawing anything
-        clearChart();
 
         // SVG element is the chart for particular chart
         let svg = getChartSvg(getSvg());

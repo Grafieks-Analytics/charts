@@ -113,7 +113,11 @@ module.exports = {
         maxDistanceBetweenTicks: 18,
         maxDistanceBetweenLabels: 40,
 
-        lineStrokeWidth: 3
+        lineStrokeWidth: 3,
+
+        labelConfig: {
+            labelStatus: false
+        }
     },
 
     LEGEND_POSITION: {
@@ -124,7 +128,7 @@ module.exports = {
     },
 
     TICKS: {
-        EXCEPTIONAL_CHARTS: [chartNames.SCATTER_CHART]
+        EXCEPTIONAL_CHARTS: [chartNames.SCATTER_CHART, chartNames.FUNNEL_CHART]
     },
 
     TICK_VERTICAL: "verticalTicks",
@@ -157,5 +161,20 @@ module.exports = {
                 fontFamily: "Arial"
             }
         }
+    },
+
+    FUNNEL: {
+        defaultDynamicHeight: false,
+        defaultBottomPinch: 1
+    },
+
+    TABEL: {
+        defaultCellBorderStatus: true,
+        defaultCellHoverStatus: true,
+        defaultCompactStatus: false,
+        defaultSearchStatus: true,
+        defaultGrandTotalStatus: false,
+        defaultRowAlternateStatus: true,
+        defaultBatchsize: 50
     }
 };
