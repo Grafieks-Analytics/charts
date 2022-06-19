@@ -95,6 +95,7 @@ const transformData = () => {
 
         case CONSTANTS.LINE_CHART:
         case CONSTANTS.AREA_CHART:
+        case CONSTANTS.WATERFALL_CHART:
             if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
                 return;
             }

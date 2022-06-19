@@ -64,6 +64,16 @@ const getToolTopValues = (element) => {
             }
 
             break;
+        case CONSTANTS.WATERFALL_CHART:
+            if (!xLabelName) {
+                xLabelName = dataLabels[0];
+            }
+            if (!yLabelName) {
+                yLabelName = dataLabels[1];
+            }
+            tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
+            tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
+            break;
     }
 
     return tooltipHtmlValue.join("");
@@ -90,7 +100,10 @@ const setTooltipHandler = () => {
             const pointers = d3.pointer(event, this);
             let [xpos, ypos] = pointers;
 
-            if (grafieks.plotConfiguration.chartName == CONSTANTS.STACKED_BAR_CHART) {
+            if (
+                grafieks.plotConfiguration.chartName == CONSTANTS.STACKED_BAR_CHART ||
+                grafieks.plotConfiguration.chartName == CONSTANTS.WATERFALL_CHART
+            ) {
                 const parentElement = this.parentElement;
                 const matrix = window.getComputedStyle(parentElement).transform;
                 const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(", ");

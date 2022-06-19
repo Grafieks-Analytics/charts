@@ -19,6 +19,7 @@ const lineChartGeneration = require("./chartModules/lineChart");
 const stackBarChart = require("./chartModules/stackBarChart");
 const multiLineChart = require("./chartModules/multilineChart");
 const scatterChart = require("./chartModules/scatterChart");
+const waterfallChart = require("./chartModules/waterfallChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -116,6 +117,9 @@ const scatterChart = require("./chartModules/scatterChart");
                 break;
             case CONSTANTS.SCATTER_CHART:
                 getChartSvg = scatterChart;
+                break;
+            case CONSTANTS.WATERFALL_CHART:
+                getChartSvg = waterfallChart;
                 break;
             default:
                 return console.log("No chart generator function found for this chart");

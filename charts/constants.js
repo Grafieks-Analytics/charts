@@ -23,7 +23,7 @@ const chartNames = {
 
     SCATTER_CHART: "Scatter Plot",
     HEAT_MAP: "Heat Map",
-    WATERFALL_CHART: "Waterfall Chart",
+    WATERFALL_CHART: "Waterfall",
 
     TREE_CHART: "Tree Chart",
     TREEMAP_CHART: "Treemap Chart",
@@ -57,7 +57,9 @@ module.exports = {
         chartNames.GROUP_BAR_CHART,
         chartNames.HORIZONTAL_GROUP_BAR_CHART,
         chartNames.MULTIPLE_AREA_CHART,
-        chartNames.SCATTER_CHART
+        chartNames.SCATTER_CHART,
+        chartNames.HEAT_MAP,
+        chartNames.WATERFALL_CHART
     ],
 
     chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
