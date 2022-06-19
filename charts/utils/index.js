@@ -124,6 +124,10 @@ const setInitialConfig = () => {
     };
 };
 
+const getDateFormattedData = (value, dateFormat) => {
+    return d3.timeFormat(dateFormat)(new Date(value));
+};
+
 // Setter functions ends
 
 module.exports = {
@@ -140,5 +144,6 @@ module.exports = {
     getYRange,
     getXRange,
     isElementInViewport,
-    getDistanceBetweenElements
+    getDistanceBetweenElements,
+    getDateFormattedData
 };

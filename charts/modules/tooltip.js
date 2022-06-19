@@ -18,9 +18,10 @@ const getToolTopValues = (element) => {
     const dataLabels = window.grafieks.dataUtils.dataLabels;
     let tooltipHtmlValue = [];
     const { toolTip = {} } = window.grafieks.plotConfiguration;
+    let { textColumn1: xLabelName, textColumn2: yLabelName } = toolTip;
+
     switch (window.grafieks.plotConfiguration.chartName) {
         case CONSTANTS.BAR_CHART:
-            let { textColumn1: xLabelName, textColumn2: yLabelName } = toolTip;
             if (!xLabelName) {
                 xLabelName = dataLabels[0];
             }
@@ -28,6 +29,17 @@ const getToolTopValues = (element) => {
                 yLabelName = dataLabels[1];
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
+            tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
+            break;
+        case CONSTANTS.STACKED_BAR_CHART:
+            if (!xLabelName) {
+                xLabelName = dataLabels[0];
+            }
+            if (!yLabelName) {
+                yLabelName = dataLabels[1];
+            }
+            tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
+            tooltipHtmlValue.push(formTooltipRow(dataLabels[2], dataValues.valueX2));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
             break;
     }
@@ -54,7 +66,15 @@ const setTooltipHandler = () => {
 
             // Get the x and y values for the mouse position
             const pointers = d3.pointer(event, this);
-            const [xpos, ypos] = pointers;
+            let [xpos, ypos] = pointers;
+
+            if (grafieks.plotConfiguration.chartName == CONSTANTS.STACKED_BAR_CHART) {
+                const parentElement = this.parentElement;
+                const matrix = window.getComputedStyle(parentElement).transform;
+                const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(", ");
+
+                xpos += +matrixValues[4] || 0;
+            }
 
             const topValue = ypos - 30 + (window.grafieks.legend.topMargin || 0);
             const leftValue = xpos + 20 + (window.grafieks.legend.leftMargin || 0);
@@ -82,7 +102,9 @@ const setTooltipHandler = () => {
             if (!isElementInViewport(d3.select(".tooltip").node())) {
                 d3.select(".tooltip .leftArrow").style("display", "none");
                 d3.select(".tooltip .rightArrow").style("display", "block");
+
                 const toolTipRight = window.innerWidth - xpos - (window.grafieks.legend.leftMargin || 0);
+
                 tooltipBox.style.right = toolTipRight + 16 + "px";
                 tooltipBox.style.left = null;
             }
