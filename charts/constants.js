@@ -35,7 +35,7 @@ const chartNames = {
     GAUGE_CHART: "Gauge Chart",
     PIVOT: "Pivot",
     TABLE: "Table",
-    KPI: "KPI",
+    KPI_CHART: "KPI",
     FUNNEL_CHART: "Funnel Chart"
 };
 
@@ -135,6 +135,27 @@ module.exports = {
             positive: "#59a14f",
             negative: "#e15759",
             total: "#4e79a7"
+        }
+    },
+
+    KPI: {
+        STYLE: {
+            value: {
+                fontSize: 12,
+                color: "#000",
+                bold: false,
+                italic: false,
+                underline: false,
+                fontFamily: "Arial"
+            },
+            label: {
+                fontSize: 12,
+                color: "#000",
+                bold: false,
+                italic: false,
+                underline: false,
+                fontFamily: "Arial"
+            }
         }
     }
 };
