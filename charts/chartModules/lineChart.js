@@ -21,7 +21,6 @@ const lineChartGeneration = (svg) => {
     const { height } = grafieks.chartsConfig;
 
     const numericalValues = dataValues.map((d) => d[1]);
-    console.log({ numericalValues });
     const minValue = utils.getMinimumValue(numericalValues);
     const maxValue = utils.getMaximumValue(numericalValues);
 

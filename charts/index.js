@@ -16,6 +16,7 @@ const { transformData } = require("./modules/dataTransformation");
 // Chart modules
 const barChartGeneration = require("./chartModules/barChart");
 const lineChartGeneration = require("./chartModules/lineChart");
+const stackBarChart = require("./chartModules/stackBarChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -103,6 +104,9 @@ const lineChartGeneration = require("./chartModules/lineChart");
                 // Line and Area Charts are same, only difference is of area function and line function and fill of lower area
                 // A condition is added to in corporate these things in a single chart generation function
                 getChartSvg = lineChartGeneration;
+                break;
+            case CONSTANTS.STACKED_BAR_CHART:
+                getChartSvg = stackBarChart;
                 break;
             default:
                 return console.log("No chart generator function found for this chart");

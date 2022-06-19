@@ -127,5 +127,6 @@ const transformData = () => {
 };
 
 module.exports = {
-    transformData
+    transformData,
+    sortDates
 };
