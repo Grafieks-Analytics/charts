@@ -144,9 +144,23 @@ text.shadow {
     height: 100vh;
 }
 
+.columnWiseCenter {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #funnelChart {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#gaugeChart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column-reverse;
 }

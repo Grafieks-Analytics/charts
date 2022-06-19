@@ -22,6 +22,7 @@ const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
 const kpiChart = require("./chartModules/kpiChart");
 const funnelChart = require("./chartModules/funnelChart");
+const gaugechart = require("./chartModules/gaugeChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -131,6 +132,9 @@ const funnelChart = require("./chartModules/funnelChart");
                 return;
             case CONSTANTS.KPI_CHART:
                 kpiChart();
+                return;
+            case CONSTANTS.GAUGE_CHART:
+                gaugechart();
                 return;
             default:
                 return console.log("No chart generator function found for this chart");
