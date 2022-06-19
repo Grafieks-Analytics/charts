@@ -37,7 +37,7 @@ const waterfallChartGeneration = (svg) => {
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    grafieks.legend.data = ["Increase", "Decrease", "Total"];
 
     const { height } = grafieks.chartsConfig;
 

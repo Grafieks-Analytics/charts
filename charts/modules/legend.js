@@ -3,7 +3,13 @@ const CONSTANTS = require("../constants");
 
 const getLegendDataHtml = () => {
     const legendData = window.grafieks.legend.data;
-    const { d3ColorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+    let { d3ColorPalette, chartName } = grafieks.plotConfiguration;
+
+    if (chartName == CONSTANTS.WATERFALL_CHART && !d3ColorPalette) {
+        d3ColorPalette = Object.values(CONSTANTS.WATERFALL.COLORS);
+    } else if (!d3ColorPalette) {
+        d3ColorPalette = CONSTANTS.d3ColorPalette;
+    }
 
     const legendHtml = legendData
         .map((legend, i) => {

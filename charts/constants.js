@@ -128,5 +128,13 @@ module.exports = {
     },
 
     TICK_VERTICAL: "verticalTicks",
-    TICK_HORIZONTAL: "horizontalTicks"
+    TICK_HORIZONTAL: "horizontalTicks",
+
+    WATERFALL: {
+        COLORS: {
+            positive: "#59a14f",
+            negative: "#e15759",
+            total: "#4e79a7"
+        }
+    }
 };
