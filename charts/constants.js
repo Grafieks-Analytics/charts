@@ -21,7 +21,7 @@ const chartNames = {
     PIE_CHART: "Pie Chart",
     DONUT_CHART: "Donut Chart",
 
-    SCATTER_CHART: "Scatter Chart",
+    SCATTER_CHART: "Scatter Plot",
     HEAT_MAP: "Heat Map",
     WATERFALL_CHART: "Waterfall Chart",
 
@@ -56,7 +56,8 @@ module.exports = {
         chartNames.HORIZONTAL_MULTIPLE_LINE_CHART,
         chartNames.GROUP_BAR_CHART,
         chartNames.HORIZONTAL_GROUP_BAR_CHART,
-        chartNames.MULTIPLE_AREA_CHART
+        chartNames.MULTIPLE_AREA_CHART,
+        chartNames.SCATTER_CHART
     ],
 
     chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
@@ -118,6 +119,10 @@ module.exports = {
         BOTTOM: "bottom",
         LEFT: "left",
         RIGHT: "right"
+    },
+
+    TICKS: {
+        EXCEPTIONAL_CHARTS: [chartNames.SCATTER_CHART]
     },
 
     TICK_VERTICAL: "verticalTicks",

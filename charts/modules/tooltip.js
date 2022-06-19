@@ -18,7 +18,7 @@ const getToolTopValues = (element) => {
     const dataLabels = window.grafieks.dataUtils.dataLabels;
     let tooltipHtmlValue = [];
     const { toolTip = {} } = window.grafieks.plotConfiguration;
-    let { textColumn1: xLabelName, textColumn2: yLabelName } = toolTip;
+    let { textColumn1: xLabelName, textColumn2: yLabelName, textColumn3: colorByName } = toolTip;
 
     switch (window.grafieks.plotConfiguration.chartName) {
         case CONSTANTS.BAR_CHART:
@@ -38,9 +38,31 @@ const getToolTopValues = (element) => {
             if (!yLabelName) {
                 yLabelName = dataLabels[1];
             }
+            if (!colorByName) {
+                colorByName = dataLabels[2];
+            }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
-            tooltipHtmlValue.push(formTooltipRow(dataLabels[2], dataValues.valueX2));
+            tooltipHtmlValue.push(formTooltipRow(colorByName, dataValues.valueX2));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
+            break;
+        case CONSTANTS.SCATTER_CHART:
+            if (!xLabelName) {
+                xLabelName = dataLabels[0];
+            }
+            if (!yLabelName) {
+                yLabelName = dataLabels[1];
+            }
+
+            if (!colorByName) {
+                colorByName = dataLabels[2];
+            }
+
+            tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
+            tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
+            if (colorByName) {
+                tooltipHtmlValue.push(formTooltipRow(colorByName, dataValues.valueX2));
+            }
+
             break;
     }
 

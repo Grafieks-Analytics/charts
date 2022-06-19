@@ -2,6 +2,9 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const isTickTextOverflowing = () => {
+    if (isTickExceptionalChart()) {
+        return;
+    }
     /*
         Here we check if the tick text is overflowing the rotating margin.
         - tick length should not exceed xAxiis length
@@ -47,7 +50,18 @@ const getClippedTickText = (tick, tickNodeLength) => {
     return text;
 };
 
+const isTickExceptionalChart = () => {
+    const chartName = window.grafieks.plotConfiguration.chartName;
+    if (CONSTANTS.TICKS.EXCEPTIONAL_CHARTS.indexOf(chartName) > -1) {
+        return true;
+    }
+    return false;
+};
+
 const modifyAndHideTicks = () => {
+    if (isTickExceptionalChart()) {
+        return;
+    }
     const tickTexts = d3.selectAll(".x-axis .tick text").nodes();
     const barsWidth = window.grafieks.utils.xScale.bandwidth();
     tickTexts.forEach((tick, i) => {
