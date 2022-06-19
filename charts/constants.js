@@ -9,12 +9,13 @@ const chartNames = {
 
     LINE_CHART: "Line Chart",
     HORIZONTAL_LINE_CHART: "Horizontal Line Chart",
-    MULTIPLE_LINE_CHART: "Multiple Line Chart",
+    MULTIPLE_LINE_CHART: "Multi Line",
     HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multiple Line Chart",
 
     AREA_CHART: "Area Chart",
     HORIZONTAL_AREA_CHART: "Horizontal Area Chart",
     STACKED_AREA_CHART: "Stacked Area Chart",
+    MULTIPLE_AREA_CHART: "Multiple Area Chart",
     HORIZONTAL_STACKED_AREA_CHART: "Horizontal Stacked Area Chart",
 
     PIE_CHART: "Pie Chart",
@@ -54,7 +55,8 @@ module.exports = {
         chartNames.HORIZONTAL_STACKED_AREA_CHART,
         chartNames.HORIZONTAL_MULTIPLE_LINE_CHART,
         chartNames.GROUP_BAR_CHART,
-        chartNames.HORIZONTAL_GROUP_BAR_CHART
+        chartNames.HORIZONTAL_GROUP_BAR_CHART,
+        chartNames.MULTIPLE_AREA_CHART
     ],
 
     chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
@@ -106,7 +108,9 @@ module.exports = {
         dataLabelFormat: "symbol",
 
         maxDistanceBetweenTicks: 18,
-        maxDistanceBetweenLabels: 40
+        maxDistanceBetweenLabels: 40,
+
+        lineStrokeWidth: 3
     },
 
     LEGEND_POSITION: {

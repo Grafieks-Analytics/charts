@@ -17,6 +17,7 @@ const { transformData } = require("./modules/dataTransformation");
 const barChartGeneration = require("./chartModules/barChart");
 const lineChartGeneration = require("./chartModules/lineChart");
 const stackBarChart = require("./chartModules/stackBarChart");
+const multiLineChart = require("./chartModules/multilineChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -107,6 +108,10 @@ const stackBarChart = require("./chartModules/stackBarChart");
                 break;
             case CONSTANTS.STACKED_BAR_CHART:
                 getChartSvg = stackBarChart;
+                break;
+            case CONSTANTS.MULTIPLE_AREA_CHART:
+            case CONSTANTS.MULTIPLE_LINE_CHART:
+                getChartSvg = multiLineChart;
                 break;
             default:
                 return console.log("No chart generator function found for this chart");
