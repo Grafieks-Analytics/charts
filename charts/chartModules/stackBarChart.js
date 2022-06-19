@@ -76,6 +76,32 @@ const getTransformedDataValue = () => {
     return [response, allKeys, dataLabels, mainKeys];
 };
 
+const getMaximumValue = (transformedDataValues) => {
+    return d3.max(transformedDataValues, function (d) {
+        return d3.max(
+            d.components.map((d1) => {
+                return d1.y0;
+            })
+        );
+    });
+};
+
+const getMinimumValue = (transformedDataValues) => {
+    let minValue =
+        d3.min(transformedDataValues, function (d) {
+            return d3.min(
+                d.components.map((d1) => {
+                    return d1.y1;
+                })
+            );
+        }) || 0;
+
+    if (minValue > 0) {
+        minValue = 0;
+    }
+    return minValue;
+};
+
 const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
@@ -97,20 +123,15 @@ const chartGeneration = (svg) => {
 
     grafieks.legend.data = legendsData;
 
-    const { height, width } = grafieks.chartsConfig;
-
-    // const numericalValues = dataValues.map((d) => d[2]);
-    // const minValue = utils.getMinimumValue(numericalValues);
-    // const maxValue = utils.getMaximumValue(numericalValues);
+    const { height } = grafieks.chartsConfig;
 
     const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
 
+    // Adding components array to be used in for stacked bar chart
     transformedDataValues.forEach(function (d) {
         var y0_positive = 0;
         var y0_negative = 0;
-
         var mainKey = d.key;
-
         d.components = splitKeys.map(function (key) {
             if (d[key] >= 0) {
                 return {
@@ -128,30 +149,10 @@ const chartGeneration = (svg) => {
                 };
             }
         });
-
-        console.log("Component", d.components);
     });
 
-    let minValue =
-        d3.min(transformedDataValues, function (d) {
-            return d3.min(
-                d.components.map((d1) => {
-                    return d1.y1;
-                })
-            );
-        }) || 0;
-
-    const maxValue = d3.max(transformedDataValues, function (d) {
-        return d3.max(
-            d.components.map((d1) => {
-                return d1.y0;
-            })
-        );
-    });
-
-    if (minValue > 0) {
-        minValue = 0;
-    }
+    const minValue = getMinimumValue(transformedDataValues);
+    const maxValue = getMaximumValue(transformedDataValues);
 
     // Setting yScale
     const yDomain = [minValue, maxValue];
