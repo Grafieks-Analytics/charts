@@ -4,7 +4,7 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const lineChartGeneration = (svg) => {
+const scatterChartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
@@ -20,7 +20,9 @@ const lineChartGeneration = (svg) => {
 
     const { height } = grafieks.chartsConfig;
 
-    const numericalValues = dataValues.map((d) => d[1]);
+    const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+
+    const numericalValues = dataValues.map((d) => +d[1]);
     const minValue = utils.getMinimumValue(numericalValues);
     const maxValue = utils.getMaximumValue(numericalValues);
 
@@ -30,9 +32,12 @@ const lineChartGeneration = (svg) => {
     const yScale = utils.getYScale(yDomain, yRange);
 
     // Setting xScale
-    const xDomain = dataValues.map((d) => d[0]); // Map the text values for x axis
+    const xDomain = d3.extent(dataValues, function (d) {
+        return +d[0];
+    }); // Map the text values for x axis
+
     const xRange = utils.getXRange();
-    const xScale = utils.getXScale(xDomain, xRange);
+    const xScale = d3.scaleLinear().domain(xDomain).nice().range(xRange);
 
     // Exposing to utils, to be used in other places, like legend, tooltip, datalabels, axis etc.
     grafieks.utils.yScale = yScale;
@@ -49,7 +54,7 @@ const lineChartGeneration = (svg) => {
         // Adding rotating margin to xAxis so that when it is rotated things are visible fine
         const ticks = g
             .attr("transform", `translate(0,${translateY - (chartsMargins.rotatingMargin || 0)})`)
-            .call(d3.axisBottom(grafieks.utils.xScale).tickSizeOuter(0))
+            .call(d3.axisBottom(grafieks.utils.xScale).tickSizeOuter(0).tickFormat(d3.format(".2s")))
             .selectAll("text");
 
         // If ticking config is vertical -> rotating the tick to 90 degrees
@@ -97,58 +102,39 @@ const lineChartGeneration = (svg) => {
         return ticks;
     };
 
+    const color = d3.scaleOrdinal().domain(dataLabels).range(d3colorPalette);
+
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
 
-    const {
-        chartName,
-        d3colorPalette = CONSTANTS.d3ColorPalette,
-        curveType = CONSTANTS.curveType.LINEAR
-    } = grafieks.plotConfiguration;
+    svg.append("g")
+        .selectAll("dot")
+        .data(dataValues)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) {
+            this.setAttribute("data-value-x1", d[0]);
+            this.setAttribute("data-value-y1", d[1]);
+            this.setAttribute("data-value-x2", d[2]);
 
-    let line;
-    let fill = "none";
-
-    if (chartName == CONSTANTS.AREA_CHART) {
-        line = d3
-            .area()
-            .x(function (d, i) {
-                // this.setAttribute("data-value-x", d[0]);
-                // this.setAttribute("data-value-y", d[1]);
-                // console.log(d);
-                return xScale(d[0]) + xScale.bandwidth() / 2;
-            })
-            .y1(function (d) {
-                return yScale(d[1]);
-            })
-            .y0(function (d) {
-                return yScale(0);
-            });
-
-        fill = d3colorPalette[0];
-    } else {
-        line = d3
-            .line()
-            .x(function (d, i) {
-                // this.setAttribute("data-value-x", d[0]);
-                // this.setAttribute("data-value-y", d[1]);
-                // console.log(d);
-                return xScale(d[0]) + xScale.bandwidth() / 2;
-            })
-            .y(function (d) {
-                return yScale(d[1]);
-            })
-            .curve(d3[curveType]);
-    }
-
-    svg.append("path")
-        .attr("class", "line") // Assign a class for styling
-        .attr("d", line(dataValues)) // 11. Calls the line generator
-        .attr("stroke", d3colorPalette[0])
-        .attr("stroke-width", CONSTANTS.defaultValues.lineStrokeWidth)
-        .attr("fill", fill)
-        .attr("transform", "translate(0,0)");
-
+            return xScale(+d[0]);
+        })
+        .attr("cy", function (d) {
+            return yScale(+d[1]);
+        })
+        .attr("r", function (d, i) {
+            if (i == 0 && d.length == 2) {
+                return 0;
+            }
+            return 5;
+        })
+        .style("fill", function (d) {
+            return color(d[2]);
+        })
+        .attr("class", function (d, i) {
+            return "scatter" + i + d[2] + " visualPlotting";
+        });
     return svg;
 };
-module.exports = lineChartGeneration;
+
+module.exports = scatterChartGeneration;

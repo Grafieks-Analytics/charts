@@ -17,6 +17,12 @@ const { transformData } = require("./modules/dataTransformation");
 const barChartGeneration = require("./chartModules/barChart");
 const lineChartGeneration = require("./chartModules/lineChart");
 const stackBarChart = require("./chartModules/stackBarChart");
+const multiLineChart = require("./chartModules/multilineChart");
+const scatterChart = require("./chartModules/scatterChart");
+const waterfallChart = require("./chartModules/waterfallChart");
+const kpiChart = require("./chartModules/kpiChart");
+const funnelChart = require("./chartModules/funnelChart");
+const gaugechart = require("./chartModules/gaugeChart");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -89,6 +95,9 @@ const stackBarChart = require("./chartModules/stackBarChart");
         // Function to get the chart's svg
         let getChartSvg = function () {};
 
+        // Clear the chart before drawing anything
+        clearChart();
+
         // TODO: Move  these functions to other file and map with chartName
         /*
             {
@@ -108,12 +117,28 @@ const stackBarChart = require("./chartModules/stackBarChart");
             case CONSTANTS.STACKED_BAR_CHART:
                 getChartSvg = stackBarChart;
                 break;
+            case CONSTANTS.MULTIPLE_AREA_CHART:
+            case CONSTANTS.MULTIPLE_LINE_CHART:
+                getChartSvg = multiLineChart;
+                break;
+            case CONSTANTS.SCATTER_CHART:
+                getChartSvg = scatterChart;
+                break;
+            case CONSTANTS.WATERFALL_CHART:
+                getChartSvg = waterfallChart;
+                break;
+            case CONSTANTS.FUNNEL_CHART:
+                funnelChart();
+                return;
+            case CONSTANTS.KPI_CHART:
+                kpiChart();
+                return;
+            case CONSTANTS.GAUGE_CHART:
+                gaugechart();
+                return;
             default:
                 return console.log("No chart generator function found for this chart");
         }
-
-        // Clear the chart before drawing anything
-        clearChart();
 
         // SVG element is the chart for particular chart
         let svg = getChartSvg(getSvg());

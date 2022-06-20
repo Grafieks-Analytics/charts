@@ -4,7 +4,28 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const lineChartGeneration = (svg) => {
+function waterfallData(data) {
+    let cumulativeValue = 0;
+    data = data.map((d, i) => {
+        return { label: d[0], value: +d[1] };
+    });
+    data.forEach((d) => {
+        d.start = cumulativeValue;
+        cumulativeValue += d.value;
+        d.end = cumulativeValue;
+        d.class = d.value >= 0 ? "positive" : "negative";
+    });
+    data.push({
+        label: "Total",
+        end: cumulativeValue,
+        start: 0,
+        class: "total",
+        value: cumulativeValue
+    });
+    return data;
+}
+
+const waterfallChartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
@@ -16,11 +37,13 @@ const lineChartGeneration = (svg) => {
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    grafieks.legend.data = ["Increase", "Decrease", "Total"];
 
     const { height } = grafieks.chartsConfig;
 
-    const numericalValues = dataValues.map((d) => d[1]);
+    const waterfallDataValues = waterfallData(dataValues);
+
+    const numericalValues = waterfallDataValues.map((d) => d.value);
     const minValue = utils.getMinimumValue(numericalValues);
     const maxValue = utils.getMaximumValue(numericalValues);
 
@@ -30,7 +53,7 @@ const lineChartGeneration = (svg) => {
     const yScale = utils.getYScale(yDomain, yRange);
 
     // Setting xScale
-    const xDomain = dataValues.map((d) => d[0]); // Map the text values for x axis
+    const xDomain = waterfallDataValues.map((d) => d.label); // Map the text values for x axis
     const xRange = utils.getXRange();
     const xScale = utils.getXScale(xDomain, xRange);
 
@@ -100,55 +123,27 @@ const lineChartGeneration = (svg) => {
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
 
-    const {
-        chartName,
-        d3colorPalette = CONSTANTS.d3ColorPalette,
-        curveType = CONSTANTS.curveType.LINEAR
-    } = grafieks.plotConfiguration;
+    const bar = svg
+        .selectAll(".bar")
+        .data(waterfallDataValues)
+        .enter()
+        .append("g")
+        .attr("class", (d) => "xBar bar " + d.class)
+        .attr("transform", function (d) {
+            // console.log(this)
+            return "translate(" + xScale(d.label) + ",0)";
+        });
 
-    let line;
-    let fill = "none";
-
-    if (chartName == CONSTANTS.AREA_CHART) {
-        line = d3
-            .area()
-            .x(function (d, i) {
-                // this.setAttribute("data-value-x", d[0]);
-                // this.setAttribute("data-value-y", d[1]);
-                // console.log(d);
-                return xScale(d[0]) + xScale.bandwidth() / 2;
-            })
-            .y1(function (d) {
-                return yScale(d[1]);
-            })
-            .y0(function (d) {
-                return yScale(0);
-            });
-
-        fill = d3colorPalette[0];
-    } else {
-        line = d3
-            .line()
-            .x(function (d, i) {
-                // this.setAttribute("data-value-x", d[0]);
-                // this.setAttribute("data-value-y", d[1]);
-                // console.log(d);
-                return xScale(d[0]) + xScale.bandwidth() / 2;
-            })
-            .y(function (d) {
-                return yScale(d[1]);
-            })
-            .curve(d3[curveType]);
-    }
-
-    svg.append("path")
-        .attr("class", "line") // Assign a class for styling
-        .attr("d", line(dataValues)) // 11. Calls the line generator
-        .attr("stroke", d3colorPalette[0])
-        .attr("stroke-width", CONSTANTS.defaultValues.lineStrokeWidth)
-        .attr("fill", fill)
-        .attr("transform", "translate(0,0)");
+    bar.append("rect")
+        .attr("class", (d) => "visualPlotting rect bar " + d.class)
+        .attr("y", function (d) {
+            this.setAttribute("data-value-x1", d.label);
+            this.setAttribute("data-value-y1", d.value);
+            return yScale(Math.max(d.start, d.end));
+        })
+        .attr("height", (d) => Math.abs(yScale(d.start) - yScale(d.end)))
+        .attr("width", xScale.bandwidth());
 
     return svg;
 };
-module.exports = lineChartGeneration;
+module.exports = waterfallChartGeneration;

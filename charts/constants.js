@@ -9,20 +9,21 @@ const chartNames = {
 
     LINE_CHART: "Line Chart",
     HORIZONTAL_LINE_CHART: "Horizontal Line Chart",
-    MULTIPLE_LINE_CHART: "Multiple Line Chart",
+    MULTIPLE_LINE_CHART: "Multi Line",
     HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multiple Line Chart",
 
     AREA_CHART: "Area Chart",
     HORIZONTAL_AREA_CHART: "Horizontal Area Chart",
     STACKED_AREA_CHART: "Stacked Area Chart",
+    MULTIPLE_AREA_CHART: "Multiple Area Chart",
     HORIZONTAL_STACKED_AREA_CHART: "Horizontal Stacked Area Chart",
 
     PIE_CHART: "Pie Chart",
     DONUT_CHART: "Donut Chart",
 
-    SCATTER_CHART: "Scatter Chart",
+    SCATTER_CHART: "Scatter Plot",
     HEAT_MAP: "Heat Map",
-    WATERFALL_CHART: "Waterfall Chart",
+    WATERFALL_CHART: "Waterfall",
 
     TREE_CHART: "Tree Chart",
     TREEMAP_CHART: "Treemap Chart",
@@ -34,7 +35,7 @@ const chartNames = {
     GAUGE_CHART: "Gauge Chart",
     PIVOT: "Pivot",
     TABLE: "Table",
-    KPI: "KPI",
+    KPI_CHART: "KPI",
     FUNNEL_CHART: "Funnel Chart"
 };
 
@@ -54,7 +55,11 @@ module.exports = {
         chartNames.HORIZONTAL_STACKED_AREA_CHART,
         chartNames.HORIZONTAL_MULTIPLE_LINE_CHART,
         chartNames.GROUP_BAR_CHART,
-        chartNames.HORIZONTAL_GROUP_BAR_CHART
+        chartNames.HORIZONTAL_GROUP_BAR_CHART,
+        chartNames.MULTIPLE_AREA_CHART,
+        chartNames.SCATTER_CHART,
+        chartNames.HEAT_MAP,
+        chartNames.WATERFALL_CHART
     ],
 
     chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
@@ -106,7 +111,13 @@ module.exports = {
         dataLabelFormat: "symbol",
 
         maxDistanceBetweenTicks: 18,
-        maxDistanceBetweenLabels: 40
+        maxDistanceBetweenLabels: 40,
+
+        lineStrokeWidth: 3,
+
+        labelConfig: {
+            labelStatus: false
+        }
     },
 
     LEGEND_POSITION: {
@@ -116,6 +127,54 @@ module.exports = {
         RIGHT: "right"
     },
 
+    TICKS: {
+        EXCEPTIONAL_CHARTS: [chartNames.SCATTER_CHART, chartNames.FUNNEL_CHART]
+    },
+
     TICK_VERTICAL: "verticalTicks",
-    TICK_HORIZONTAL: "horizontalTicks"
+    TICK_HORIZONTAL: "horizontalTicks",
+
+    WATERFALL: {
+        COLORS: {
+            positive: "#59a14f",
+            negative: "#e15759",
+            total: "#4e79a7"
+        }
+    },
+
+    KPI: {
+        STYLE: {
+            value: {
+                fontSize: 12,
+                color: "#000",
+                bold: false,
+                italic: false,
+                underline: false,
+                fontFamily: "Arial"
+            },
+            label: {
+                fontSize: 12,
+                color: "#000",
+                bold: false,
+                italic: false,
+                underline: false,
+                fontFamily: "Arial"
+            }
+        }
+    },
+
+    FUNNEL: {
+        defaultDynamicHeight: false,
+        defaultBottomPinch: 1
+    },
+
+    TABEL: {
+        defaultCellBorderStatus: true,
+        defaultCellHoverStatus: true,
+        defaultCompactStatus: false,
+        defaultSearchStatus: true,
+        defaultGrandTotalStatus: false,
+        defaultRowAlternateStatus: true,
+        defaultBatchsize: 50
+    }
 };

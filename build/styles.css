@@ -124,3 +124,43 @@ text.shadow {
 .grid text {
     display: none;
 }
+
+.bar.total rect {
+    fill: #4e79a7;
+}
+
+.bar.positive rect {
+    fill: #59a14f;
+}
+.bar.negative rect {
+    fill: #e15759;
+}
+
+.kpi-text-center {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.columnWiseCenter {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#funnelChart {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#gaugeChart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column-reverse;
+}

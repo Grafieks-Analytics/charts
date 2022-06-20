@@ -95,6 +95,7 @@ const transformData = () => {
 
         case CONSTANTS.LINE_CHART:
         case CONSTANTS.AREA_CHART:
+        case CONSTANTS.WATERFALL_CHART:
             if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
                 return;
             }
@@ -120,6 +121,33 @@ const transformData = () => {
 
             grafieks.dataUtils.rawData[0] = transformedData;
 
+            return;
+        case CONSTANTS.FUNNEL_CHART:
+            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+                return;
+            }
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            timeFormat = d3.timeFormat(dateFormat);
+
+            xAxisData = dataValues.map((d) => d.label || d.key);
+            yAxisData = dataValues.map((d) => d.value);
+
+            xAxisData.forEach((d, i) => {
+                const dateValue = timeFormat(new Date(d));
+                if (!newDataSet[dateValue]) {
+                    newDataSet[dateValue] = 0;
+                }
+                newDataSet[dateValue] += yAxisData[i];
+            });
+
+            dates = Object.keys(newDataSet);
+            sortedDates = sortDates(dates, dateFormat);
+
+            transformedData = sortedDates.map((key) => {
+                return { label: key, value: newDataSet[key] };
+            });
+
+            grafieks.dataUtils.rawData[0] = transformedData;
             return;
         default:
             return;
