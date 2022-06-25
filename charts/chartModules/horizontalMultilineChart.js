@@ -1,7 +1,6 @@
 const d3 = require("d3");
 
 const CONSTANTS = require("../constants");
-
 const utils = require("../utils");
 const { sortDates } = require("../modules/dataTransformation");
 
@@ -16,7 +15,7 @@ const getTransformedDataValue = () => {
     // 3. X Axis Texts Or the domains for x axis => Category
     // 4. data labels => Category | Sub-Category | Sales
 
-    let [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
+    let [dataValues = [], legendsData = [], dataLabels = []] = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
@@ -35,16 +34,16 @@ const getTransformedDataValue = () => {
     let uniqueKey = [];
     dataValues.forEach((d) => {
         // Index 1 is categry
-        let key = d[1];
+        let key = d[0];
         if (isKey1Date) {
-            key = utils.getDateFormattedData(d[1], dateFormat);
+            key = utils.getDateFormattedData(key, dateFormat);
         }
 
         if (!json[key]) {
             json[key] = {};
         }
 
-        const key2 = d[0];
+        const key2 = d[1];
         if (!uniqueKey.includes(key2)) {
             uniqueKey.push(key2);
         }
@@ -73,33 +72,16 @@ const getTransformedDataValue = () => {
         });
     }
 
-    return [response, allKeys, dataLabels, mainKeys];
-};
+    var responseData = [];
 
-const getMaximumValue = (transformedDataValues) => {
-    return d3.max(transformedDataValues, function (d) {
-        return d3.max(
-            d.components.map((d1) => {
-                return d1.y0;
-            })
-        );
+    response.forEach((d) => {
+        var objectName = d.key;
+        allKeys.forEach((key) => {
+            responseData.push([objectName, key, d[key]]);
+        });
     });
-};
 
-const getMinimumValue = (transformedDataValues) => {
-    let minValue =
-        d3.min(transformedDataValues, function (d) {
-            return d3.min(
-                d.components.map((d1) => {
-                    return d1.y1;
-                })
-            );
-        }) || 0;
-
-    if (minValue > 0) {
-        minValue = 0;
-    }
-    return minValue;
+    return [responseData, allKeys, dataLabels, mainKeys];
 };
 
 const chartGeneration = (svg) => {
@@ -108,7 +90,12 @@ const chartGeneration = (svg) => {
     const data = grafieks.dataUtils.rawData || [];
 
     const [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
-    const { dataColumns = {}, d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+    const {
+        dataColumns = {},
+        d3colorPalette = CONSTANTS.d3ColorPalette,
+        chartName,
+        curveType = CONSTANTS.curveType.LINEAR
+    } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
     let isDateTransforming = false;
@@ -127,35 +114,11 @@ const chartGeneration = (svg) => {
 
     const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
 
-    // Adding components array to be used in for stacked bar chart
-    transformedDataValues.forEach(function (d) {
-        var y0_positive = 0;
-        var y0_negative = 0;
-        var mainKey = d.key;
-        d.components = splitKeys.map(function (key) {
-            if (d[key] >= 0) {
-                return {
-                    key,
-                    mainKey,
-                    y1: y0_positive,
-                    y0: (y0_positive += d[key])
-                };
-            } else {
-                return {
-                    key,
-                    mainKey,
-                    y0: y0_negative,
-                    y1: (y0_negative += d[key])
-                };
-            }
-        });
-    });
-
-    const minValue = getMinimumValue(transformedDataValues);
-    const maxValue = getMaximumValue(transformedDataValues);
+    const minValue = utils.getMinimumValue(transformedDataValues.map((d) => +d[2]));
+    const maxValue = utils.getMaximumValue(transformedDataValues.map((d) => +d[2]));
 
     // Setting yScale
-    const yDomain = isDateTransforming ? mainCategoryKeys : xAxisTextValues;
+    const yDomain = mainCategoryKeys;
     const yRange = utils.getYRange();
     const yScale = utils.getYScale(yDomain, yRange);
 
@@ -240,47 +203,65 @@ const chartGeneration = (svg) => {
 
     const color = d3.scaleOrdinal().domain(dataLabels).range(d3colorPalette);
 
-    const margins = grafieks.chartsConfig.margins;
+    let line;
+    if (chartName == CONSTANTS.HORIZONTAL_STACKED_AREA_CHART) {
+        line = d3
+            .area()
+            .y(function (d, i) {
+                // this.setAttribute("data-value-x", d[0]);
+                // this.setAttribute("data-value-y", d[1]);
+                // console.log(d);
+                return yScale(d[0]) + yScale.bandwidth() / 2;
+            })
+            .x1(function (d) {
+                return xScale(d[2]);
+            })
+            .x0(function (d) {
+                return xScale(0);
+            });
 
-    const entry = svg
-        .selectAll(".entry")
-        .data(transformedDataValues)
-        .enter()
-        .append("g")
-        .attr("class", "g")
-        .attr("transform", function (d) {
-            return "translate(0, 0)";
-        });
+        fill = d3colorPalette[0];
+    } else {
+        line = d3
+            .line()
+            .x(function (d, i) {
+                // this.setAttribute("data-value-x", d[0]);
+                // this.setAttribute("data-value-y", d[1]);
+                // console.log(d);
+                return xScale(d[2]);
+            })
+            .y(function (d) {
+                return yScale(d[0]) + yScale.bandwidth() / 2;
+            })
+            .curve(d3[curveType]);
+    }
+
+    const entry = svg.selectAll(".line").data(splitKeys).enter();
 
     entry
-        .selectAll("rect")
-        .data(function (d) {
-            return d.components;
-        })
-        .enter()
-        .append("rect")
-        .attr("class", "bar visualPlotting")
-        .attr("height", yScale.bandwidth())
-        .attr("y", function (d) {
-            return yScale(d.mainKey);
-        })
-        .attr("x", function (d) {
-            return xScale(d.y1);
-        })
-        .attr("width", function (d) {
-            this.setAttribute("data-value-x1", d.mainKey);
-            this.setAttribute("data-value-x2", d.key);
-
-            var yValue = d.y0 - d.y1;
-            if (d.y1 < 0) {
-                yValue = d.y1 - d.y0;
+        .append("path")
+        .attr("fill", function (d) {
+            if (chartName == CONSTANTS.HORIZONTAL_STACKED_AREA_CHART) {
+                return color(d);
+            } else {
+                return "none";
             }
-            this.setAttribute("data-value-y1", Math.round(yValue));
-
-            return Math.abs(xScale(d.y0) - xScale(d.y1));
         })
-        .style("fill", function (d) {
-            return color(d.key);
+        .attr("stroke", function (d) {
+            return color(d);
+        })
+        .style("opacity", chartName == CONSTANTS.HORIZONTAL_STACKED_AREA_CHART ? 0.7 : 1)
+        .attr("stroke-width", CONSTANTS.defaultValues.lineStrokeWidth)
+        .attr("class", "line")
+        .attr("d", function (d) {
+            const lineData = transformedDataValues.filter((dataRow) => {
+                if (dataRow[1] == d) {
+                    return true;
+                }
+                return false;
+            });
+
+            return line(lineData);
         });
 
     return svg;

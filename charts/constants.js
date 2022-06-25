@@ -10,13 +10,13 @@ const chartNames = {
     LINE_CHART: "Line Chart",
     HORIZONTAL_LINE_CHART: "Horizontal Line Chart",
     MULTIPLE_LINE_CHART: "Multi Line",
-    HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multiple Line Chart",
+    HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multi Line",
 
     AREA_CHART: "Area Chart",
     HORIZONTAL_AREA_CHART: "Horizontal Area Chart",
     STACKED_AREA_CHART: "Stacked Area Chart",
     MULTIPLE_AREA_CHART: "Multiple Area Chart",
-    HORIZONTAL_STACKED_AREA_CHART: "Horizontal Stacked Area Chart",
+    HORIZONTAL_STACKED_AREA_CHART: "Multiple Horizontal Area Chart",
 
     PIE_CHART: "Pie Chart",
     DONUT_CHART: "Donut Chart",

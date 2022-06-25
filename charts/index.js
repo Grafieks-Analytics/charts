@@ -24,6 +24,8 @@ const stackBarChart = require("./chartModules/stackBarChart");
 const horizontalStackedBarChart = require("./chartModules/horizontalStackedBarChart");
 
 const multiLineChart = require("./chartModules/multilineChart");
+const horizontalMultiLineChart = require("./chartModules/horizontalMultilineChart");
+
 const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
 const kpiChart = require("./chartModules/kpiChart");
@@ -139,6 +141,10 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.MULTIPLE_AREA_CHART:
             case CONSTANTS.MULTIPLE_LINE_CHART:
                 getChartSvg = multiLineChart;
+                break;
+            case CONSTANTS.HORIZONTAL_STACKED_AREA_CHART:
+            case CONSTANTS.HORIZONTAL_MULTIPLE_LINE_CHART:
+                getChartSvg = horizontalMultiLineChart;
                 break;
             case CONSTANTS.SCATTER_CHART:
                 getChartSvg = scatterChart;
