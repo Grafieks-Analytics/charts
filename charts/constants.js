@@ -2,7 +2,7 @@ const chartNames = {
     BAR_CHART: "Bar Chart",
     HORIZONTAL_BAR_CHART: "Horizontal Bar Chart",
     STACKED_BAR_CHART: "Stacked Bar Chart",
-    HORIZONTAL_STACKED_BAR_CHART: "Horizontal Stacked Bar Chart",
+    HORIZONTAL_STACKED_BAR_CHART: "Horizontal Stack Bar Chart",
 
     GROUP_BAR_CHART: "Group Bar Chart",
     HORIZONTAL_GROUP_BAR_CHART: "Horizontal Group Bar Chart",

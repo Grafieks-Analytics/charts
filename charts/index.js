@@ -18,7 +18,11 @@ const barChartGeneration = require("./chartModules/barChart");
 const horizontalBarChartGeneration = require("./chartModules/horizontalBarChart");
 
 const lineChartGeneration = require("./chartModules/lineChart");
+const horizontalLineChartGeneration = require("./chartModules/horizontalLineChart");
+
 const stackBarChart = require("./chartModules/stackBarChart");
+const horizontalStackedBarChart = require("./chartModules/horizontalStackedBarChart");
+
 const multiLineChart = require("./chartModules/multilineChart");
 const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
@@ -121,6 +125,13 @@ const gaugechart = require("./chartModules/gaugeChart");
                 // Line and Area Charts are same, only difference is of area function and line function and fill of lower area
                 // A condition is added to in corporate these things in a single chart generation function
                 getChartSvg = lineChartGeneration;
+                break;
+            case CONSTANTS.HORIZONTAL_AREA_CHART:
+            case CONSTANTS.HORIZONTAL_LINE_CHART:
+                getChartSvg = horizontalLineChartGeneration;
+                break;
+            case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
+                getChartSvg = horizontalStackedBarChart;
                 break;
             case CONSTANTS.STACKED_BAR_CHART:
                 getChartSvg = stackBarChart;
