@@ -62,7 +62,17 @@ module.exports = {
         chartNames.WATERFALL_CHART
     ],
 
-    chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
+    horizontalCharts: [
+        chartNames.HORIZONTAL_BAR_CHART,
+        chartNames.HORIZONTAL_LINE_CHART,
+        chartNames.HORIZONTAL_AREA_CHART,
+        chartNames.HORIZONTAL_STACKED_BAR_CHART,
+        chartNames.HORIZONTAL_STACKED_AREA_CHART,
+        chartNames.HORIZONTAL_MULTIPLE_LINE_CHART,
+        chartNames.HORIZONTAL_GROUP_BAR_CHART
+    ],
+
+    chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0, horizontalLeft: 0 },
 
     d3SequentialDefaultTheme: ["#ffffff", "#08306b"],
     d3ColorPalette: [

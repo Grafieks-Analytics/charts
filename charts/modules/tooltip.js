@@ -21,6 +21,7 @@ const getToolTopValues = (element) => {
     let { textColumn1: xLabelName, textColumn2: yLabelName, textColumn3: colorByName } = toolTip;
 
     switch (window.grafieks.plotConfiguration.chartName) {
+        case CONSTANTS.HORIZONTAL_BAR_CHART:
         case CONSTANTS.BAR_CHART:
             if (!xLabelName) {
                 xLabelName = dataLabels[0];

@@ -1,5 +1,6 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
+const { isHorizontalGraph } = require("../utils");
 
 const isTickTextOverflowing = () => {
     if (isTickExceptionalChart()) {
@@ -9,13 +10,43 @@ const isTickTextOverflowing = () => {
         Here we check if the tick text is overflowing the rotating margin.
         - tick length should not exceed xAxiis length
     */
-    const tickText = d3.selectAll(".x-axis .tick text");
+    let className = ".x-axis .tick text";
+    const isHorizontalGraphBool = isHorizontalGraph();
+    if (isHorizontalGraphBool) {
+        className = ".y-axis .tick text";
+    }
+    const tickText = d3.selectAll(className);
     const tickNodes = tickText.nodes();
+    const tickNodeLength = tickNodes.length;
+
+    if (isHorizontalGraphBool) {
+        let barsWidth = 0;
+        let maxLength = CONSTANTS.defaultValues.maxRotationMargin;
+        let tempMaxLength = 0;
+
+        for (var i = 0; i < tickNodeLength; i++) {
+            const tick = tickNodes[i];
+            const textLength = tick.getComputedTextLength();
+            if (textLength > tempMaxLength) {
+                tempMaxLength = textLength;
+            }
+        }
+
+        if (tempMaxLength < maxLength) {
+            maxLength = tempMaxLength;
+        }
+
+        barsWidth += maxLength;
+
+        grafieks.chartsConfig.margins.horizontalLeft = barsWidth;
+
+        return;
+    }
+
     const xScale = window.grafieks.utils.xScale;
     let isOverflowing = false;
-    const tickNodeLength = tickNodes.length;
     let rotatingMargin = grafieks.chartsConfig.margins.rotatingMargin;
-    const barsWidth = xScale.bandwidth();
+    let barsWidth = xScale.bandwidth && xScale.bandwidth();
 
     for (var i = 0; i < tickNodeLength; i++) {
         const tick = tickNodes[i];
@@ -39,6 +70,13 @@ const isTickTextOverflowing = () => {
 const getClippedTickText = (tick, tickNodeLength) => {
     const text = tick.innerHTML;
     const singleLetterLength = tickNodeLength / text.length;
+    if (isHorizontalGraph()) {
+        const totalEligibleCharacters = Math.floor(grafieks.chartsConfig.margins.horizontalLeft / singleLetterLength);
+        if (text.length - totalEligibleCharacters > 3) {
+            return text.substr(0, totalEligibleCharacters + 2) + "...";
+        }
+        return text;
+    }
     const totalEligibleCharacters = Math.floor(grafieks.chartsConfig.margins.rotatingMargin / singleLetterLength);
     // If the text is longer than the total eligible characters, then we need to clip the text
     if (text.length - totalEligibleCharacters > 3) {
@@ -62,8 +100,14 @@ const modifyAndHideTicks = () => {
     if (isTickExceptionalChart()) {
         return;
     }
-    const tickTexts = d3.selectAll(".x-axis .tick text").nodes();
-    const barsWidth = window.grafieks.utils.xScale.bandwidth();
+    let className = ".x-axis .tick text";
+    if (isHorizontalGraph()) {
+        className = ".y-axis .tick text";
+    }
+    const tickTexts = d3.selectAll(className).nodes();
+    const bandwidth = window.grafieks.utils.xScale.bandwidth || window.grafieks.utils.yScale.bandwidth;
+    const barsWidth = bandwidth();
+
     tickTexts.forEach((tick, i) => {
         const verticalTickWidth = tick.getBBox().height;
         // if barsWidth > verticalTickWidth => Tick is eligible to be shown;
@@ -82,7 +126,28 @@ const modifyAndHideTicks = () => {
     });
 };
 
+const getHorizontalLeftValue = () => {
+    let barsWidth = CONSTANTS.chartsMargins.left - 20;
+    let maxLength = CONSTANTS.chartsMargins.horizontalLeft;
+    let tempMaxLength = 0;
+    for (var i = 0; i < tickNodeLength; i++) {
+        const tick = tickNodes[i];
+        const textLength = tick.getComputedTextLength();
+        if (textLength > tempMaxLength) {
+            tempMaxLength = textLength;
+        }
+    }
+
+    if (tempMaxLength < maxLength) {
+        maxLength = tempMaxLength;
+    }
+    barsWidth += maxLength;
+
+    return barsWidth;
+};
+
 module.exports = {
     isTickTextOverflowing,
-    modifyAndHideTicks
+    modifyAndHideTicks,
+    getHorizontalLeftValue
 };
