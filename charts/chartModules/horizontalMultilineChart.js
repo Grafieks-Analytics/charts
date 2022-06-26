@@ -104,7 +104,6 @@ const chartGeneration = (svg) => {
     }
 
     grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
@@ -114,6 +113,7 @@ const chartGeneration = (svg) => {
 
     const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
 
+    grafieks.dataUtils.dataLabels = dataLabelsTransformed;
     const minValue = utils.getMinimumValue(transformedDataValues.map((d) => +d[2]));
     const maxValue = utils.getMaximumValue(transformedDataValues.map((d) => +d[2]));
 
