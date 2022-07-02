@@ -2,7 +2,7 @@ const chartNames = {
     BAR_CHART: "Bar Chart",
     HORIZONTAL_BAR_CHART: "Horizontal Bar Chart",
     STACKED_BAR_CHART: "Stacked Bar Chart",
-    HORIZONTAL_STACKED_BAR_CHART: "Horizontal Stacked Bar Chart",
+    HORIZONTAL_STACKED_BAR_CHART: "Horizontal Stack Bar Chart",
 
     GROUP_BAR_CHART: "Group Bar Chart",
     HORIZONTAL_GROUP_BAR_CHART: "Horizontal Group Bar Chart",
@@ -10,13 +10,13 @@ const chartNames = {
     LINE_CHART: "Line Chart",
     HORIZONTAL_LINE_CHART: "Horizontal Line Chart",
     MULTIPLE_LINE_CHART: "Multi Line",
-    HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multiple Line Chart",
+    HORIZONTAL_MULTIPLE_LINE_CHART: "Horizontal Multi Line",
 
     AREA_CHART: "Area Chart",
     HORIZONTAL_AREA_CHART: "Horizontal Area Chart",
     STACKED_AREA_CHART: "Stacked Area Chart",
     MULTIPLE_AREA_CHART: "Multiple Area Chart",
-    HORIZONTAL_STACKED_AREA_CHART: "Horizontal Stacked Area Chart",
+    HORIZONTAL_STACKED_AREA_CHART: "Multiple Horizontal Area Chart",
 
     PIE_CHART: "Pie Chart",
     DONUT_CHART: "Donut Chart",
@@ -62,7 +62,17 @@ module.exports = {
         chartNames.WATERFALL_CHART
     ],
 
-    chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0 },
+    horizontalCharts: [
+        chartNames.HORIZONTAL_BAR_CHART,
+        chartNames.HORIZONTAL_LINE_CHART,
+        chartNames.HORIZONTAL_AREA_CHART,
+        chartNames.HORIZONTAL_STACKED_BAR_CHART,
+        chartNames.HORIZONTAL_STACKED_AREA_CHART,
+        chartNames.HORIZONTAL_MULTIPLE_LINE_CHART,
+        chartNames.HORIZONTAL_GROUP_BAR_CHART
+    ],
+
+    chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0, horizontalLeft: 0 },
 
     d3SequentialDefaultTheme: ["#ffffff", "#08306b"],
     d3ColorPalette: [

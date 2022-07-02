@@ -1,5 +1,6 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
+const { isHorizontalGraph } = require("../utils");
 
 const setXAxisLabel = (svg) => {
     const { width, height } = window.grafieks.chartsConfig;
@@ -10,7 +11,11 @@ const setXAxisLabel = (svg) => {
     } = window.grafieks.plotConfiguration;
 
     if (!xlabel) {
-        xlabel = grafieks.dataUtils.dataLabels[0];
+        if (isHorizontalGraph()) {
+            xlabel = grafieks.dataUtils.dataLabels[1];
+        } else {
+            xlabel = grafieks.dataUtils.dataLabels[0];
+        }
     }
 
     // TODO: Center the xAxis label
@@ -34,7 +39,11 @@ const setYAxisLabel = (svg) => {
     } = window.grafieks.plotConfiguration;
 
     if (!ylabel) {
-        ylabel = grafieks.dataUtils.dataLabels[1];
+        if (isHorizontalGraph()) {
+            ylabel = grafieks.dataUtils.dataLabels[0];
+        } else {
+            ylabel = grafieks.dataUtils.dataLabels[1];
+        }
     }
 
     // TODO: Center the yAxis label

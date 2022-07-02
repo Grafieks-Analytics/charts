@@ -2,7 +2,7 @@ const d3 = require("d3");
 const CONSTANTS = require("./constants");
 
 // Utility functions
-const { setInitialConfig, isAxisBasedChart, clearChart, getSvg } = require("./utils");
+const { setInitialConfig, isAxisBasedChart, clearChart, getSvg, isHorizontalGraph } = require("./utils");
 
 // Features Modules
 const { setYAxisLabel, setXAxisLabel } = require("./modules/axisLabels");
@@ -15,14 +15,23 @@ const { transformData } = require("./modules/dataTransformation");
 
 // Chart modules
 const barChartGeneration = require("./chartModules/barChart");
+const horizontalBarChartGeneration = require("./chartModules/horizontalBarChart");
+
 const lineChartGeneration = require("./chartModules/lineChart");
+const horizontalLineChartGeneration = require("./chartModules/horizontalLineChart");
+
 const stackBarChart = require("./chartModules/stackBarChart");
+const horizontalStackedBarChart = require("./chartModules/horizontalStackedBarChart");
+
 const multiLineChart = require("./chartModules/multilineChart");
+const horizontalMultiLineChart = require("./chartModules/horizontalMultilineChart");
+
 const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
 const kpiChart = require("./chartModules/kpiChart");
 const funnelChart = require("./chartModules/funnelChart");
 const gaugechart = require("./chartModules/gaugeChart");
+// const pivotChart = require("./chartModules/pivot");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -40,6 +49,8 @@ const gaugechart = require("./chartModules/gaugeChart");
         if (!grafieks.flags.isDataTransformed) {
             transformData();
         }
+
+        grafieks.plotConfiguration.isHorizontalGraph = isHorizontalGraph();
 
         const {
             chartName,
@@ -108,11 +119,21 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.BAR_CHART:
                 getChartSvg = barChartGeneration;
                 break;
+            case CONSTANTS.HORIZONTAL_BAR_CHART:
+                getChartSvg = horizontalBarChartGeneration;
+                break;
             case CONSTANTS.AREA_CHART:
             case CONSTANTS.LINE_CHART:
                 // Line and Area Charts are same, only difference is of area function and line function and fill of lower area
                 // A condition is added to in corporate these things in a single chart generation function
                 getChartSvg = lineChartGeneration;
+                break;
+            case CONSTANTS.HORIZONTAL_AREA_CHART:
+            case CONSTANTS.HORIZONTAL_LINE_CHART:
+                getChartSvg = horizontalLineChartGeneration;
+                break;
+            case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
+                getChartSvg = horizontalStackedBarChart;
                 break;
             case CONSTANTS.STACKED_BAR_CHART:
                 getChartSvg = stackBarChart;
@@ -120,6 +141,10 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.MULTIPLE_AREA_CHART:
             case CONSTANTS.MULTIPLE_LINE_CHART:
                 getChartSvg = multiLineChart;
+                break;
+            case CONSTANTS.HORIZONTAL_STACKED_AREA_CHART:
+            case CONSTANTS.HORIZONTAL_MULTIPLE_LINE_CHART:
+                getChartSvg = horizontalMultiLineChart;
                 break;
             case CONSTANTS.SCATTER_CHART:
                 getChartSvg = scatterChart;
@@ -136,6 +161,9 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.GAUGE_CHART:
                 gaugechart();
                 return;
+            case CONSTANTS.PIVOT:
+            // pivotChart();
+            // return;
             default:
                 return console.log("No chart generator function found for this chart");
         }
@@ -149,7 +177,7 @@ const gaugechart = require("./chartModules/gaugeChart");
         // Checking if tick text is overflowing
         const isOverFlowing = isTickTextOverflowing();
 
-        if (isOverFlowing) {
+        if (isOverFlowing || grafieks.chartsConfig.margins.horizontalLeft) {
             /*
                 Rotate the x-axis labels to vertical. To perform this action, we need to
                 - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
@@ -157,7 +185,9 @@ const gaugechart = require("./chartModules/gaugeChart");
                 - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
             */
             svg.node().remove();
-            grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
+            if (!isHorizontalGraph()) {
+                grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
+            }
             svg = getChartSvg(getSvg());
             chartsDiv.node().appendChild(svg.node());
             modifyAndHideTicks();

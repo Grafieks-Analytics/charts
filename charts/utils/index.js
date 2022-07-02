@@ -76,10 +76,17 @@ const getSvg = () => {
 
 const getXRange = () => {
     const { width, margins: chartsMargins } = window.grafieks.chartsConfig;
+    if (isHorizontalGraph()) {
+        // Extra Margin for horizontal graphs - horizontalLeft
+        return [chartsMargins.left + chartsMargins.horizontalLeft, width - chartsMargins.right];
+    }
     return [chartsMargins.left, width - chartsMargins.right];
 };
 
 const getXScale = (domain, range, options = {}) => {
+    if (isHorizontalGraph()) {
+        return d3.scaleLinear().domain(domain).nice().range(range);
+    }
     const { padding = 0.25 } = options;
     return d3.scaleBand().domain(domain).range(range).padding(padding);
 };
@@ -89,7 +96,11 @@ const getYRange = () => {
     return [height - chartsMargins.bottom - chartsMargins.rotatingMargin, chartsMargins.top];
 };
 
-const getYScale = (domain, range) => {
+const getYScale = (domain, range, options = {}) => {
+    if (isHorizontalGraph()) {
+        const { padding = 0.25 } = options;
+        return d3.scaleBand().domain(domain).range(range).padding(padding);
+    }
     return d3.scaleLinear().domain(domain).nice().range(range);
 };
 
@@ -128,9 +139,21 @@ const getDateFormattedData = (value, dateFormat) => {
     return d3.timeFormat(dateFormat)(new Date(value));
 };
 
+const getChartsDiv = () => {
+    return d3.select(".charts-div");
+};
+
+const isHorizontalGraph = () => {
+    if (CONSTANTS.horizontalCharts.indexOf(grafieks.plotConfiguration.chartName) > -1) {
+        return true;
+    }
+    return false;
+};
+
 // Setter functions ends
 
 module.exports = {
+    getChartsDiv,
     setInitialConfig,
     getSvg,
     getAxisWidth,
@@ -145,5 +168,6 @@ module.exports = {
     getXRange,
     isElementInViewport,
     getDistanceBetweenElements,
-    getDateFormattedData
+    getDateFormattedData,
+    isHorizontalGraph
 };

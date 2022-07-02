@@ -1,5 +1,6 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
+const { isHorizontalGraph } = require("../utils");
 
 const isDateFormat = (itemType) => {
     if (itemType === "Date") {
@@ -66,12 +67,19 @@ const transformData = () => {
     let sortedDates = [];
 
     switch (chartName) {
+        case CONSTANTS.HORIZONTAL_BAR_CHART:
         case CONSTANTS.BAR_CHART:
-            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+            let itemType = xAxisColumnDetails[0].itemType;
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+
+            if (isHorizontalGraph()) {
+                itemType = yAxisColumnDetails[0].itemType;
+                dateFormat = yAxisColumnDetails[0].dateFormat;
+            }
+            if (!isDateFormat(itemType)) {
                 return;
             }
 
-            dateFormat = xAxisColumnDetails[0].dateFormat;
             timeFormat = d3.timeFormat(dateFormat);
 
             [xAxisData, yAxisData] = dataValues || [];

@@ -21,6 +21,7 @@ const getToolTopValues = (element) => {
     let { textColumn1: xLabelName, textColumn2: yLabelName, textColumn3: colorByName } = toolTip;
 
     switch (window.grafieks.plotConfiguration.chartName) {
+        case CONSTANTS.HORIZONTAL_BAR_CHART:
         case CONSTANTS.BAR_CHART:
             if (!xLabelName) {
                 xLabelName = dataLabels[0];
@@ -31,6 +32,7 @@ const getToolTopValues = (element) => {
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
             break;
+        case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
         case CONSTANTS.STACKED_BAR_CHART:
             if (!xLabelName) {
                 xLabelName = dataLabels[0];
@@ -101,6 +103,7 @@ const setTooltipHandler = () => {
             let [xpos, ypos] = pointers;
 
             if (
+                grafieks.plotConfiguration.chartName == CONSTANTS.HORIZONTAL_STACKED_BAR_CHART ||
                 grafieks.plotConfiguration.chartName == CONSTANTS.STACKED_BAR_CHART ||
                 grafieks.plotConfiguration.chartName == CONSTANTS.WATERFALL_CHART
             ) {
