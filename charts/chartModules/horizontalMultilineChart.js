@@ -142,10 +142,7 @@ const chartGeneration = (svg) => {
         const ticks = g
             .attr("transform", `translate(${chartsMargins.left + chartsMargins.horizontalLeft},0)`)
             .call(
-                d3
-                    .axisLeft(yScale)
-                    .tickSize(0) // To remove the tick marks (The dashed solid lines)
-                    .ticks(utils.getNumberOfTicks())
+                d3.axisLeft(yScale).tickSize(0) // To remove the tick marks (The dashed solid lines)
             )
             .selectAll("text");
 
@@ -168,7 +165,7 @@ const chartGeneration = (svg) => {
         // Adding rotating margin to xAxis so that when it is rotated things are visible fine
         const ticks = g
             .attr("transform", `translate(0,${translateY - (chartsMargins.rotatingMargin || 0)})`)
-            .call(d3.axisBottom(xScale).tickSizeOuter(0).tickFormat(d3.format(".2s")))
+            .call(d3.axisBottom(xScale).ticks(utils.getNumberOfTicks()).tickSizeOuter(0).tickFormat(d3.format(".2s")))
             .selectAll("text");
 
         // If ticking config is vertical -> rotating the tick to 90 degrees
@@ -201,7 +198,7 @@ const chartGeneration = (svg) => {
         .attr("transform", "translate(0," + xScale(0) + ")")
         .call(centerLine.tickSize(0));
 
-    const color = d3.scaleOrdinal().domain(dataLabels).range(d3colorPalette);
+    const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
     let line;
     if (chartName == CONSTANTS.HORIZONTAL_STACKED_AREA_CHART) {

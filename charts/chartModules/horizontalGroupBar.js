@@ -23,6 +23,7 @@ const getTransformedDataValue = () => {
 
     let json = {};
     let isKey1Date = false; // key1 is the cateogry || later on key2 can be added for sub category or color by split
+    let isKey2Date = false;
 
     const { yAxisColumnDetails = [] } = dataColumns;
     let dateFormat = "%Y";
@@ -30,6 +31,15 @@ const getTransformedDataValue = () => {
     if (yAxisColumnDetails[0].itemType == "Date") {
         isKey1Date = true;
         dateFormat = yAxisColumnDetails[0].dateFormat;
+    }
+
+    if (yAxisColumnDetails[1].itemType == "Date") {
+        isKey2Date = true;
+        dateFormat = yAxisColumnDetails[1].dateFormat;
+    }
+
+    if (!isKey1Date && !isKey2Date) {
+        return data;
     }
 
     let uniqueKey = [];
@@ -76,26 +86,16 @@ const getTransformedDataValue = () => {
     return [response, allKeys, dataLabels, mainKeys];
 };
 
-const getMaximumValue = (transformedDataValues) => {
-    return d3.max(transformedDataValues, function (d) {
-        return d3.max(
-            d.components.map((d1) => {
-                return d1.y0;
-            })
-        );
-    });
+const getMaximumValue = (transformedDataValues, splitKeys) => {
+    let maxValue = d3.max(transformedDataValues, (d) => d3.max(splitKeys, (k) => d && d[k]));
+    if (maxValue < 0) {
+        maxValue = 0;
+    }
+    return maxValue;
 };
 
-const getMinimumValue = (transformedDataValues) => {
-    let minValue =
-        d3.min(transformedDataValues, function (d) {
-            return d3.min(
-                d.components.map((d1) => {
-                    return d1.y1;
-                })
-            );
-        }) || 0;
-
+const getMinimumValue = (transformedDataValues, splitKeys) => {
+    let minValue = d3.min(transformedDataValues, (d) => d3.min(splitKeys, (k) => d && d[k]));
     if (minValue > 0) {
         minValue = 0;
     }
@@ -107,12 +107,17 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
-    const { dataColumns = {}, d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+    const [dataValues = [], legendsData = [], dataLabels = []] = data;
+
+    const {
+        dataColumns = {},
+        options: { groupBarChartColorBy } = {},
+        d3colorPalette = CONSTANTS.d3ColorPalette
+    } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
     let isDateTransforming = false;
-    if (yAxisColumnDetails[0].itemType == "Date") {
+    if (yAxisColumnDetails[0].itemType == "Date" || yAxisColumnDetails[1].itemType == "Date") {
         isDateTransforming = true;
     }
 
@@ -121,45 +126,27 @@ const chartGeneration = (svg) => {
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
-
     const { height } = grafieks.chartsConfig;
 
-    const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
+    const [transformedDataValues, [splitKeys, mainCategoryKeys], dataLabelsTransformed] = getTransformedDataValue();
 
-    // Adding components array to be used in for stacked bar chart
-    transformedDataValues.forEach(function (d) {
-        var y0_positive = 0;
-        var y0_negative = 0;
-        var mainKey = d.key;
-        d.components = splitKeys.map(function (key) {
-            if (d[key] >= 0) {
-                return {
-                    key,
-                    mainKey,
-                    y1: y0_positive,
-                    y0: (y0_positive += d[key])
-                };
-            } else {
-                return {
-                    key,
-                    mainKey,
-                    y0: y0_negative,
-                    y1: (y0_negative += d[key])
-                };
-            }
-        });
-    });
+    window.grafieks.dataUtils.dataLabels = dataLabelsTransformed;
+    grafieks.legend.data = !groupBarChartColorBy
+        ? [dataLabelsTransformed[0]]
+        : groupBarChartColorBy == "category"
+        ? mainCategoryKeys
+        : splitKeys;
 
-    const minValue = getMinimumValue(transformedDataValues);
-    const maxValue = getMaximumValue(transformedDataValues);
+    const minValue = getMinimumValue(transformedDataValues, splitKeys);
+    const maxValue = getMaximumValue(transformedDataValues, splitKeys);
 
     // Setting yScale
-    const yDomain = isDateTransforming ? mainCategoryKeys : xAxisTextValues;
+    const yDomain = mainCategoryKeys;
     const yRange = utils.getYRange();
     const yScale = utils.getYScale(yDomain, yRange);
 
     // Setting xScale
+
     const xDomain = [minValue, maxValue];
     const xRange = utils.getXRange();
     const xScale = utils.getXScale(xDomain, xRange);
@@ -229,60 +216,122 @@ const chartGeneration = (svg) => {
     svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
 
-    // Setting center line
-    const center = d3.scaleLinear().range(yRange);
-    const centerLine = d3.axisLeft(center).ticks(0);
+    const color = d3
+        .scaleOrdinal()
+        .domain(groupBarChartColorBy == "category" ? mainCategoryKeys : splitKeys)
+        .range(d3colorPalette);
 
-    svg.append("g")
-        .attr("class", "centerline")
-        .attr("transform", "translate(0," + xScale(0) + ")")
-        .call(centerLine.tickSize(0));
+    function getBars(d, all_keys) {
+        const bars = [];
+        all_keys.forEach((k) => {
+            if (d && d[k]) {
+                bars.push({
+                    name: k,
+                    value: d[k],
+                    data: d,
+                    mainCategory: d.mainCategory
+                });
+            }
+        });
+        return bars;
+    }
 
-    const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
+    function groupOffset(d, all_keys) {
+        const groupElementsCount = all_keys.reduce((acc, k) => (d && d.hasOwnProperty(k) ? (acc += 1) : acc), 0),
+            allElementsCount = all_keys.length,
+            groupWidth = yScale.bandwidth(),
+            x_offset = ((1 - groupElementsCount / allElementsCount) * groupWidth) / 2;
 
-    const margins = grafieks.chartsConfig.margins;
+        return x_offset;
+    }
 
-    const entry = svg
-        .selectAll(".entry")
+    svg.selectAll(".groups")
         .data(transformedDataValues)
         .enter()
         .append("g")
-        .attr("class", "g")
-        .attr("transform", function (d) {
-            return "translate(0, 0)";
-        });
+        .attr("class", "mainCategory")
+        .each(function (group_data) {
+            const bar_data = getBars(group_data, splitKeys),
+                x_offset = groupOffset(group_data, splitKeys),
+                group_keys = bar_data.map((d) => d.name);
 
-    entry
-        .selectAll("rect")
-        .data(function (d) {
-            return d.components;
-        })
-        .enter()
-        .append("rect")
-        .attr("class", "bar visualPlotting")
-        .attr("height", yScale.bandwidth())
-        .attr("y", function (d) {
-            return yScale(d.mainKey);
-        })
-        .attr("x", function (d) {
-            return xScale(d.y1);
-        })
-        .attr("width", function (d) {
-            this.setAttribute("data-value-x1", d.mainKey);
-            this.setAttribute("data-value-x2", d.key);
+            yScale1 = d3
+                .scaleBand()
+                .domain(group_keys)
+                .range([0, yScale.bandwidth() - x_offset * 2]);
 
-            var yValue = d.y0 - d.y1;
-            if (d.y1 < 0) {
-                yValue = d.y1 - d.y0;
-            }
-            this.setAttribute("data-value-y1", Math.round(yValue));
+            d3.select(this)
+                .attr("transform", (d) => `translate(0, ${yScale(d && d.mainCategory) + x_offset})`)
+                .selectAll(".bar")
+                .data(bar_data)
+                .enter()
+                .append("rect")
+                .attr("class", "bar visualPlotting")
+                .attr("fill", function (d) {
+                    this.setAttribute("data-value-x1", d.mainCategory);
+                    this.setAttribute("data-value-x2", d.name);
+                    this.setAttribute("data-value-y", d.value);
 
-            return Math.abs(xScale(d.y0) - xScale(d.y1));
-        })
-        .style("fill", function (d) {
-            return color(d.key);
+                    if (groupBarChartColorBy == "category") {
+                        return color(d.data.mainCategory);
+                    }
+                    if (groupBarChartColorBy == "subcategory") {
+                        return color(d.name);
+                    }
+                    return d3colorPalette[0];
+                })
+                .attr("y", (d) => yScale1(d.name))
+                .attr("x", (d) => {
+                    if (d.value < 0) {
+                        return xScale(d.value);
+                    }
+                    return xScale(0);
+                })
+                .attr("height", yScale1.bandwidth())
+                .attr("width", (d) => {
+                    var heightValue = Math.abs(xScale(0) - xScale(Math.abs(d.value)));
+                    if (!heightValue) {
+                        heightValue = 1;
+                    }
+                    return heightValue;
+                });
         });
 
     return svg;
 };
 module.exports = chartGeneration;
+
+/*
+[
+    [
+        {
+            "Central": 163797.16380000004,
+            "East": 208291.20400000009,
+            "South": 117298.6840000001,
+            "West": 252612.7435000003,
+            "mainCategory": "Furniture"
+        },
+        {
+            "Central": 167026.41500000027,
+            "East": 205516.0549999999,
+            "South": 125651.31299999992,
+            "West": 220853.24900000007,
+            "mainCategory": "Office Supplies"
+        },
+        {
+            "Central": 170416.3119999999,
+            "East": 264973.9810000003,
+            "South": 148771.9079999999,
+            "West": 251991.83199999997,
+            "mainCategory": "Technology"
+        }
+    ],
+    [
+        ["South", "West", "Central", "East"],
+        ["Furniture", "Office Supplies", "Technology"]
+    ],
+    ["Category", "Region", "Sales"]
+]
+
+
+*/

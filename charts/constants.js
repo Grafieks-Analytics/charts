@@ -4,8 +4,8 @@ const chartNames = {
     STACKED_BAR_CHART: "Stacked Bar Chart",
     HORIZONTAL_STACKED_BAR_CHART: "Horizontal Stack Bar Chart",
 
-    GROUP_BAR_CHART: "Group Bar Chart",
-    HORIZONTAL_GROUP_BAR_CHART: "Horizontal Group Bar Chart",
+    GROUP_BAR_CHART: "Grouped Bar Chart",
+    HORIZONTAL_GROUP_BAR_CHART: "Horizontal Bar Grouped Chart",
 
     LINE_CHART: "Line Chart",
     HORIZONTAL_LINE_CHART: "Horizontal Line Chart",
@@ -29,8 +29,8 @@ const chartNames = {
     TREEMAP_CHART: "Treemap Chart",
 
     SANKEY_CHART: "Sankey Chart",
-    RADAR_CHART: "Radar Chart",
-    SUNBURST_CHART: "Sunburst Chart",
+    RADAR_CHART: "Radar",
+    SUNBURST_CHART: "Sunburst",
 
     GAUGE_CHART: "Gauge Chart",
     PIVOT: "Pivot",
@@ -101,6 +101,21 @@ module.exports = {
         RECT: "rect"
     },
 
+    markerShapeConfig: {
+        circle: {
+            xPositionAttrName: "cx",
+            yPositionAttrName: "cy"
+        },
+        rect: {
+            xPositionAttrName: "x",
+            yPositionAttrName: "y"
+        },
+        polygon: {
+            xPositionAttrName: "x",
+            yPositionAttrName: "y"
+        }
+    },
+
     labelFormat: {
         ROUND: "symbol",
         NONE: "none"
@@ -127,7 +142,16 @@ module.exports = {
 
         labelConfig: {
             labelStatus: false
-        }
+        },
+
+        innerRadius: 0.75,
+
+        initialCircleRadius: 3,
+        onHoverCircleRadius: 7,
+        initialBoxDimension: 6,
+        onHoverBoxDimension: 8,
+
+        markerShape: "circle"
     },
 
     LEGEND_POSITION: {

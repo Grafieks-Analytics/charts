@@ -1,6 +1,6 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
-const { isHorizontalGraph } = require("../utils");
+const { isHorizontalGraph, getDateFormattedData } = require("../utils");
 
 const isDateFormat = (itemType) => {
     if (itemType === "Date") {
@@ -153,6 +153,38 @@ const transformData = () => {
 
             transformedData = sortedDates.map((key) => {
                 return { label: key, value: newDataSet[key] };
+            });
+
+            grafieks.dataUtils.rawData[0] = transformedData;
+            return;
+        case CONSTANTS.PIE_CHART:
+            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+                return;
+            }
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            timeFormat = d3.timeFormat(dateFormat);
+
+            const json = {};
+            const uniqueKey = [];
+            Object.keys(dataValues).forEach((d) => {
+                const key = getDateFormattedData(d, dateFormat);
+                if (!uniqueKey.includes(key)) {
+                    uniqueKey.push(key);
+                }
+
+                if (!json[key]) {
+                    json[key] = 0;
+                }
+
+                json[key] += dataValues[d];
+            });
+
+            transformedData = {};
+            Object.keys(json).forEach((d) => {
+                if (json[d] < 0) {
+                    return;
+                }
+                transformedData[d] = json[d];
             });
 
             grafieks.dataUtils.rawData[0] = transformedData;
