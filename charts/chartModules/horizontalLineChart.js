@@ -140,11 +140,12 @@ const horizontalBarChartGeneration = (svg) => {
             .curve(d3[curveType]);
     }
 
+    const lineStroke = CONSTANTS.defaultValues.lineStrokeWidth;
     svg.append("path")
         .attr("class", "line") // Assign a class for styling
         .attr("d", line(dataValues)) // 11. Calls the line generator
         .attr("stroke", d3colorPalette[0])
-        .attr("stroke-width", CONSTANTS.defaultValues.lineStrokeWidth)
+        .attr("stroke-width", lineStroke)
         .attr("fill", fill)
         .attr("transform", "translate(0,0)");
 

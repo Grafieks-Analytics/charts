@@ -241,7 +241,7 @@ const chartGeneration = (svg) => {
         .attr("transform", "translate(0," + yScale(0) + ")")
         .call(centerLine.tickSize(0));
 
-    const color = d3.scaleOrdinal().domain(dataLabels).range(d3colorPalette);
+    const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
     const entry = svg
         .selectAll(".entry")

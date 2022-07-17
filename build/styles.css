@@ -2,6 +2,7 @@
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     box-sizing: border-box;
+    border-radius: 0;
 }
 
 body {
@@ -10,10 +11,6 @@ body {
     overflow: hidden;
 }
 
-* {
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-}
 text.shadow {
     stroke: white;
     stroke-width: 4px;
@@ -66,7 +63,7 @@ text.shadow {
     border: 1px solid lavender;
     background: #fff;
     box-shadow: -8px 4px 20px 3px rgba(0, 0, 0, 0.2);
-    padding: 10px;
+    padding: 2px 6px;
     position: absolute;
     border-radius: 4px;
     z-index: 10000000000;
@@ -75,12 +72,12 @@ text.shadow {
 .tooltip-row {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
     padding: 4px 0;
 }
 
 .tooltip-heading {
     color: grey;
+    margin-right: 8px;
 }
 
 .legend {
@@ -101,6 +98,14 @@ text.shadow {
     margin-right: 6px;
 }
 
+[data-align="horizontal"] .legend-column {
+    margin: 2px 0;
+}
+
+[data-align="vertical"] .legend-column {
+    margin: 0px 2px;
+}
+
 .outerLegendDivHorizontal {
     width: 100%;
     height: 100%;
@@ -108,7 +113,7 @@ text.shadow {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    /* gap: 6px; */
 }
 
 .outerLegendDivVertical {
@@ -163,4 +168,49 @@ text.shadow {
     justify-content: center;
     align-items: center;
     flex-flow: column-reverse;
+}
+
+.slice {
+    cursor: pointer;
+}
+
+.slice .main-arc {
+    stroke: #fff;
+    stroke-width: 0px;
+}
+
+.slice .hidden-arc {
+    fill: none;
+}
+
+.slice text {
+    pointer-events: none;
+    dominant-baseline: middle;
+    text-anchor: middle;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+}
+
+/* Pivot CSS */
+
+.inner-table.upper-buttons {
+    display: none;
+}
+
+.orb-container {
+    margin-left: 5px;
+    margin-right: 0px;
+}
+
+.custom-left-top-menu td {
+    padding: 14px 7px;
+    text-overflow: ellipsis;
+}
+
+.orb-toolbar {
+    display: none;
 }

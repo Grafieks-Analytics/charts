@@ -23,15 +23,25 @@ const horizontalLineChartGeneration = require("./chartModules/horizontalLineChar
 const stackBarChart = require("./chartModules/stackBarChart");
 const horizontalStackedBarChart = require("./chartModules/horizontalStackedBarChart");
 
+const groupBarChart = require("./chartModules/groupBar");
+const horizontalGroupBar = require("./chartModules/horizontalGroupBar");
+
 const multiLineChart = require("./chartModules/multilineChart");
 const horizontalMultiLineChart = require("./chartModules/horizontalMultilineChart");
 
 const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
+const heatmapChart = require("./chartModules/heatmap");
+const radarChart = require("./chartModules/radarChart");
+const pieChart = require("./chartModules/pieChart");
+const sunburstChart = require("./chartModules/sunburstChart");
+const treeChart = require("./chartModules/treeChart");
+
 const kpiChart = require("./chartModules/kpiChart");
 const funnelChart = require("./chartModules/funnelChart");
 const gaugechart = require("./chartModules/gaugeChart");
-// const pivotChart = require("./chartModules/pivot");
+const pivotChart = require("./chartModules/pivot");
+const table = require("./chartModules/table");
 
 (function () {
     // Setting Initial Window Grafieks Object and Constants
@@ -138,6 +148,12 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.STACKED_BAR_CHART:
                 getChartSvg = stackBarChart;
                 break;
+            case CONSTANTS.GROUP_BAR_CHART:
+                getChartSvg = groupBarChart;
+                break;
+            case CONSTANTS.HORIZONTAL_GROUP_BAR_CHART:
+                getChartSvg = horizontalGroupBar;
+                break;
             case CONSTANTS.MULTIPLE_AREA_CHART:
             case CONSTANTS.MULTIPLE_LINE_CHART:
                 getChartSvg = multiLineChart;
@@ -146,14 +162,33 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.HORIZONTAL_MULTIPLE_LINE_CHART:
                 getChartSvg = horizontalMultiLineChart;
                 break;
+            case CONSTANTS.HEAT_MAP:
+                getChartSvg = heatmapChart;
+                break;
             case CONSTANTS.SCATTER_CHART:
                 getChartSvg = scatterChart;
                 break;
             case CONSTANTS.WATERFALL_CHART:
                 getChartSvg = waterfallChart;
                 break;
+            case CONSTANTS.DONUT_CHART:
+            case CONSTANTS.PIE_CHART:
+                pieChart();
+                break;
+            case CONSTANTS.RADAR_CHART:
+                radarChart();
+                break;
+            case CONSTANTS.TREE_CHART:
+                treeChart();
+                break;
+            case CONSTANTS.SUNBURST_CHART:
+                sunburstChart();
+                break;
             case CONSTANTS.FUNNEL_CHART:
                 funnelChart();
+                if (labelStatus) {
+                    setDataLabels(svg);
+                }
                 return;
             case CONSTANTS.KPI_CHART:
                 kpiChart();
@@ -161,40 +196,49 @@ const gaugechart = require("./chartModules/gaugeChart");
             case CONSTANTS.GAUGE_CHART:
                 gaugechart();
                 return;
+            case CONSTANTS.TABLE:
+                table();
+                return;
             case CONSTANTS.PIVOT:
-            // pivotChart();
-            // return;
+                pivotChart();
+                return;
             default:
                 return console.log("No chart generator function found for this chart");
         }
 
-        // SVG element is the chart for particular chart
-        let svg = getChartSvg(getSvg());
-
-        const chartsDiv = d3.select(".charts-div");
-        chartsDiv.node().appendChild(svg.node());
-
-        // Checking if tick text is overflowing
-        const isOverFlowing = isTickTextOverflowing();
-
-        if (isOverFlowing || grafieks.chartsConfig.margins.horizontalLeft) {
-            /*
-                Rotate the x-axis labels to vertical. To perform this action, we need to
-                - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
-                - Change yAxis Scale (Rotating Margin is added to yScale in range)
-                - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
-            */
-            svg.node().remove();
-            if (!isHorizontalGraph()) {
-                grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
-            }
-            svg = getChartSvg(getSvg());
-            chartsDiv.node().appendChild(svg.node());
-            modifyAndHideTicks();
-        }
-
         if (plotConfiguration.isAxisBasedChart) {
             // Add multiple conditions only for the axis based chart
+            // SVG element is the chart for particular chart
+            let svg = getChartSvg(getSvg());
+
+            const chartsDiv = d3.select(".charts-div");
+            chartsDiv.node().appendChild(svg.node());
+
+            // Checking if tick text is overflowing
+            const isOverFlowing = isTickTextOverflowing();
+
+            if (isOverFlowing || grafieks.chartsConfig.margins.horizontalLeft) {
+                /*
+                    Rotate the x-axis labels to vertical. To perform this action, we need to
+                    - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
+                    - Change yAxis Scale (Rotating Margin is added to yScale in range)
+                    - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
+                */
+                svg.node().remove();
+                if (!isHorizontalGraph()) {
+                    grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
+                }
+                if (!isOverFlowing && chartName == CONSTANTS.HEAT_MAP) {
+                    grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
+                }
+                svg = getChartSvg(getSvg());
+                chartsDiv.node().appendChild(svg.node());
+                if (!isOverFlowing && chartName == CONSTANTS.HEAT_MAP) {
+                    // do nothing
+                } else {
+                    modifyAndHideTicks();
+                }
+            }
 
             // Setting xAxis labels
             if (xaxisStatus) {
@@ -209,17 +253,19 @@ const gaugechart = require("./chartModules/gaugeChart");
             if (gridStatus) {
                 setGrids(svg);
             }
+
+            // Set data labels
+            if (labelStatus) {
+                setDataLabels(svg);
+            }
         }
 
         // Set Tooltip Handler
         setTooltipHandler();
 
         // Set Lenged
-        setLengend();
-
-        // Set data labels
-        if (labelStatus) {
-            setDataLabels(svg);
+        if (!(chartName == CONSTANTS.PIE_CHART || chartName == CONSTANTS.DONUT_CHART)) {
+            setLengend();
         }
     };
 

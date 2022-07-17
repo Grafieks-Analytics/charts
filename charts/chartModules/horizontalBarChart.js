@@ -74,7 +74,7 @@ const horizontalBarChartGeneration = (svg) => {
         // Adding rotating margin to xAxis so that when it is rotated things are visible fine
         const ticks = g
             .attr("transform", `translate(0,${translateY - (chartsMargins.rotatingMargin || 0)})`)
-            .call(d3.axisBottom(xScale).tickSizeOuter(0).tickFormat(d3.format(".2s")))
+            .call(d3.axisBottom(xScale).ticks(utils.getNumberOfTicks()).tickSizeOuter(0).tickFormat(d3.format(".2s")))
             .selectAll("text");
 
         // If ticking config is vertical -> rotating the tick to 90 degrees

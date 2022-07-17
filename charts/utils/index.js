@@ -14,12 +14,13 @@ const isAxisBasedChart = (chartName) => {
 const isElementInViewport = (element) => {
     const rect = element.getBoundingClientRect();
 
-    return (
+    const status =
         rect.top >= 0 &&
         rect.left >= 0 &&
         rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+
+    return { status, boundingRects: rect };
 };
 
 // Getter Functions Starts
@@ -65,7 +66,20 @@ const getMinimumValue = (array) => {
 };
 
 const getNumberOfTicks = () => {
+    if (isHorizontalGraph()) {
+        return Math.floor(window.innerWidth / 150);
+    }
     return Math.floor(window.innerHeight / 70);
+};
+
+const getPageWidth = () => {
+    const margins = window.grafieks.chartsConfig.margins;
+    return window.innerWidth - margins.left - margins.right;
+};
+
+const getPageHeight = () => {
+    const margins = window.grafieks.chartsConfig.margins;
+    return window.innerHeight - margins.top - margins.bottom;
 };
 
 const getSvg = () => {
@@ -76,7 +90,7 @@ const getSvg = () => {
 
 const getXRange = () => {
     const { width, margins: chartsMargins } = window.grafieks.chartsConfig;
-    if (isHorizontalGraph()) {
+    if (isHorizontalGraph() || grafieks.plotConfiguration.chartName == CONSTANTS.HEAT_MAP) {
         // Extra Margin for horizontal graphs - horizontalLeft
         return [chartsMargins.left + chartsMargins.horizontalLeft, width - chartsMargins.right];
     }
@@ -150,6 +164,12 @@ const isHorizontalGraph = () => {
     return false;
 };
 
+const arraySum = (arr) => {
+    return arr.reduce((a, b) => a + b, 0);
+};
+
+window.Math.arraySum = arraySum;
+
 // Setter functions ends
 
 module.exports = {
@@ -162,6 +182,8 @@ module.exports = {
     clearChart,
     getMinimumValue,
     getMaximumValue,
+    getPageHeight,
+    getPageWidth,
     getYScale,
     getXScale,
     getYRange,

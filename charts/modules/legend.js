@@ -2,7 +2,7 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const getLegendDataHtml = () => {
-    const legendData = window.grafieks.legend.data;
+    const legendData = window.grafieks.legend.data || [];
     let { d3ColorPalette, chartName } = grafieks.plotConfiguration;
 
     if (chartName == CONSTANTS.WATERFALL_CHART && !d3ColorPalette) {
@@ -41,6 +41,7 @@ const setLengend = () => {
         switch (legendPosition) {
             case CONSTANTS.LEGEND_POSITION.RIGHT:
                 d3.select(".legend")
+                    .attr("data-align", "horizontal")
                     .style("top", "0px")
                     .style("right", "0px")
                     .style("bottom", null)
@@ -50,6 +51,7 @@ const setLengend = () => {
 
                 grafieks.legend.topMargin = 0;
                 grafieks.legend.leftMargin = 0;
+                grafieks.legend.rightMargin = CONSTANTS.defaultValues.legendWidth;
 
                 legendContentOuterDiv.className = "outerLegendDivVertical";
                 legendContentOuterDiv.innerHTML = getLegendDataHtml();
@@ -57,6 +59,7 @@ const setLengend = () => {
                 break;
             case CONSTANTS.LEGEND_POSITION.LEFT:
                 d3.select(".legend")
+                    .attr("data-align", "horizontal")
                     .style("top", "0px")
                     .style("right", null)
                     .style("bottom", null)
@@ -66,6 +69,7 @@ const setLengend = () => {
 
                 grafieks.legend.topMargin = 0;
                 grafieks.legend.leftMargin = 100;
+                grafieks.legend.rightMargin = 0;
 
                 legendContentOuterDiv.className = "outerLegendDivVertical";
                 legendContentOuterDiv.innerHTML = getLegendDataHtml();
@@ -73,6 +77,7 @@ const setLengend = () => {
                 break;
             case CONSTANTS.LEGEND_POSITION.TOP:
                 d3.select(".legend")
+                    .attr("data-align", "vertical")
                     .style("top", "0px")
                     .style("right", null)
                     .style("bottom", null)
@@ -85,10 +90,12 @@ const setLengend = () => {
 
                 grafieks.legend.topMargin = CONSTANTS.defaultValues.legendHeight;
                 grafieks.legend.leftMargin = 0;
+                grafieks.legend.rightMargin = 0;
 
                 break;
             case CONSTANTS.LEGEND_POSITION.BOTTOM:
                 d3.select(".legend")
+                    .attr("data-align", "vertical")
                     .style("top", null)
                     .style("right", null)
                     .style("bottom", "0px")
@@ -101,6 +108,7 @@ const setLengend = () => {
 
                 grafieks.legend.topMargin = 0;
                 grafieks.legend.leftMargin = 0;
+                grafieks.legend.rightMargin = 0;
                 break;
         }
 
@@ -108,6 +116,7 @@ const setLengend = () => {
     } else {
         grafieks.legend.topMargin = 0;
         grafieks.legend.leftMargin = 0;
+        grafieks.legend.rightMargin = 0;
     }
 
     d3.select(".main-div")

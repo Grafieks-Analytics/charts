@@ -2,6 +2,31 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 const { isHorizontalGraph } = require("../utils");
 
+const updateHorizontalLeftValue = (tickText) => {
+    const tickNodes = tickText.nodes();
+    const tickNodeLength = tickNodes.length;
+
+    let barsWidth = 0;
+    let maxLength = CONSTANTS.defaultValues.maxRotationMargin;
+    let tempMaxLength = 0;
+
+    for (var i = 0; i < tickNodeLength; i++) {
+        const tick = tickNodes[i];
+        const textLength = tick.getComputedTextLength();
+        if (textLength > tempMaxLength) {
+            tempMaxLength = textLength;
+        }
+    }
+
+    if (tempMaxLength < maxLength) {
+        maxLength = tempMaxLength;
+    }
+
+    barsWidth += maxLength;
+
+    grafieks.chartsConfig.margins.horizontalLeft = barsWidth;
+};
+
 const isTickTextOverflowing = () => {
     if (isTickExceptionalChart()) {
         return;
@@ -20,27 +45,12 @@ const isTickTextOverflowing = () => {
     const tickNodeLength = tickNodes.length;
 
     if (isHorizontalGraphBool) {
-        let barsWidth = 0;
-        let maxLength = CONSTANTS.defaultValues.maxRotationMargin;
-        let tempMaxLength = 0;
-
-        for (var i = 0; i < tickNodeLength; i++) {
-            const tick = tickNodes[i];
-            const textLength = tick.getComputedTextLength();
-            if (textLength > tempMaxLength) {
-                tempMaxLength = textLength;
-            }
-        }
-
-        if (tempMaxLength < maxLength) {
-            maxLength = tempMaxLength;
-        }
-
-        barsWidth += maxLength;
-
-        grafieks.chartsConfig.margins.horizontalLeft = barsWidth;
-
+        updateHorizontalLeftValue(tickText);
         return;
+    }
+
+    if (grafieks.plotConfiguration.chartName == CONSTANTS.HEAT_MAP) {
+        updateHorizontalLeftValue(d3.selectAll(".y-axis .tick text"));
     }
 
     const xScale = window.grafieks.utils.xScale;
