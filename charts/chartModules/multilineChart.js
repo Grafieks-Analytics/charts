@@ -4,6 +4,7 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 const { sortDates } = require("../modules/dataTransformation");
+const { drawMarkerForMultiLine } = require("../modules/markers");
 
 const getTransformedDataValue = () => {
     const grafieks = window.grafieks;
@@ -229,6 +230,7 @@ const chartGeneration = (svg) => {
 
     const entry = svg.selectAll(".line").data(splitKeys).enter();
 
+    const stroke = CONSTANTS.defaultValues.lineStrokeWidth;
     entry
         .append("path")
         .attr("fill", function (d) {
@@ -242,7 +244,7 @@ const chartGeneration = (svg) => {
             return color(d);
         })
         .style("opacity", chartName == CONSTANTS.MULTIPLE_AREA_CHART ? 0.7 : 1)
-        .attr("stroke-width", CONSTANTS.defaultValues.lineStrokeWidth)
+        .attr("stroke-width", stroke)
         .attr("class", "line")
         .attr("d", function (d) {
             const lineData = transformedDataValues.filter((dataRow) => {
@@ -254,6 +256,8 @@ const chartGeneration = (svg) => {
 
             return line(lineData);
         });
+
+    drawMarkerForMultiLine(svg, transformedDataValues, stroke, legendsData);
 
     return svg;
 };

@@ -42,6 +42,8 @@ const getToolTopValues = (element) => {
             break;
         case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
         case CONSTANTS.STACKED_BAR_CHART:
+        case CONSTANTS.MULTIPLE_LINE_CHART:
+        case CONSTANTS.MULTIPLE_AREA_CHART:
             if (!xLabelName) {
                 xLabelName = dataLabels[0];
             }

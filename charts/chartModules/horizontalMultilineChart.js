@@ -107,7 +107,7 @@ const chartGeneration = (svg) => {
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    grafieks.legend.data = legendsData;
 
     const { height } = grafieks.chartsConfig;
 
