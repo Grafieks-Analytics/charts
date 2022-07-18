@@ -127,6 +127,8 @@ const chartGeneration = (svg) => {
 
     const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
 
+    grafieks.legend.data = splitKeys;
+
     // Adding components array to be used in for stacked bar chart
     transformedDataValues.forEach(function (d) {
         var y0_positive = 0;

@@ -113,6 +113,10 @@ module.exports = {
         polygon: {
             xPositionAttrName: "x",
             yPositionAttrName: "y"
+        },
+        none: {
+            xPositionAttrName: "x",
+            yPositionAttrName: "y"
         }
     },
 

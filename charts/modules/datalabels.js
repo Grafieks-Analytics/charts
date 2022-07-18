@@ -41,7 +41,7 @@ function removeDataLabelsByDistance() {
     });
 }
 
-const setDataLabels = (svg) => {
+const barChartDataLabel = (svg) => {
     const visualPlotting = svg.selectAll(".visualPlotting");
     const visualPlottingNodes = visualPlotting.nodes();
 
@@ -74,6 +74,194 @@ const setDataLabels = (svg) => {
         .text(function (dataLabelText) {
             return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
         });
+};
+
+const horizontalBarChartDataLabel = (svg) => {
+    const visualPlotting = svg.selectAll(".visualPlotting");
+    const visualPlottingNodes = visualPlotting.nodes();
+
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+    } = grafieks.plotConfiguration;
+
+    svg.append("g")
+        .attr("class", "data-label")
+        .selectAll("text")
+        .data(grafieks.dataUtils.dataLabelValues)
+        .join("text")
+        .attr("class", "label-text")
+        .attr("text-anchor", "middle")
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
+        .attr("x", function (d, i) {
+            let xPosition = +visualPlottingNodes[i].getAttribute("x") - 20;
+            if (d > 0) {
+                xPosition += +visualPlottingNodes[i].getAttribute("width") + 35;
+            }
+            return xPosition;
+        })
+        .attr("y", function (_, i) {
+            return +visualPlottingNodes[i].getAttribute("y") + +visualPlottingNodes[i].getAttribute("height") / 2 + 4;
+        })
+        .text(function (dataLabelText) {
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+        });
+};
+
+const stackedBarChartDataLabel = (svg) => {
+    const visualPlotting = svg.selectAll(".visualPlotting");
+    const visualPlottingNodes = visualPlotting.nodes();
+
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+    } = grafieks.plotConfiguration;
+
+    svg.append("g")
+        .attr("class", "data-label")
+        .selectAll("text")
+        .data(visualPlottingNodes)
+        .join("text")
+        .attr("class", "label-text")
+        .attr("text-anchor", "middle")
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
+        .attr("x", function (d) {
+            let xPosition = +d.getAttribute("x");
+
+            const parentElement = d.parentElement;
+            const matrix = window.getComputedStyle(parentElement).transform;
+            const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(", ");
+
+            const boxWidth = +d.getAttribute("width");
+
+            xPosition += boxWidth / 2;
+
+            return (xPosition += +matrixValues[4] || 0);
+        })
+        .attr("y", function (d) {
+            return +d.getAttribute("y") + +d.getAttribute("height") / 2 + 4;
+        })
+        .text(function (d, i) {
+            const dataLabelText = d.dataset.valueY1;
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+        });
+};
+
+const lineChartDataLabel = (svg) => {
+    const visualPlotting = svg.selectAll(".visualPlotting");
+    const visualPlottingNodes = visualPlotting.nodes();
+
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+    } = grafieks.plotConfiguration;
+
+    svg.append("g")
+        .attr("class", "data-label")
+        .selectAll("text")
+        .data(visualPlottingNodes)
+        .join("text")
+        .attr("class", "label-text")
+        .attr("text-anchor", "middle")
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
+        .attr("x", function (d) {
+            return d.getBBox && d.getBBox().x;
+        })
+        .attr("y", function (d) {
+            const dataLabelText = +d.dataset.valueY1;
+            let yPosition = d.getBBox && d.getBBox().y - 5;
+            if (dataLabelText < 0) {
+                yPosition += 20;
+            }
+            return yPosition;
+        })
+        .text(function (d, i) {
+            const dataLabelText = d.dataset.valueY1;
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+        });
+};
+
+const waterfallDataLabel = (svg) => {
+    const visualPlotting = svg.selectAll(".visualPlotting");
+    const visualPlottingNodes = visualPlotting.nodes();
+
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+    } = grafieks.plotConfiguration;
+
+    svg.append("g")
+        .attr("class", "data-label")
+        .selectAll("text")
+        .data(visualPlottingNodes)
+        .join("text")
+        .attr("class", "label-text")
+        .attr("text-anchor", "middle")
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
+        .attr("x", function (d, i) {
+            let xPosition = d.getBBox().x;
+            const parentElement = d.parentElement;
+            const matrix = window.getComputedStyle(parentElement).transform;
+            const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(", ");
+
+            const boxWidth = +d.getAttribute("width");
+
+            xPosition += boxWidth / 2;
+
+            return (xPosition += +matrixValues[4] || 0);
+        })
+        .attr("y", function (d, i) {
+            let yPosition = +visualPlottingNodes[i].getAttribute("y") - 3;
+            if (d < 0) {
+                yPosition += +visualPlottingNodes[i].getAttribute("height") + 16;
+            }
+            return yPosition;
+        })
+        .text(function (d) {
+            const dataLabelText = d.dataset.valueY1;
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+        });
+};
+
+const setDataLabels = (svg) => {
+    const { chartName } = grafieks.plotConfiguration;
+
+    switch (chartName) {
+        case CONSTANTS.BAR_CHART:
+            barChartDataLabel(svg);
+            break;
+        case CONSTANTS.HORIZONTAL_BAR_CHART:
+            horizontalBarChartDataLabel(svg);
+            break;
+        case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
+        case CONSTANTS.STACKED_BAR_CHART:
+            stackedBarChartDataLabel(svg);
+            break;
+        case CONSTANTS.HORIZONTAL_AREA_CHART:
+        case CONSTANTS.HORIZONTAL_LINE_CHART:
+        case CONSTANTS.AREA_CHART:
+        case CONSTANTS.LINE_CHART:
+        case CONSTANTS.MULTIPLE_AREA_CHART:
+        case CONSTANTS.MULTIPLE_LINE_CHART:
+        case CONSTANTS.SCATTER_CHART:
+            lineChartDataLabel(svg);
+            break;
+        case CONSTANTS.WATERFALL_CHART:
+            waterfallDataLabel(svg);
+            break;
+    }
 
     removeDataLabelsByDistance();
 };
