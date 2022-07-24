@@ -235,6 +235,40 @@ const waterfallDataLabel = (svg) => {
         });
 };
 
+const heatmapDataLabels = (svg) => {
+    const visualPlotting = svg.selectAll(".visualPlotting");
+    const visualPlottingNodes = visualPlotting.nodes();
+
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+    } = grafieks.plotConfiguration;
+
+    svg.append("g")
+        .attr("class", "data-label")
+        .selectAll("text")
+        .data(visualPlottingNodes)
+        .join("text")
+        .attr("class", "label-text")
+        .attr("text-anchor", "middle")
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
+        .attr("x", function (d, i) {
+            return +d.getAttribute("x") + +d.getAttribute("width") / 2;
+        })
+        .attr("y", function (d, i) {
+            let yPosition = +d.getAttribute("y");
+            const height = d.getBBox().height;
+            return (yPosition += height / 2);
+        })
+        .text(function (d) {
+            const dataLabelText = d.dataset.value;
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+        });
+};
+
 const setDataLabels = (svg) => {
     const { chartName } = grafieks.plotConfiguration;
 
@@ -259,7 +293,11 @@ const setDataLabels = (svg) => {
             lineChartDataLabel(svg);
             break;
         case CONSTANTS.WATERFALL_CHART:
+        case CONSTANTS.GROUP_BAR_CHART:
             waterfallDataLabel(svg);
+            break;
+        case CONSTANTS.HEAT_MAP:
+            heatmapDataLabels(svg);
             break;
     }
 
