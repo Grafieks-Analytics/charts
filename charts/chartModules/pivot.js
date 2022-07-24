@@ -74,7 +74,7 @@ function exportToExcel(anchor) {
 
 function changeThemeColour(themeColor) {
     config.theme = themeColor.toLowerCase();
-    drawChart(window.data);
+    pivotChartGeneration();
 }
 
 function clipLetters(td) {
@@ -97,12 +97,18 @@ function clipLetters(td) {
 
 const pivotChartGeneration = () => {
     const grafieks = window.grafieks;
+    grafieks.utils.changeThemeColour = changeThemeColour;
     const data = grafieks.dataUtils.rawData || [];
     const [dataSource, totalRows, fieldsTemp, rowColumnsValues] = data;
 
     const [rows, columns, dataKeys] = rowColumnsValues;
 
-    const { columnWiseGrandTotal = [], rowWiseGrandTotal = [], subTotalVisible } = grafieks.plotConfiguration;
+    const {
+        columnWiseGrandTotal,
+        rowWiseGrandTotal,
+        subTotalVisible,
+        pivotTheme = "blue"
+    } = grafieks.plotConfiguration;
 
     const chartsDiv = getChartsDiv();
     const element = document.createElement("div");
@@ -133,6 +139,7 @@ const pivotChartGeneration = () => {
         height: window.innerHeight + 40,
         dataSource,
         fields,
+        theme: pivotTheme.toLowerCase(),
         grandTotal: {
             rowsvisible: !!rowWiseGrandTotal,
             columnsvisible: !!columnWiseGrandTotal
