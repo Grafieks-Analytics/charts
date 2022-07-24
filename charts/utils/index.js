@@ -168,6 +168,10 @@ const arraySum = (arr) => {
     return arr.reduce((a, b) => a + b, 0);
 };
 
+const getUniqueArrayValues = (value, index, self) => {
+    return self.indexOf(value) === index;
+};
+
 window.Math.arraySum = arraySum;
 
 // Setter functions ends
@@ -191,5 +195,6 @@ module.exports = {
     isElementInViewport,
     getDistanceBetweenElements,
     getDateFormattedData,
-    isHorizontalGraph
+    isHorizontalGraph,
+    getUniqueArrayValues
 };
