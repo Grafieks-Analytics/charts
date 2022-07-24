@@ -1,19 +1,64 @@
 const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
+const isLegendExceptionChart = () => {
+    const exceptionCharts = [CONSTANTS.RADAR_CHART, CONSTANTS.TREE_CHART];
+
+    let { chartName } = grafieks.plotConfiguration;
+
+    if (exceptionCharts.indexOf(chartName) > -1) {
+        return true;
+    }
+    return false;
+};
+
+const heatmapCustomLegend = (colors, legendData) => {
+    const { legendConfig: { legendPosition = CONSTANTS.LEGEND_POSITION.RIGHT } = {} } =
+        window.grafieks.plotConfiguration;
+
+    const [minValue, maxValue] = legendData || [0, 0];
+    const color1 = "#fff";
+    const color2 = colors[colors.length - 1];
+
+    let boxHeight = Math.min(window.innerHeight * 0.8, 300);
+    let boxWidth = 15;
+
+    let degree = 180;
+    let outerClassSuffix = "Vertical";
+    if (legendPosition == "top" || legendPosition == "bottom") {
+        outerClassSuffix = "Horizontal";
+        degree = 45;
+        boxHeight = 30;
+        boxWidth = Math.min(window.innerWidth * 0.5, 200);
+    }
+    return `<div class="gradientLegendFlexBox${outerClassSuffix}" style="height: ${boxHeight}px">
+        <div class="minMaxValue text-center"> ${minValue} </div>
+        <div class="gradientLegendInnerBox" style="width: ${boxWidth}px; background-image: linear-gradient(${degree}deg,${color1},${color2});">
+        </div>
+        <div class="minMaxValue text-center"> ${maxValue.toFixed(2)} </div>
+    </div>`;
+};
+
 const getLegendDataHtml = () => {
     const legendData = window.grafieks.legend.data || [];
-    let { d3ColorPalette, chartName } = grafieks.plotConfiguration;
+    let { d3colorPalette, chartName } = grafieks.plotConfiguration;
 
-    if (chartName == CONSTANTS.WATERFALL_CHART && !d3ColorPalette) {
-        d3ColorPalette = Object.values(CONSTANTS.WATERFALL.COLORS);
-    } else if (!d3ColorPalette) {
-        d3ColorPalette = CONSTANTS.d3ColorPalette;
+    if (chartName == CONSTANTS.WATERFALL_CHART && !d3colorPalette) {
+        d3colorPalette = Object.values(CONSTANTS.WATERFALL.COLORS);
+    } else if (chartName == CONSTANTS.HEAT_MAP && !d3colorPalette) {
+        // Add Condition for legend color
+        d3colorPalette = CONSTANTS.d3SequentialDefaultTheme;
+    } else if (!d3colorPalette) {
+        d3colorPalette = CONSTANTS.d3ColorPalette;
+    }
+
+    if (chartName == CONSTANTS.HEAT_MAP) {
+        return heatmapCustomLegend(d3colorPalette, legendData);
     }
 
     const legendHtml = legendData
         .map((legend, i) => {
-            const color = d3ColorPalette[i % d3ColorPalette.length];
+            const color = d3colorPalette[i % d3colorPalette.length];
             return `<div class="legend-column"> 
                         <div class="legendBox" style="background: ${color}"></div> 
                         <span>
@@ -26,6 +71,10 @@ const getLegendDataHtml = () => {
 };
 
 const setLengend = () => {
+    if (isLegendExceptionChart()) {
+        return;
+    }
+
     const {
         legendConfig: {
             legendStatus = CONSTANTS.defaultValues.legendStatus,
