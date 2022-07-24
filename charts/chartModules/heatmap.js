@@ -92,7 +92,11 @@ const chartGeneration = (svg) => {
 
     const [transformedDataValues, [xAxisGroup, yAxisGroup]] = transformData(dataValues);
 
-    console.log(transformedDataValues);
+    const numericalValues = transformedDataValues.map((d) => d[2]);
+    const minValue = utils.getMinimumValue(numericalValues);
+    const maxValue = utils.getMaximumValue(numericalValues);
+
+    grafieks.legend.data = [minValue, maxValue];
 
     const xDomain = xAxisGroup;
     const xRange = utils.getXRange();
@@ -105,8 +109,6 @@ const chartGeneration = (svg) => {
     // Exposing to utils, to be used in other places, like legend, tooltip, datalabels, axis etc.
     grafieks.utils.yScale = yScale;
     grafieks.utils.xScale = xScale;
-
-    console.log({ d3colorPalette });
 
     var myColor = d3
         .scaleLinear()
