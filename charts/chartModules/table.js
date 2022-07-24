@@ -1,18 +1,13 @@
-const { Tabulator } = require("tabulator-tables");
-
-const CONSTANTS = require("../constants");
-
 const utils = require("../utils");
 
 const tableId = "example";
-let tableStatus = false;
 
 const defaultTableChartConfig = {
     defaultCellBorderStatus: true,
     defaultCellHoverStatus: true,
     defaultCompactStatus: false,
     defaultSearchStatus: true,
-    defaultGrandTotalStatus: false,
+    defaultGrandTotalStatus: true,
     defaultRowAlternateStatus: true,
     defaultBatchsize: 50
 };
@@ -99,6 +94,7 @@ function grandTotalStatus(totalStatus, hasNumerical) {
 function clearChart() {
     init();
 }
+
 function updateTable() {
     addDataToRow();
 }
@@ -140,21 +136,6 @@ function addRowAlternateColor() {
     document.head.appendChild(styleTag);
 }
 
-function setLazyLoadHandler() {
-    var tableScrollBody = document.querySelector(".dataTables_scrollBody");
-    tableScrollBody.addEventListener("scroll", function (event) {
-        var element = event.target;
-        if (!window.dataTableValues[window.counter]) {
-            return;
-        }
-        if (element.scrollTop + element.clientHeight + 100 > element.scrollHeight) {
-            console.log("Adding new data");
-            window.scrollBarPosition = Math.abs(element.clientHeight - element.scrollTop);
-            updateTable();
-        }
-    });
-}
-
 function addDataToRow() {
     tableInstance.rows.add(window.dataTableValues[window.counter++]).draw();
 }
@@ -184,6 +165,26 @@ const chartGeneration = () => {
         batchSize = defaultBatchsize,
         rowWiseGrandTotal: totalStatus = defaultGrandTotalStatus
     } = grafieks.plotConfiguration;
+
+    if (!cellBorderStatus) {
+        removeCellBorder();
+    } else {
+        addCellBorder();
+    }
+
+    if (hoverStatus) {
+        addHoverBackground();
+    } else {
+        removeHoverBackground();
+    }
+
+    if (rowAlternateStatus) {
+        addRowAlternateColor();
+    } else {
+        removeRowAlternateColor();
+    }
+
+    setCompact(compactStatus);
 
     var hasNumerical = false;
 
@@ -291,6 +292,7 @@ const chartGeneration = () => {
 
     setTimeout(function () {
         table.setData(data[0]);
+        grandTotalStatus(totalStatus, hasNumerical);
     }, 0);
 };
 
