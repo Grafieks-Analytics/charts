@@ -210,6 +210,12 @@ function update(source) {
 const chartGeneration = () => {
     const grafieks = window.grafieks;
     const rawData = grafieks.dataUtils.rawData || [];
+
+    if (grafieks.legendConfig && grafieks.legend) {
+        grafieks.legendConfig.legendStatus = false;
+        grafieks.legend.data = [];
+    }
+
     const [dataValues, dataLabel] = rawData;
 
     const margin = { top: 50, right: 50, bottom: 50, left: 50 },
