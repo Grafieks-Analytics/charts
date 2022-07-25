@@ -16,4 +16,5 @@ Built on node version v14.1.0
 
 ## How to add a new Chart
 
--   Add a new module in modules folder
+-   Add a new module in `charts/chartsModules` folder
+-   Name it as `<chart_name>.js`

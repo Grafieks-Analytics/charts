@@ -130,7 +130,7 @@ module.exports = {
         fontFamily: "MS Sans Serif",
         fontColor: "black",
 
-        gridStatus: false,
+        gridStatus: true,
         legendStatus: false,
         labelStatus: false,
 

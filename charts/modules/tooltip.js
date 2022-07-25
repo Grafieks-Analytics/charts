@@ -121,7 +121,7 @@ const getToolTopValues = (element) => {
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(colorByName, dataValues.valueX2));
-            tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY));
+            tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
     }
 
     return tooltipHtmlValue.join("");
