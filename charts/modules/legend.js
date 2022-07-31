@@ -198,7 +198,7 @@ const setLengend = () => {
         legend.appendChild(legendContentOuterDiv);
 
         // Update position on the basis of scroll position
-        updateLegendPosition();
+        updateLegendPosition(legendPosition);
     } else {
         grafieks.legend.topMargin = 0;
         grafieks.legend.leftMargin = 0;

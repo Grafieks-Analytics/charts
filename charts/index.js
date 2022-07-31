@@ -125,6 +125,12 @@ const table = require("./chartModules/table");
                 BAR_CHART: barChartGeneration
             }
         */
+        const body = document.querySelector("body");
+        if (chartName == CONSTANTS.TREE_CHART) {
+            body.classList.add("overflowAuto");
+        } else {
+            body.classList.remove("overflowAuto");
+        }
         switch (chartName) {
             case CONSTANTS.BAR_CHART:
                 getChartSvg = barChartGeneration;

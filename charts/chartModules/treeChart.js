@@ -257,6 +257,12 @@ const chartGeneration = () => {
         .text((d) => {
             return d;
         });
+
+    setTimeout(function () {
+        const svgNode = document.querySelector("svg");
+        const widthSvgNode = document.querySelector(".charts-div svg g").getBBox().width;
+        svgNode.setAttribute("width", widthSvgNode + 50);
+    }, 0);
 };
 
 module.exports = chartGeneration;
