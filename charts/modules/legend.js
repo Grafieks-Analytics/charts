@@ -70,6 +70,40 @@ const getLegendDataHtml = () => {
     return legendHtml;
 };
 
+const updateLegendPosition = (legendPosition) => {
+    const setJustifyContent = (element, value) => {
+        element.style["justify-content"] = value;
+    };
+
+    /**
+     * When position is left or right if window height is more than the scrollHeight
+     * Or When position is top or bottom if window width is more than the scrollWidth
+     * Add justify content center
+     * Else remove justify content center
+     */
+    if (legendPosition == CONSTANTS.LEGEND_POSITION.LEFT || legendPosition == CONSTANTS.LEGEND_POSITION.RIGHT) {
+        const legendOuterBox = document.querySelector(".legend .outerLegendDivVertical");
+        const legendBoxHeight = legendOuterBox.scrollHeight;
+        if (window.innerHeight > legendBoxHeight) {
+            // Add justfy content center
+            setJustifyContent(legendOuterBox, "center");
+        } else {
+            // Remove justify content center
+            setJustifyContent(legendOuterBox, null);
+        }
+    } else {
+        const legendOuterBox = document.querySelector(".legend .outerLegendDivHorizontal");
+        const legendBoxWidth = legendOuterBox.scrollWidth;
+        if (window.innerWidth > legendBoxWidth) {
+            // Add justfy content center
+            setJustifyContent(legendOuterBox, "center");
+        } else {
+            // Remove justify content center
+            setJustifyContent(legendOuterBox, null);
+        }
+    }
+};
+
 const setLengend = () => {
     if (isLegendExceptionChart()) {
         return;
@@ -162,6 +196,9 @@ const setLengend = () => {
         }
 
         legend.appendChild(legendContentOuterDiv);
+
+        // Update position on the basis of scroll position
+        updateLegendPosition();
     } else {
         grafieks.legend.topMargin = 0;
         grafieks.legend.leftMargin = 0;
