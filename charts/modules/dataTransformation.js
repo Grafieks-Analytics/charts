@@ -46,7 +46,7 @@ const sortDates = (datesArray, dateFormat) => {
         }
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
-        return new Date(b) - new Date(a);
+        return new Date(a) - new Date(b);
     });
     return datesArray;
 };

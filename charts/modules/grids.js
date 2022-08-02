@@ -1,4 +1,5 @@
 const d3 = require("d3");
+const CONSTANTS = require("../constants");
 const { getNumberOfTicks, getAxisWidth, getYRange } = require("../utils");
 
 const makeYaxisGridLines = (scale) => {
@@ -14,7 +15,22 @@ const makeXaxisGridLines = (scale) => {
         .ticks(getNumberOfTicks());
 };
 
+const isExceptionChart = () => {
+    const exceptionCharts = [CONSTANTS.HEAT_MAP];
+
+    let { chartName } = grafieks.plotConfiguration;
+
+    if (exceptionCharts.indexOf(chartName) > -1) {
+        return true;
+    }
+    return false;
+};
+
 const setGrids = (svg) => {
+    if (isExceptionChart()) {
+        return;
+    }
+
     const grafieks = window.grafieks;
     const chartsMargins = grafieks.chartsConfig.margins;
 

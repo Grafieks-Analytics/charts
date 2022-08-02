@@ -126,6 +126,44 @@ text.shadow {
     gap: 6px;
 }
 
+.gradientLegendFlexBoxVertical {
+    display: flex;
+    padding: 2px;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gradientLegendFlexBoxHorizontal {
+    display: flex;
+    padding: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.gradientLegendFlexBoxVertical .gradientLegendInnerBox {
+    height: 90%;
+    margin: 0 auto;
+    border: 1px solid grey;
+}
+
+.gradientLegendFlexBoxHorizontal .gradientLegendInnerBox {
+    height: 70%;
+    margin: 10px;
+    border: 1px solid grey;
+}
+
+.gradientLegend {
+    width: 15px;
+    height: 200px;
+    margin-top: 2px;
+    border: 1px solid grey;
+}
+
 .grid text {
     display: none;
 }
@@ -154,6 +192,10 @@ text.shadow {
     flex-flow: column;
     justify-content: center;
     align-items: center;
+}
+
+.gaugeDataLabel {
+    position: fixed;
 }
 
 #funnelChart {

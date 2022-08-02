@@ -23,7 +23,7 @@ const gauge = function (container, configuration) {
 
         majorTicks: 3,
         labelFormat: d3.format(".1s"),
-        labelInset: 10,
+        labelInset: 30,
 
         arcColorFn: d3.interpolateHsl(d3.rgb("#b3de69"), d3.rgb("#fccde5"))
     };
@@ -67,8 +67,6 @@ const gauge = function (container, configuration) {
 
         const { maxValue, redValue, yellowValue } = config;
 
-        var redValueData = redValue / maxValue;
-
         tickData = [redValue / maxValue, (yellowValue - redValue) / maxValue, (maxValue - yellowValue) / maxValue];
         var covered = 0;
 
@@ -88,7 +86,8 @@ const gauge = function (container, configuration) {
     that.configure = configure;
 
     function centerTranslation() {
-        return "translate(" + (r + 5) + "," + (r + 140) + ")";
+        let yPos = window.innerHeight * 0.1;
+        return "translate(" + (r + 15) + "," + (r + yPos) + ")";
     }
 
     function isRendered() {
@@ -136,7 +135,7 @@ const gauge = function (container, configuration) {
             })
             .attr("d", arc);
 
-        var lg = svg.append("g").attr("class", "label").attr("transform", centerTx);
+        var lg = svg.append("g").attr("class", "gaugeLabel").attr("transform", centerTx);
 
         const { maxValue, redValue, yellowValue } = config;
 
@@ -152,17 +151,18 @@ const gauge = function (container, configuration) {
                 var newAngle = config.minAngle + ratio * range;
                 console.log(d, ratio, newAngle);
                 if (!i) {
-                    this.setAttribute("x", config.labelInset - r + 60);
+                    this.setAttribute("x", config.labelInset - r);
                     this.setAttribute("y", 25);
                     // this.setAttribute('tick-position', 'start')
                     return null;
                 }
                 if (i == ticks.length - 1) {
-                    this.setAttribute("x", config.labelInset + r);
+                    this.setAttribute("x", config.labelInset + r + 10);
                     this.setAttribute("tick-position", "end");
+                    this.setAttribute("class", "lastTick");
                     return null;
                 }
-                return "rotate(" + newAngle + ") translate(0," + (config.labelInset - r) + ")";
+                return "rotate(" + newAngle + ") translate(0," + (config.labelInset - r - 20) + ")";
             })
             .text(config.labelFormat);
 
@@ -198,17 +198,23 @@ const gauge = function (container, configuration) {
 
     var numberFormat = d3.format(".1s");
 
+    function getTopValue() {
+        var element = document.querySelector(".lastTick");
+        return element.getBoundingClientRect().top;
+    }
+
     function update(newValue, gaugeSize, newConfiguration) {
         const data = grafieks.dataUtils.rawData || [];
         var label = data[1];
 
         d3.select("#x")
+            .attr("class", "gaugeDataLabel")
+            .style("top", `${getTopValue()}px`)
             .html(
                 `<div class="columnWiseCenter"><div class="value">${numberFormat(
                     newValue
-                )}</div><div class="label text-center">${label}</div></div>`
-            )
-            .style("margin-top", "-" + (gaugeSize / 2 - 140 + "px"));
+                )}</div><div class="gaugeLabel text-center">${label}</div></div>`
+            );
         if (newConfiguration !== undefined) {
             configure(newConfiguration);
         }
@@ -260,13 +266,9 @@ const gaugeChartGeneration = () => {
     powerGauge.render();
 
     function updateReadings(value, gaugeSize) {
-        // just pump in random data here...
         powerGauge.update(value, gaugeSize);
     }
 
-    // every few seconds update reading values
     updateReadings(readingValue, gaugeSize);
 };
 module.exports = gaugeChartGeneration;
-
-// [[2297221.75,"Sales"]]

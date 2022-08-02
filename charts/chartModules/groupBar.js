@@ -10,7 +10,7 @@ const getTransformedDataValue = () => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    let [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
+    let [dataValues = [], legendsData = [], dataLabels = []] = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
@@ -36,48 +36,58 @@ const getTransformedDataValue = () => {
         return data;
     }
 
-    let uniqueKey = [];
+    var globalKeys = [];
+    var transformedDataValue = {};
+
     dataValues.forEach((d) => {
-        // Index 1 is categry
-        let key = d[1];
+        var currentData = d;
+
+        var category = d.mainCategory;
         if (isKey1Date) {
-            key = utils.getDateFormattedData(d[1], dateFormat);
+            category = utils.getDateFormattedData(d.mainCategory, dateFormat);
         }
-
-        if (!json[key]) {
-            json[key] = {};
+        // console.log(category);
+        if (!transformedDataValue[category]) {
+            transformedDataValue[category] = {};
         }
+        var originalData = transformedDataValue[category];
 
-        const key2 = d[0];
-        if (!uniqueKey.includes(key2)) {
-            uniqueKey.push(key2);
-        }
+        var allKeys = [...Object.keys(originalData), ...Object.keys(currentData)];
 
-        const value = d[2];
+        allKeys = allKeys
+            .filter((d) => {
+                if (d != "mainCategory") {
+                    return d;
+                }
+            })
+            .filter(utils.getUniqueArrayValues);
 
-        if (!json[key][key2]) {
-            json[key][key2] = 0;
-        }
+        globalKeys.push(...allKeys);
 
-        json[key][key2] += +value;
+        allKeys.forEach((d) => {
+            originalData[d] = (originalData[d] || 0) + (currentData[d] || 0);
+        });
+        transformedDataValue[category] = {
+            ...originalData,
+            mainCategory: category
+        };
     });
 
-    const allKeys = uniqueKey;
-
-    let response = Object.keys(json).map((key) => {
-        return { ...json[key], key };
-    });
-
-    let mainKeys = Object.keys(json);
     if (isKey1Date) {
-        const sortedKeys = sortDates(Object.keys(json), dateFormat);
-        mainKeys = sortedKeys;
-        response = sortedKeys.map((d) => {
-            return { ...json[d], key: d };
+        var sortedKeys = sortDates(Object.keys(transformedDataValue), dateFormat);
+        transformedDataValue = sortedKeys.map((key) => {
+            return transformedDataValue[key];
+        });
+    } else {
+        transformedDataValue = Object.keys(transformedDataValue).map((key) => {
+            return transformedDataValue[key];
         });
     }
 
-    return [response, allKeys, dataLabels, mainKeys];
+    globalKeys = globalKeys.filter(utils.getUniqueArrayValues);
+    var mainCategoryData = transformedDataValue.map((d) => d.mainCategory);
+
+    return [transformedDataValue, [globalKeys, mainCategoryData], dataLabels];
 };
 
 const getMaximumValue = (transformedDataValues, splitKeys) => {
@@ -273,7 +283,7 @@ const chartGeneration = (svg) => {
                 .attr("fill", function (d) {
                     this.setAttribute("data-value-x1", d.mainCategory);
                     this.setAttribute("data-value-x2", d.name);
-                    this.setAttribute("data-value-y", d.value);
+                    this.setAttribute("data-value-y1", d.value);
 
                     if (groupBarChartColorBy == "category") {
                         return color(d.data.mainCategory);
