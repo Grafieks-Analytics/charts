@@ -85,7 +85,7 @@ text.shadow {
     font-size: 12px;
     padding: 6px 4px;
     position: fixed;
-    z-index: -1;
+    z-index: 1000;
 }
 
 .legend-column {
@@ -108,12 +108,10 @@ text.shadow {
 
 .outerLegendDivHorizontal {
     width: 100%;
-    height: 100%;
+    height: auto;
     margin: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    /* gap: 6px; */
+    overflow: auto;
 }
 
 .outerLegendDivVertical {
@@ -122,8 +120,7 @@ text.shadow {
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 6px;
+    overflow: auto;
 }
 
 .gradientLegendFlexBoxVertical {
@@ -255,4 +252,12 @@ text.shadow {
 
 .orb-toolbar {
     display: none;
+}
+
+.tabulator-tableHolder {
+    overflow-y: overlay !important;
+}
+
+.overflowAuto {
+    overflow-x: auto !important;
 }
