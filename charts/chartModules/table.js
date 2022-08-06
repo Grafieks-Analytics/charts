@@ -12,58 +12,12 @@ const defaultTableChartConfig = {
     defaultBatchsize: 50
 };
 
-function addCss() {
-    const link = "https://unpkg.com/tabulator-tables@5.2.7/dist/css/tabulator.min.css";
-    const linkTag = document.createElement("link");
-    linkTag.href = link;
-    linkTag.rel = "stylesheet";
-    document.head.appendChild(linkTag);
-
-    // <link href="" rel="stylesheet">
-    // <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator.min.js"></script>
-}
-
 function init() {
     utils.getChartsDiv().node().innerHTML = `<table id="${tableId}" class="ui celled table very compact">
                 <thead></thead>
                 <tbody></tbody>
                 <tfoot></tfoot>
             </table>`;
-}
-
-function generateNewTr(row, type = "td") {
-    var tr = document.createElement("tr");
-    var rowValues = Object.values(row);
-    for (var i = 0; i < rowValues.length; i++) {
-        var td = document.createElement(type);
-        td.innerText = rowValues[i];
-        tr.appendChild(td);
-    }
-    return tr;
-}
-
-function addNewRow(table) {
-    var tr = document.createElement("tr");
-    for (var i = 0; i < 3; i++) {
-        var td = document.createElement("td");
-        td.innerText = "Test" + i;
-        tr.appendChild(td);
-    }
-    table.row.add(tr);
-}
-
-function addHeader() {
-    var table = document.querySelector("thead");
-    table.appendChild(generateNewTr(window.data[2], "th"));
-}
-
-function addFooter() {
-    var table = document.querySelector("tfoot");
-    table.appendChild(generateNewTr(window.data[1], "th"));
-}
-
-function getColumnNamesConfigArray(data) {
-    return data.map((d) => ({ data: d }));
 }
 
 function setCompact(compactStatus) {
@@ -89,14 +43,6 @@ function grandTotalStatus(totalStatus, hasNumerical) {
             e.style.display = "none";
         });
     }
-}
-
-function clearChart() {
-    init();
-}
-
-function updateTable() {
-    addDataToRow();
 }
 
 function addCellBorder() {
@@ -134,10 +80,6 @@ function addRowAlternateColor() {
     styleTag.id = "alternateRow";
     styleTag.innerHTML = ".tabulator-row-odd { background-color: #d9d9d933; }";
     document.head.appendChild(styleTag);
-}
-
-function addDataToRow() {
-    tableInstance.rows.add(window.dataTableValues[window.counter++]).draw();
 }
 
 const chartGeneration = () => {
@@ -262,7 +204,7 @@ const chartGeneration = () => {
         return true; //must return a boolean, true if it passes the filter.
     }
 
-    var table = new Tabulator("#example", {
+    var table = new Tabulator(`#${tableId}`, {
         layout: "fitColumns",
         height: "calc(100vh - 26px)",
         movableColumns: true,
