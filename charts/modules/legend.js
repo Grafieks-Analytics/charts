@@ -43,7 +43,7 @@ const getLegendDataHtml = () => {
     const legendData = window.grafieks.legend.data || [];
     let { d3colorPalette, chartName } = grafieks.plotConfiguration;
 
-    if (chartName == CONSTANTS.WATERFALL_CHART && !d3colorPalette) {
+if (chartName == CONSTANTS.WATERFALL_CHART) {
         d3colorPalette = Object.values(CONSTANTS.WATERFALL.COLORS);
     } else if (chartName == CONSTANTS.HEAT_MAP && !d3colorPalette) {
         // Add Condition for legend color
