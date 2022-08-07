@@ -254,10 +254,6 @@ text.shadow {
     display: none;
 }
 
-.tabulator-tableHolder {
-    overflow-y: overlay !important;
-}
-
 .overflowAuto {
     overflow-x: auto !important;
 }
