@@ -19,7 +19,7 @@ function formatLabel(labelValue, labelFormat) {
 }
 
 function removeDataLabelsByDistance() {
-    var labels = document.querySelectorAll(".data-label text");
+    var labels = document.querySelectorAll(".data-label text, .data-label-text");
     var lastTickShown = labels[0];
     var lastTickShown1 = null;
     var lastTickShown2 = null;
@@ -269,6 +269,38 @@ const heatmapDataLabels = (svg) => {
         });
 };
 
+const pieChartDataLabels = () => {
+    const { radius } = grafieks.dataUtils;
+
+    const {
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        labelConfig: { labelFormat } = {}
+    } = grafieks.plotConfiguration;
+
+    // Another arc that won't be drawn. Just for labels positioning
+    let outerArcRadius = radius + 15;
+    var outerArc = d3.arc().innerRadius(outerArcRadius).outerRadius(outerArcRadius);
+
+    const arcs = grafieks.utils.arcs;
+
+    arcs.append("text")
+        .attr("class", "data-label-text")
+        .attr("transform", function (d) {
+            const pos = outerArc.centroid(d);
+            return "translate(" + pos + ")";
+        })
+        .attr("dy", 5)
+        .attr("font-size", dataLabelfontSize)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("fill", dataLabelColor)
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+            return formatLabel(d.data, labelFormat);
+        });
+};
+
 const setDataLabels = (svg) => {
     const { chartName } = grafieks.plotConfiguration;
 
@@ -298,6 +330,10 @@ const setDataLabels = (svg) => {
             break;
         case CONSTANTS.HEAT_MAP:
             heatmapDataLabels(svg);
+            break;
+        case CONSTANTS.DONUT_CHART:
+        case CONSTANTS.PIE_CHART:
+            pieChartDataLabels(svg);
             break;
     }
 
