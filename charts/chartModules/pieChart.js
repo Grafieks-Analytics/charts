@@ -2,26 +2,20 @@ const d3 = require("d3");
 
 const CONSTANTS = require("../constants");
 const { setLengend } = require("../modules/legend");
-const { getSvg, getPageHeight, getPageWidth } = require("../utils");
+const { setDataLabels } = require("../modules/datalabels");
+const { getSvg } = require("../utils");
 
 const chartGeneration = () => {
     const grafieks = window.grafieks;
     const data = grafieks.dataUtils.rawData || [];
     const [dataValues, dataLabels] = data;
 
-    let isDateTransforming = false;
     const {
         dataColumns: { xAxisColumnDetails = [] } = {},
         chartName,
         d3colorPalette = CONSTANTS.d3ColorPalette,
-        paddingInner,
-        dataColumns,
-        labelConfig = CONSTANTS.defaultValues.defaultlabelConfig,
-        dateFormat = CONSTANTS.defaultValues.dateFormat,
-        innerRadius = CONSTANTS.defaultValues.innerRadius,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
-        dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelColor = CONSTANTS.defaultValues.fontColor
+        labelConfig: { labelStatus = CONSTANTS.defaultValues.labelStatus } = {},
+        innerRadius = CONSTANTS.defaultValues.innerRadius
     } = grafieks.plotConfiguration;
 
     if (xAxisColumnDetails[0].itemType == "Date") {
@@ -40,7 +34,13 @@ const chartGeneration = () => {
     const height = window.innerHeight - (grafieks.legend.topMargin || 0);
 
     let radius = Math.min(width, height) / 2;
-    radius = radius * 0.8;
+    if (labelStatus) {
+        radius = radius * 0.7;
+    } else {
+        radius = radius * 0.85;
+    }
+
+    grafieks.dataUtils.radius = radius;
 
     const translateSvgTop = 0;
     const translateSvgLeft = 0;
@@ -51,7 +51,8 @@ const chartGeneration = () => {
         .attr("transform", "translate(" + (width / 2 + translateSvgLeft) + "," + (height / 2 + translateSvgTop) + ")");
 
     // Creating Pie generator
-    var pie = d3.pie();
+    // No sorting
+    var pie = d3.pie().sort(null);
 
     // Creating arc
     var arc = d3
@@ -73,6 +74,9 @@ const chartGeneration = () => {
         .enter()
         .append("g");
 
+    // Arcs will be used in data labels -> To append labels
+    grafieks.utils.arcs = arcs;
+
     // Appending path
     arcs.append("path")
         .attr("fill", function (_, i) {
@@ -88,5 +92,10 @@ const chartGeneration = () => {
 
     const chartsDiv = d3.select(".charts-div");
     chartsDiv.node().appendChild(svg.node());
+
+    // Set data labels
+    if (labelStatus) {
+        setDataLabels(svg);
+    }
 };
 module.exports = chartGeneration;
