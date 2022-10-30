@@ -74,7 +74,7 @@ function exportToExcel(anchor) {
 
 function changeThemeColour(themeColor) {
     config.theme = themeColor.toLowerCase();
-    pivotChartGeneration();
+    chartGeneration();
 }
 
 function clipLetters(td) {
@@ -95,11 +95,11 @@ function clipLetters(td) {
     }
 }
 
-const pivotChartGeneration = () => {
+const chartGeneration = () => {
     const grafieks = window.grafieks;
     grafieks.utils.changeThemeColour = changeThemeColour;
     const data = grafieks.dataUtils.rawData || [];
-    const [dataSource, totalRows, fieldsTemp, rowColumnsValues] = data;
+    const { dataValues: dataSource, fields: fieldsTemp, rowColumnsValues } = data;
 
     const [rows, columns, dataKeys] = rowColumnsValues;
 
@@ -234,7 +234,7 @@ const pivotChartGeneration = () => {
     }
 };
 
-module.exports = pivotChartGeneration;
+module.exports = chartGeneration;
 
 /*
 

@@ -16,7 +16,7 @@ const getTransformedDataValue = () => {
     // 3. X Axis Texts Or the domains for x axis => Category
     // 4. data labels => Category | Sub-Category | Sales
 
-    let [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
+    let { dataValues = [], dataLabels = [] } = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
@@ -107,7 +107,7 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
+    const { dataValues = [], legendsData = [], axisTextValues = [], dataLabels = [] } = data;
     const { dataColumns = {}, d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
@@ -157,7 +157,7 @@ const chartGeneration = (svg) => {
     const maxValue = getMaximumValue(transformedDataValues);
 
     // Setting yScale
-    const yDomain = isDateTransforming ? mainCategoryKeys : xAxisTextValues;
+    const yDomain = isDateTransforming ? mainCategoryKeys : axisTextValues;
     const yRange = utils.getYRange();
     const yScale = utils.getYScale(yDomain, yRange);
 

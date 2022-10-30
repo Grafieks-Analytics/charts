@@ -16,29 +16,14 @@ const getTransformedDataValue = () => {
     // 3. X Axis Texts Or the domains for x axis => Category
     // 4. data labels => Category | Sub-Category | Sales
 
-    let [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
-
-    // Data columns has all the values of x-y axis and rows and values rows
-    const { dataColumns } = grafieks.plotConfiguration;
+    let { dataValues = [], dataLabels = [] } = data;
 
     let json = {};
-    let isKey1Date = false; // key1 is the cateogry || later on key2 can be added for sub category or color by split
-
-    const { xAxisColumnDetails = [] } = dataColumns;
-    let dateFormat = "%Y";
-
-    if (xAxisColumnDetails[0].itemType == "Date") {
-        isKey1Date = true;
-        dateFormat = xAxisColumnDetails[0].dateFormat;
-    }
 
     let uniqueKey = [];
     dataValues.forEach((d) => {
         // Index 1 is categry
         let key = d[1];
-        if (isKey1Date) {
-            key = utils.getDateFormattedData(d[1], dateFormat);
-        }
 
         if (!json[key]) {
             json[key] = {};
@@ -65,13 +50,6 @@ const getTransformedDataValue = () => {
     });
 
     let mainKeys = Object.keys(json);
-    if (isKey1Date) {
-        const sortedKeys = sortDates(Object.keys(json), dateFormat);
-        mainKeys = sortedKeys;
-        response = sortedKeys.map((d) => {
-            return { ...json[d], key: d };
-        });
-    }
 
     return [response, allKeys, dataLabels, mainKeys];
 };
@@ -107,7 +85,7 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
+    const { dataValues = [], legendsData = [], axisTextValues = [], dataLabels = [] } = data;
     const { dataColumns = {} } = grafieks.plotConfiguration;
     const { xAxisColumnDetails = [] } = dataColumns;
 
@@ -161,7 +139,7 @@ const chartGeneration = (svg) => {
 
     // Setting xScale
 
-    const xDomain = isDateTransforming ? mainCategoryKeys : xAxisTextValues;
+    const xDomain = isDateTransforming ? mainCategoryKeys : axisTextValues;
     const xRange = utils.getXRange();
     const xScale = utils.getXScale(xDomain, xRange);
 
