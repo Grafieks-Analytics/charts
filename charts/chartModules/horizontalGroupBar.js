@@ -16,12 +16,11 @@ const getTransformedDataValue = () => {
     // 3. X Axis Texts Or the domains for x axis => Category
     // 4. data labels => Category | Sub-Category | Sales
 
-    let [dataValues = [], legendsData = [], dataLabels = []] = data;
+    let { dataValues = [], dataLabels = [] } = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
 
-    let json = {};
     let isKey1Date = false; // key1 is the cateogry || later on key2 can be added for sub category or color by split
     let isKey2Date = false;
 
@@ -117,7 +116,7 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], legendsData = [], dataLabels = []] = data;
+    const { dataValues = [], dataLabels = [] } = data;
 
     const {
         dataColumns = {},

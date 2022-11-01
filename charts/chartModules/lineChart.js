@@ -6,12 +6,12 @@ const utils = require("../utils");
 
 const { drawMarker } = require("../modules/markers");
 
-const lineChartGeneration = (svg) => {
+const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], dataLabels = []] = data;
+    const { dataValues = [], dataLabels = [] } = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
@@ -156,4 +156,4 @@ const lineChartGeneration = (svg) => {
 
     return svg;
 };
-module.exports = lineChartGeneration;
+module.exports = chartGeneration;

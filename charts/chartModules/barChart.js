@@ -4,24 +4,25 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const barChartGeneration = (svg) => {
+const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], dataLabels = []] = data;
+    const { dataValues = [], dataLabels = [] } = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    grafieks.legend.data = [dataLabels.xAxisLabel];
 
     const { height } = grafieks.chartsConfig;
 
-    const minValue = utils.getMinimumValue(dataValues[1]);
-    const maxValue = utils.getMaximumValue(dataValues[1]);
+    const numericalValues = dataValues.map((d) => d[1]);
+    const minValue = utils.getMinimumValue(numericalValues);
+    const maxValue = utils.getMaximumValue(numericalValues);
 
     // Setting yScale
     const yDomain = [minValue, maxValue];
@@ -29,7 +30,7 @@ const barChartGeneration = (svg) => {
     const yScale = utils.getYScale(yDomain, yRange);
 
     // Setting xScale
-    const xDomain = dataValues[0];
+    const xDomain = dataValues.map((d) => d[0]);
     const xRange = utils.getXRange();
     const xScale = utils.getXScale(xDomain, xRange);
 
@@ -105,16 +106,16 @@ const barChartGeneration = (svg) => {
         .attr("class", "bars")
         .attr("fill", d3colorPalette[0])
         .selectAll("rect")
-        .data(dataValues[0])
+        .data(dataValues)
         .join("rect")
         .attr("class", "visualPlotting")
-        .attr("x", function (_, i) {
-            const xValue = dataValues[0][i];
+        .attr("x", function (d) {
+            const xValue = d[0];
             this.setAttribute("data-value-x1", xValue);
             return xScale(xValue);
         })
-        .attr("y", function (_, i) {
-            const value = dataValues[1][i];
+        .attr("y", function (d) {
+            const value = d[1];
             let yValue = null;
             if (value < 0) {
                 yValue = yScale(0);
@@ -124,8 +125,8 @@ const barChartGeneration = (svg) => {
             this.setAttribute("data-value-y1", value);
             return yValue;
         })
-        .attr("height", function (_, i) {
-            const value = dataValues[1][i];
+        .attr("height", function (d, i) {
+            const value = d[1];
             var height = Math.abs(yScale(0) - yScale(Math.abs(value)));
             if (!height) {
                 height = 0.1;
@@ -136,4 +137,4 @@ const barChartGeneration = (svg) => {
 
     return svg;
 };
-module.exports = barChartGeneration;
+module.exports = chartGeneration;

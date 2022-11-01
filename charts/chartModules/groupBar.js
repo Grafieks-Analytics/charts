@@ -10,7 +10,7 @@ const getTransformedDataValue = () => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    let [dataValues = [], legendsData = [], dataLabels = []] = data;
+    let { dataValues = [], dataLabels = [] } = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
@@ -111,7 +111,7 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], legendsData = [], dataLabels = []] = data;
+    const { dataValues = [], dataLabels = [] } = data;
 
     const {
         dataColumns = {},
