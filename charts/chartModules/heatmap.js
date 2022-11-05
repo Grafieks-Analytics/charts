@@ -85,10 +85,10 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], dataLabels = [] } = data;
+    const [dataValues = [], dataLabels = [], axisLabels = []] = data;
 
     grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
+    grafieks.dataUtils.dataLabels = [axisLabels[0], axisLabels[2], axisLabels[1]];
 
     const [transformedDataValues, [xAxisGroup, yAxisGroup]] = transformData(dataValues);
 

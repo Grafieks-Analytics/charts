@@ -17,7 +17,7 @@ const getTransformedDataValue = () => {
     // 3. X Axis Texts Or the domains for x axis => Category
     // 4. data labels => Category | Sub-Category | Sales
 
-    let { dataValues = [], dataLabels = [] } = data;
+    let [dataValues = [], legendsData = [], dataLabels = []] = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
@@ -91,7 +91,7 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], legendsData = [], dataLabels = [] } = data;
+    const [dataValues = [], legendsData = [], dataLabels = []] = data;
     const { dataColumns = {}, curveType = CONSTANTS.curveType.LINEAR, chartName } = grafieks.plotConfiguration;
     const { xAxisColumnDetails = [] } = dataColumns;
 

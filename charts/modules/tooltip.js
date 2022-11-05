@@ -32,10 +32,10 @@ const getToolTopValues = (element) => {
 
         case CONSTANTS.RADAR_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels.xAxisLabel;
+                xLabelName = dataLabels[0];
             }
             if (!yLabelName) {
-                yLabelName = dataLabels.yAxisLabel;
+                yLabelName = dataLabels[1];
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
@@ -45,13 +45,13 @@ const getToolTopValues = (element) => {
         case CONSTANTS.MULTIPLE_LINE_CHART:
         case CONSTANTS.MULTIPLE_AREA_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels.xAxisLabel;
+                xLabelName = dataLabels[0];
             }
             if (!yLabelName) {
-                yLabelName = dataLabels.yAxisLabel;
+                yLabelName = dataLabels[1];
             }
             if (!colorByName) {
-                colorByName = dataLabels.colorByLabel;
+                colorByName = dataLabels[2];
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(colorByName, dataValues.valueX2));

@@ -1,12 +1,12 @@
 const D3Funnel = require("d3-funnel");
 const CONSTANTS = require("../constants");
 
-const chartGeneration = () => {
+const funnelChartgeneration = () => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], dataLabels = [] } = data;
+    const [dataValues = [], dataLabels = []] = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
@@ -72,4 +72,4 @@ const chartGeneration = () => {
     const chart = new D3Funnel("#funnelChart");
     chart.draw(dataValues, options);
 };
-module.exports = chartGeneration;
+module.exports = funnelChartgeneration;

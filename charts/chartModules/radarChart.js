@@ -352,7 +352,7 @@ function RadarChart(id, data, options) {
 const chartGeneration = () => {
     const data = grafieks.dataUtils.rawData;
 
-    let { dataValues = [], dataLabels = {} } = data;
+    let [dataValues = [], dataLabels = []] = data;
     dataValues = [dataValues];
 
     grafieks.dataUtils.dataValues = dataValues;

@@ -4,12 +4,12 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const chartGeneration = (svg) => {
+const horizontalBarChartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], dataLabels = [] } = data;
+    const [dataValues = [], dataLabels = []] = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
@@ -20,12 +20,11 @@ const chartGeneration = (svg) => {
 
     const { height } = grafieks.chartsConfig;
 
-    const numericalValues = dataValues.map((d) => d[1]);
-    const minValue = utils.getMinimumValue(numericalValues);
-    const maxValue = utils.getMaximumValue(numericalValues);
+    const minValue = utils.getMinimumValue(dataValues[1]);
+    const maxValue = utils.getMaximumValue(dataValues[1]);
 
     // Setting yScale
-    const yDomain = dataValues.map((d) => d[0]);
+    const yDomain = dataValues[0];
     const yRange = utils.getYRange();
     const yScale = utils.getYScale(yDomain, yRange);
 
@@ -105,24 +104,24 @@ const chartGeneration = (svg) => {
         .attr("class", "bars")
         .attr("fill", d3colorPalette[0])
         .selectAll("rect")
-        .data(dataValues)
+        .data(dataValues[0])
         .join("rect")
         .attr("class", "visualPlotting")
-        .attr("x", function (d) {
-            const value = d[1];
+        .attr("x", function (_, i) {
+            const value = dataValues[1][i];
             if (minValue > 0) {
                 return 0;
             }
             this.setAttribute("data-value-y1", value);
             return xScale(Math.min(0, value));
         })
-        .attr("y", function (d) {
-            const xValue = d[0];
+        .attr("y", function (_, i) {
+            const xValue = dataValues[0][i];
             this.setAttribute("data-value-x1", xValue);
             return yScale(xValue);
         })
-        .attr("width", function (d, i) {
-            const value = d[1];
+        .attr("width", function (_, i) {
+            const value = dataValues[1][i];
             var width = Math.abs(xScale(0) - xScale(Math.abs(value)));
             if (!width) {
                 width = 0.1;
@@ -133,4 +132,4 @@ const chartGeneration = (svg) => {
 
     return svg;
 };
-module.exports = chartGeneration;
+module.exports = horizontalBarChartGeneration;
