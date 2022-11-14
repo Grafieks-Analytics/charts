@@ -5,7 +5,7 @@ const CONSTANTS = require("../constants");
 const chartGeneration = () => {
     const grafieks = window.grafieks;
     const rawData = grafieks.dataUtils.rawData || [];
-    const { dataValues, dataLabels } = rawData;
+    const [dataValues, dataLabel] = rawData;
     window.grafieks.legend.data = [];
 
     let {
@@ -96,7 +96,7 @@ const chartGeneration = () => {
         .append("path")
         .attr("class", function (d, i) {
             this.setAttribute("data-value-x-label", d.data.label);
-            this.setAttribute("data-value-y-label", dataLabels[dataLabels.length - 1]);
+            this.setAttribute("data-value-y-label", dataLabel[dataLabel.length - 1]);
             this.setAttribute("data-value-x1", d.data.name);
             this.setAttribute("data-value-y1", d.data.size);
             return "main-arc visualPlotting";

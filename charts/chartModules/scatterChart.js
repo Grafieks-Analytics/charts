@@ -4,19 +4,19 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const chartGeneration = (svg) => {
+const scatterChartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], dataLabels = [], legendsData = [] } = data;
+    const [dataValues = [], dataLabels = [], legends = []] = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = legendsData.length ? legendsData : [dataLabels[0]];
+    grafieks.legend.data = legends.length ? legends : [dataLabels[0]];
 
     const { height } = grafieks.chartsConfig;
 
@@ -137,4 +137,4 @@ const chartGeneration = (svg) => {
     return svg;
 };
 
-module.exports = chartGeneration;
+module.exports = scatterChartGeneration;

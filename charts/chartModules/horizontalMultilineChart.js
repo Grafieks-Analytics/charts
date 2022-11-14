@@ -89,7 +89,7 @@ const chartGeneration = (svg) => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], legendsData = [] } = data;
+    const [dataValues = [], legendsData = [], xAxisTextValues = [], dataLabels = []] = data;
     const {
         dataColumns = {},
         d3colorPalette = CONSTANTS.d3ColorPalette,

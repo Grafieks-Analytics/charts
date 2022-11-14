@@ -40,12 +40,12 @@ const addDataStyling = (fontStyling, textType, styleElementId) => {
     document.body.appendChild(styleElement);
 };
 
-const chartGeneration = () => {
+const kpiChartGeneration = () => {
     const grafieks = window.grafieks;
     const data = grafieks.dataUtils.rawData || [];
-    const { dataValues } = data;
+    const [dataValue, dataLabel] = data[0];
 
-    const [dataValue, dataLabel] = dataValues;
+    console.log(dataValue, dataLabel);
 
     const chartsDiv = d3.select(".charts-div");
 
@@ -61,6 +61,6 @@ const chartGeneration = () => {
     d3.select(".value").text(d3.format(".3s")(dataValue)).style("color", dataValueColorKpi);
     d3.select(".label").text(dataLabel).style("color", dataLabelColorKpi);
 };
-module.exports = chartGeneration;
+module.exports = kpiChartGeneration;
 
 // [[2297221.75,"Sales"]]

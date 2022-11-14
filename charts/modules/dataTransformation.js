@@ -59,7 +59,7 @@ const transformData = () => {
     grafieks.flags.isDataTransformed = true;
 
     const data = grafieks.dataUtils.rawData;
-    const { dataValues } = data;
+    const [dataValues] = data;
 
     let transformedData, timeFormat, dates, xAxisData, yAxisData;
     let newDataSet = {};

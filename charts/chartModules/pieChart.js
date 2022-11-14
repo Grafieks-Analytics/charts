@@ -8,7 +8,7 @@ const { getSvg } = require("../utils");
 const chartGeneration = () => {
     const grafieks = window.grafieks;
     const data = grafieks.dataUtils.rawData || [];
-    const { dataValues, dataLabels } = data;
+    const [dataValues, dataLabels] = data;
 
     const {
         dataColumns: { xAxisColumnDetails = [] } = {},

@@ -4,12 +4,12 @@ const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
 
-const chartGeneration = (svg) => {
+const horizontalBarChartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], dataLabels = [] } = data;
+    const [dataValues = [], dataLabels = []] = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
@@ -151,4 +151,4 @@ const chartGeneration = (svg) => {
 
     return svg;
 };
-module.exports = chartGeneration;
+module.exports = horizontalBarChartGeneration;
