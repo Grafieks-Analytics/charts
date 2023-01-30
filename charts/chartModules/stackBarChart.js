@@ -194,7 +194,7 @@ const chartGeneration = (svg) => {
 
     const entry = svg
         .selectAll(".entry")
-        .data(transformedDataValues)
+        .data(dataValues)
         .enter()
         .append("g")
         .attr("class", "g")
