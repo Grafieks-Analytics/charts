@@ -192,92 +192,43 @@ const chartGeneration = (svg) => {
 
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
-    // const batches = utils.createBatches(dataValues, 1);
+    const entry = svg
+        .selectAll(".entry")
+        .data(dataValues)
+        .enter()
+        .append("g")
+        .attr("class", "g")
+        .attr("transform", function (d) {
+            return "translate(" + xScale(d.key) + ", 0)";
+        });
 
-    // const totalLength = batches.length;
+    entry
+        .selectAll("rect")
+        .data(function (d) {
+            return d.components;
+        })
+        .enter()
+        .append("rect")
+        .attr("class", "bar visualPlotting")
+        .attr("width", xScale.bandwidth())
+        .attr("y", function (d) {
+            return yScale(d.y0);
+        })
+        .attr("height", function (d) {
+            this.setAttribute("data-value-x1", d.mainKey);
+            this.setAttribute("data-value-x2", d.key);
 
-    // for (let i = 0; i < totalLength; i++) {
-    // const batchData = batches[i];
-    // console.log(JSON.stringify(batchData).length, batchData);
-
-    // setTimeout(function () {
-    // const entry = svg
-    //     .selectAll(".entry")
-    //     .data(dataValues)
-    //     .enter()
-    //     .append("g")
-    //     .attr("class", "g")
-    //     .attr("transform", function (d) {
-    //         return "translate(" + xScale(d.key) + ", 0)";
-    //     });
-
-    // entry
-    //     .selectAll("rect")
-    //     .data(function (d) {
-    //         return d.components;
-    //     })
-    //     .enter()
-    //     .append("rect")
-    //     .attr("class", "bar visualPlotting")
-    //     .attr("width", xScale.bandwidth())
-    //     .attr("y", function (d) {
-    //         return yScale(d.y0);
-    //     })
-    //     .attr("height", function (d) {
-    //         this.setAttribute("data-value-x1", d.mainKey);
-    //         this.setAttribute("data-value-x2", d.key);
-
-    //         var yValue = d.y0 - d.y1;
-    //         if (d.y1 < 0) {
-    //             yValue = d.y1 - d.y0;
-    //         }
-    //         this.setAttribute("data-value-y1", Math.round(yValue));
-
-    //         return Math.abs(yScale(d.y0) - yScale(d.y1));
-    //     })
-    //     .style("fill", function (d) {
-    //         return color(d.key);
-    //     });
-
-    const fragment = document.createDocumentFragment();
-    for (let index = 0; index < dataValues.length; index++) {
-        const dataValue = dataValues[index];
-
-        const gElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        gElement.setAttribute("transform", "translate(" + xScale(dataValue.key) + ", 0)");
-
-        const components = dataValue.components;
-        const totalComponents = components.length;
-        for (let componentIndex = 0; componentIndex < totalComponents; componentIndex += 10) {
-            const element = components[componentIndex];
-            // var yValue = element.y0 - element.y1;
-            // if (element.y1 < 0) {
-            //     yValue = element.y1 - element.y0;
-            // }
-            const height = Math.abs(yScale(element.y0) - yScale(element.y1));
-            if (isNaN(height)) {
-                continue;
+            var yValue = d.y0 - d.y1;
+            if (d.y1 < 0) {
+                yValue = d.y1 - d.y0;
             }
-            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            rect.setAttribute("width", xScale.bandwidth());
-            rect.setAttribute("height", height);
-            rect.setAttribute("y", yScale(element.y0));
-            rect.setAttribute("style", `fill: ${color(element.key)}`);
-            gElement.appendChild(rect);
-        }
+            this.setAttribute("data-value-y1", Math.round(yValue));
 
-        fragment.appendChild(gElement);
-    }
-
-    // setTimeout(function () {
-    //     const svg1 = document.querySelector("svg");
-    //     svg1.appendChild(fragment);
-    // }, 0);
-
-    svg.node().appendChild(fragment);
-
-    // }, 0);
-    // }
+            return Math.abs(yScale(d.y0) - yScale(d.y1));
+        })
+        .style("fill", function (d) {
+            return color(d.key);
+        });
 
     return svg;
 };
