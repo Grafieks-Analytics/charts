@@ -3,59 +3,9 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
-const { sortDates } = require("../modules/dataTransformation");
 
-const getTransformedDataValue = () => {
-    const grafieks = window.grafieks;
-
-    const data = grafieks.dataUtils.rawData || [];
-
-    // Stack bar data structure
-    // 1. Data Valuess [[sub-category, category, sales]] => TODO needs to be corrected
-    // 2. Legend Data (The break downs) => Eg Sub-Categories
-    // 3. X Axis Texts Or the domains for x axis => Category
-    // 4. data labels => Category | Sub-Category | Sales
-
-    let { dataValues = [], dataLabels = [] } = data;
-
-    let json = {};
-
-    let uniqueKey = [];
-    dataValues.forEach((d) => {
-        // Index 1 is categry
-        let key = d[1];
-
-        if (!json[key]) {
-            json[key] = {};
-        }
-
-        const key2 = d[0];
-        if (!uniqueKey.includes(key2)) {
-            uniqueKey.push(key2);
-        }
-
-        const value = d[2];
-
-        if (!json[key][key2]) {
-            json[key][key2] = 0;
-        }
-
-        json[key][key2] += +value;
-    });
-
-    const allKeys = uniqueKey;
-
-    let response = Object.keys(json).map((key) => {
-        return { ...json[key], key };
-    });
-
-    let mainKeys = Object.keys(json);
-
-    return [response, allKeys, dataLabels, mainKeys];
-};
-
-const getMaximumValue = (transformedDataValues) => {
-    return d3.max(transformedDataValues, function (d) {
+const getMaximumValue = (data) => {
+    return d3.max(data, function (d) {
         return d3.max(
             d.components.map((d1) => {
                 return d1.y0;
@@ -64,9 +14,9 @@ const getMaximumValue = (transformedDataValues) => {
     });
 };
 
-const getMinimumValue = (transformedDataValues) => {
+const getMinimumValue = (data) => {
     let minValue =
-        d3.min(transformedDataValues, function (d) {
+        d3.min(data, function (d) {
             return d3.min(
                 d.components.map((d1) => {
                     return d1.y1;
@@ -80,12 +30,22 @@ const getMinimumValue = (transformedDataValues) => {
     return minValue;
 };
 
+function transformDataValues(dataValues) {
+    const dataObject = Object.values(dataValues);
+    const keys = Object.keys(dataValues);
+
+    dataObject.forEach((obj, i) => {
+        obj.key = keys[i];
+    });
+    return dataObject;
+}
+
 const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], legendsData = [], axisTextValues = [], dataLabels = [] } = data;
+    let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
     const { dataColumns = {} } = grafieks.plotConfiguration;
     const { xAxisColumnDetails = [] } = dataColumns;
 
@@ -99,14 +59,25 @@ const chartGeneration = (svg) => {
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = legendsData;
-
     const { height } = grafieks.chartsConfig;
 
-    const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
+    axisTextValues = Object.keys(dataValues);
+    dataValues = transformDataValues(dataValues);
+    const splitKeys = Array.from(
+        new Set(
+            dataValues
+                .map((d) => {
+                    return Object.keys(d);
+                })
+                .join()
+                .split(",")
+        )
+    ).filter((d) => d != "key");
 
-    // Adding components array to be used in for stacked bar chart
-    transformedDataValues.forEach(function (d) {
+    legendsData = splitKeys;
+    grafieks.legend.data = legendsData;
+
+    dataValues.forEach(function (d) {
         var y0_positive = 0;
         var y0_negative = 0;
         var mainKey = d.key;
@@ -116,21 +87,21 @@ const chartGeneration = (svg) => {
                     key,
                     mainKey,
                     y1: y0_positive,
-                    y0: (y0_positive += d[key])
+                    y0: (y0_positive += d[key] || 0)
                 };
             } else {
                 return {
                     key,
                     mainKey,
                     y0: y0_negative,
-                    y1: (y0_negative += d[key])
+                    y1: (y0_negative += d[key] || 0)
                 };
             }
         });
     });
 
-    const minValue = getMinimumValue(transformedDataValues);
-    const maxValue = getMaximumValue(transformedDataValues);
+    const minValue = getMinimumValue(dataValues);
+    const maxValue = getMaximumValue(dataValues);
 
     // Setting yScale
     const yDomain = [minValue, maxValue];
@@ -139,7 +110,7 @@ const chartGeneration = (svg) => {
 
     // Setting xScale
 
-    const xDomain = isDateTransforming ? mainCategoryKeys : axisTextValues;
+    const xDomain = axisTextValues;
     const xRange = utils.getXRange();
     const xScale = utils.getXScale(xDomain, xRange);
 
@@ -221,43 +192,92 @@ const chartGeneration = (svg) => {
 
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
-    const entry = svg
-        .selectAll(".entry")
-        .data(transformedDataValues)
-        .enter()
-        .append("g")
-        .attr("class", "g")
-        .attr("transform", function (d) {
-            return "translate(" + xScale(d.key) + ", 0)";
-        });
+    // const batches = utils.createBatches(dataValues, 1);
 
-    entry
-        .selectAll("rect")
-        .data(function (d) {
-            return d.components;
-        })
-        .enter()
-        .append("rect")
-        .attr("class", "bar visualPlotting")
-        .attr("width", xScale.bandwidth())
-        .attr("y", function (d) {
-            return yScale(d.y0);
-        })
-        .attr("height", function (d) {
-            this.setAttribute("data-value-x1", d.mainKey);
-            this.setAttribute("data-value-x2", d.key);
+    // const totalLength = batches.length;
 
-            var yValue = d.y0 - d.y1;
-            if (d.y1 < 0) {
-                yValue = d.y1 - d.y0;
+    // for (let i = 0; i < totalLength; i++) {
+    // const batchData = batches[i];
+    // console.log(JSON.stringify(batchData).length, batchData);
+
+    // setTimeout(function () {
+    // const entry = svg
+    //     .selectAll(".entry")
+    //     .data(dataValues)
+    //     .enter()
+    //     .append("g")
+    //     .attr("class", "g")
+    //     .attr("transform", function (d) {
+    //         return "translate(" + xScale(d.key) + ", 0)";
+    //     });
+
+    // entry
+    //     .selectAll("rect")
+    //     .data(function (d) {
+    //         return d.components;
+    //     })
+    //     .enter()
+    //     .append("rect")
+    //     .attr("class", "bar visualPlotting")
+    //     .attr("width", xScale.bandwidth())
+    //     .attr("y", function (d) {
+    //         return yScale(d.y0);
+    //     })
+    //     .attr("height", function (d) {
+    //         this.setAttribute("data-value-x1", d.mainKey);
+    //         this.setAttribute("data-value-x2", d.key);
+
+    //         var yValue = d.y0 - d.y1;
+    //         if (d.y1 < 0) {
+    //             yValue = d.y1 - d.y0;
+    //         }
+    //         this.setAttribute("data-value-y1", Math.round(yValue));
+
+    //         return Math.abs(yScale(d.y0) - yScale(d.y1));
+    //     })
+    //     .style("fill", function (d) {
+    //         return color(d.key);
+    //     });
+
+    const fragment = document.createDocumentFragment();
+    for (let index = 0; index < dataValues.length; index++) {
+        const dataValue = dataValues[index];
+
+        const gElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        gElement.setAttribute("transform", "translate(" + xScale(dataValue.key) + ", 0)");
+
+        const components = dataValue.components;
+        const totalComponents = components.length;
+        for (let componentIndex = 0; componentIndex < totalComponents; componentIndex += 10) {
+            const element = components[componentIndex];
+            // var yValue = element.y0 - element.y1;
+            // if (element.y1 < 0) {
+            //     yValue = element.y1 - element.y0;
+            // }
+            const height = Math.abs(yScale(element.y0) - yScale(element.y1));
+            if (isNaN(height)) {
+                continue;
             }
-            this.setAttribute("data-value-y1", Math.round(yValue));
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("width", xScale.bandwidth());
+            rect.setAttribute("height", height);
+            rect.setAttribute("y", yScale(element.y0));
+            rect.setAttribute("style", `fill: ${color(element.key)}`);
+            gElement.appendChild(rect);
+        }
 
-            return Math.abs(yScale(d.y0) - yScale(d.y1));
-        })
-        .style("fill", function (d) {
-            return color(d.key);
-        });
+        fragment.appendChild(gElement);
+    }
+
+    // setTimeout(function () {
+    //     const svg1 = document.querySelector("svg");
+    //     svg1.appendChild(fragment);
+    // }, 0);
+
+    svg.node().appendChild(fragment);
+
+    // }, 0);
+    // }
 
     return svg;
 };
