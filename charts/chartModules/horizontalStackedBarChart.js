@@ -5,79 +5,8 @@ const CONSTANTS = require("../constants");
 const utils = require("../utils");
 const { sortDates } = require("../modules/dataTransformation");
 
-const getTransformedDataValue = () => {
-    const grafieks = window.grafieks;
-
-    const data = grafieks.dataUtils.rawData || [];
-
-    // Stack bar data structure
-    // 1. Data Valuess [[sub-category, category, sales]] => TODO needs to be corrected
-    // 2. Legend Data (The break downs) => Eg Sub-Categories
-    // 3. X Axis Texts Or the domains for x axis => Category
-    // 4. data labels => Category | Sub-Category | Sales
-
-    let { dataValues = [], dataLabels = [] } = data;
-
-    // Data columns has all the values of x-y axis and rows and values rows
-    const { dataColumns } = grafieks.plotConfiguration;
-
-    let json = {};
-    let isKey1Date = false; // key1 is the cateogry || later on key2 can be added for sub category or color by split
-
-    const { yAxisColumnDetails = [] } = dataColumns;
-    let dateFormat = "%Y";
-
-    if (yAxisColumnDetails[0].itemType == "Date") {
-        isKey1Date = true;
-        dateFormat = yAxisColumnDetails[0].dateFormat;
-    }
-
-    let uniqueKey = [];
-    dataValues.forEach((d) => {
-        // Index 1 is categry
-        let key = d[1];
-        if (isKey1Date) {
-            key = utils.getDateFormattedData(d[1], dateFormat);
-        }
-
-        if (!json[key]) {
-            json[key] = {};
-        }
-
-        const key2 = d[0];
-        if (!uniqueKey.includes(key2)) {
-            uniqueKey.push(key2);
-        }
-
-        const value = d[2];
-
-        if (!json[key][key2]) {
-            json[key][key2] = 0;
-        }
-
-        json[key][key2] += +value;
-    });
-
-    const allKeys = uniqueKey;
-
-    let response = Object.keys(json).map((key) => {
-        return { ...json[key], key };
-    });
-
-    let mainKeys = Object.keys(json);
-    if (isKey1Date) {
-        const sortedKeys = sortDates(Object.keys(json), dateFormat);
-        mainKeys = sortedKeys;
-        response = sortedKeys.map((d) => {
-            return { ...json[d], key: d };
-        });
-    }
-
-    return [response, allKeys, dataLabels, mainKeys];
-};
-
-const getMaximumValue = (transformedDataValues) => {
-    return d3.max(transformedDataValues, function (d) {
+const getMaximumValue = (data) => {
+    return d3.max(data, function (d) {
         return d3.max(
             d.components.map((d1) => {
                 return d1.y0;
@@ -86,9 +15,9 @@ const getMaximumValue = (transformedDataValues) => {
     });
 };
 
-const getMinimumValue = (transformedDataValues) => {
+const getMinimumValue = (data) => {
     let minValue =
-        d3.min(transformedDataValues, function (d) {
+        d3.min(data, function (d) {
             return d3.min(
                 d.components.map((d1) => {
                     return d1.y1;
@@ -102,13 +31,23 @@ const getMinimumValue = (transformedDataValues) => {
     return minValue;
 };
 
+function transformDataValues(dataValues) {
+    const dataObject = Object.values(dataValues);
+    const keys = Object.keys(dataValues);
+
+    dataObject.forEach((obj, i) => {
+        obj.key = keys[i];
+    });
+    return dataObject;
+}
+
 const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], legendsData = [], axisTextValues = [], dataLabels = [] } = data;
-    const { dataColumns = {}, d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+    let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
+    const { dataColumns = {} } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
     let isDateTransforming = false;
@@ -121,16 +60,25 @@ const chartGeneration = (svg) => {
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
-
     const { height } = grafieks.chartsConfig;
 
-    const [transformedDataValues, splitKeys, dataLabelsTransformed, mainCategoryKeys] = getTransformedDataValue();
+    axisTextValues = Object.keys(dataValues);
+    dataValues = transformDataValues(dataValues);
+    const splitKeys = Array.from(
+        new Set(
+            dataValues
+                .map((d) => {
+                    return Object.keys(d);
+                })
+                .join()
+                .split(",")
+        )
+    ).filter((d) => d != "key");
 
-    grafieks.legend.data = splitKeys;
+    legendsData = splitKeys;
+    grafieks.legend.data = legendsData;
 
-    // Adding components array to be used in for stacked bar chart
-    transformedDataValues.forEach(function (d) {
+    dataValues.forEach(function (d) {
         var y0_positive = 0;
         var y0_negative = 0;
         var mainKey = d.key;
@@ -140,21 +88,21 @@ const chartGeneration = (svg) => {
                     key,
                     mainKey,
                     y1: y0_positive,
-                    y0: (y0_positive += d[key])
+                    y0: (y0_positive += d[key] || 0)
                 };
             } else {
                 return {
                     key,
                     mainKey,
                     y0: y0_negative,
-                    y1: (y0_negative += d[key])
+                    y1: (y0_negative += d[key] || 0)
                 };
             }
         });
     });
 
-    const minValue = getMinimumValue(transformedDataValues);
-    const maxValue = getMaximumValue(transformedDataValues);
+    const minValue = getMinimumValue(dataValues);
+    const maxValue = getMaximumValue(dataValues);
 
     // Setting yScale
     const yDomain = isDateTransforming ? mainCategoryKeys : axisTextValues;
@@ -240,13 +188,15 @@ const chartGeneration = (svg) => {
         .attr("transform", "translate(0," + xScale(0) + ")")
         .call(centerLine.tickSize(0));
 
+    const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
     const margins = grafieks.chartsConfig.margins;
 
     const entry = svg
         .selectAll(".entry")
-        .data(transformedDataValues)
+        .data(dataValues)
         .enter()
         .append("g")
         .attr("class", "g")
