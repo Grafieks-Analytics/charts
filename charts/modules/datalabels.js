@@ -54,24 +54,25 @@ const barChartDataLabel = (svg) => {
     svg.append("g")
         .attr("class", "data-label")
         .selectAll("text")
-        .data(grafieks.dataUtils.dataLabelValues)
+        .data(visualPlottingNodes)
         .join("text")
         .attr("class", "label-text")
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
         .attr("font-family", dataLabelfontFamily)
         .attr("fill", dataLabelColor)
-        .attr("x", function (_, i) {
-            return +visualPlottingNodes[i].getAttribute("x") + +visualPlottingNodes[i].getAttribute("width") / 2;
+        .attr("x", function (d) {
+            return +d.getAttribute("x") + +d.getAttribute("width") / 2;
         })
         .attr("y", function (d, i) {
-            let yPosition = +visualPlottingNodes[i].getAttribute("y") - 3;
+            let yPosition = +d.getAttribute("y") - 3;
             if (d < 0) {
-                yPosition += +visualPlottingNodes[i].getAttribute("height") + 16;
+                yPosition += +d.getAttribute("height") + 16;
             }
             return yPosition;
         })
-        .text(function (dataLabelText) {
+        .text(function (d) {
+            const dataLabelText = d.dataset.valueY1;
             return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
         });
 };
@@ -184,7 +185,7 @@ const lineChartDataLabel = (svg) => {
             }
             return yPosition;
         })
-        .text(function (d, i) {
+        .text(function (d) {
             const dataLabelText = d.dataset.valueY1;
             return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
         });

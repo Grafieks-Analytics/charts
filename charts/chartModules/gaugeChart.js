@@ -205,7 +205,7 @@ const gauge = function (container, configuration) {
 
     function update(newValue, gaugeSize, newConfiguration) {
         const data = grafieks.dataUtils.rawData || [];
-        var label = data[1];
+        var label = data.dataLabels;
 
         d3.select("#x")
             .attr("class", "gaugeDataLabel")
@@ -233,11 +233,11 @@ const gauge = function (container, configuration) {
     return that;
 };
 
-const gaugeChartGeneration = () => {
+const chartGeneration = () => {
     const grafieks = window.grafieks;
     const data = grafieks.dataUtils.rawData || [];
 
-    const [maxValue, yellowValue, redValue, readingValue] = data[0];
+    const [maxValue, yellowValue, redValue, readingValue] = data.dataValues;
 
     const chartsDiv = document.querySelector(".charts-div");
     const gaugeChartDiv = document.createElement("div");
@@ -271,4 +271,4 @@ const gaugeChartGeneration = () => {
 
     updateReadings(readingValue, gaugeSize);
 };
-module.exports = gaugeChartGeneration;
+module.exports = chartGeneration;

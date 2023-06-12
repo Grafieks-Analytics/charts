@@ -32,10 +32,10 @@ const getToolTopValues = (element) => {
 
         case CONSTANTS.RADAR_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels[0];
+                xLabelName = dataLabels.xAxisLabel;
             }
             if (!yLabelName) {
-                yLabelName = dataLabels[1];
+                yLabelName = dataLabels.yAxisLabel;
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
@@ -45,13 +45,13 @@ const getToolTopValues = (element) => {
         case CONSTANTS.MULTIPLE_LINE_CHART:
         case CONSTANTS.MULTIPLE_AREA_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels[0];
+                xLabelName = dataLabels.xAxisLabel;
             }
             if (!yLabelName) {
-                yLabelName = dataLabels[1];
+                yLabelName = dataLabels.yAxisLabel;
             }
             if (!colorByName) {
-                colorByName = dataLabels[2];
+                colorByName = dataLabels.colorByLabel;
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(colorByName, dataValues.valueX2));
@@ -59,13 +59,13 @@ const getToolTopValues = (element) => {
             break;
         case CONSTANTS.HEAT_MAP:
             if (!xLabelName) {
-                xLabelName = dataLabels[0];
+                xLabelName = dataLabels.xAxisLabel;
             }
             if (!yLabelName) {
-                yLabelName = dataLabels[1];
+                yLabelName = dataLabels.yAxisLabel;
             }
             if (!colorByName) {
-                colorByName = dataLabels[2];
+                colorByName = dataLabels.colorByLabel;
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
@@ -73,14 +73,13 @@ const getToolTopValues = (element) => {
             break;
         case CONSTANTS.SCATTER_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels[0];
+                xLabelName = dataLabels.xAxisLabel;
             }
             if (!yLabelName) {
-                yLabelName = dataLabels[1];
+                yLabelName = dataLabels.yAxisLabel;
             }
-
             if (!colorByName) {
-                colorByName = dataLabels[2];
+                colorByName = dataLabels.colorByLabel;
             }
 
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
@@ -92,11 +91,12 @@ const getToolTopValues = (element) => {
             break;
         case CONSTANTS.WATERFALL_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels[0];
+                xLabelName = dataLabels.xAxisLabel;
             }
             if (!yLabelName) {
-                yLabelName = dataLabels[1];
+                yLabelName = dataLabels.yAxisLabel;
             }
+
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(yLabelName, dataValues.valueY1));
             break;
@@ -111,13 +111,13 @@ const getToolTopValues = (element) => {
         case CONSTANTS.GROUP_BAR_CHART:
         case CONSTANTS.HORIZONTAL_GROUP_BAR_CHART:
             if (!xLabelName) {
-                xLabelName = dataLabels[0];
+                xLabelName = dataLabels.xAxisLabel;
             }
             if (!yLabelName) {
-                yLabelName = dataLabels[2];
+                yLabelName = dataLabels.yAxisLabel;
             }
             if (!colorByName) {
-                colorByName = dataLabels[1];
+                colorByName = dataLabels.colorByLabel;
             }
             tooltipHtmlValue.push(formTooltipRow(xLabelName, dataValues.valueX1));
             tooltipHtmlValue.push(formTooltipRow(colorByName, dataValues.valueX2));

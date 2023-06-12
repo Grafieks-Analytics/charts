@@ -25,12 +25,12 @@ function waterfallData(data) {
     return data;
 }
 
-const waterfallChartGeneration = (svg) => {
+const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const [dataValues = [], dataLabels = []] = data;
+    const { dataValues = [], dataLabels = [] } = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
@@ -146,4 +146,4 @@ const waterfallChartGeneration = (svg) => {
 
     return svg;
 };
-module.exports = waterfallChartGeneration;
+module.exports = chartGeneration;

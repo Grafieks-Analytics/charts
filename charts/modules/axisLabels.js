@@ -12,9 +12,9 @@ const setXAxisLabel = (svg) => {
 
     if (!xlabel) {
         if (isHorizontalGraph()) {
-            xlabel = grafieks.dataUtils.dataLabels[1];
+            xlabel = grafieks.dataUtils.dataLabels.yAxisLabel;
         } else {
-            xlabel = grafieks.dataUtils.dataLabels[0];
+            xlabel = grafieks.dataUtils.dataLabels.xAxisLabel;
         }
     }
 
@@ -40,9 +40,10 @@ const setYAxisLabel = (svg) => {
 
     if (!ylabel) {
         if (isHorizontalGraph()) {
-            ylabel = grafieks.dataUtils.dataLabels[0];
+            // TODO: To check if yAxisLabel should be set here?
+            ylabel = grafieks.dataUtils.dataLabels.xAxisLabel;
         } else {
-            ylabel = grafieks.dataUtils.dataLabels[1];
+            ylabel = grafieks.dataUtils.dataLabels.yAxisLabel;
         }
     }
 
