@@ -102,38 +102,85 @@ const chartGeneration = (svg) => {
 
     const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 
-    svg.append("g")
-        .attr("class", "bars")
-        .attr("fill", d3colorPalette[0])
-        .selectAll("rect")
-        .data(dataValues)
-        .join("rect")
-        .attr("class", "visualPlotting")
-        .attr("x", function (d) {
-            const xValue = d[0];
-            this.setAttribute("data-value-x1", xValue);
-            return xScale(xValue);
-        })
-        .attr("y", function (d) {
-            const value = d[1];
-            let yValue = null;
-            if (value < 0) {
-                yValue = yScale(0);
-            } else {
-                yValue = yScale(value);
-            }
-            this.setAttribute("data-value-y1", value);
-            return yValue;
-        })
-        .attr("height", function (d, i) {
-            const value = d[1];
-            var height = Math.abs(yScale(0) - yScale(Math.abs(value)));
-            if (!height) {
-                height = 0.1;
-            }
-            return height;
-        })
-        .attr("width", xScale.bandwidth());
+    // normal chart
+    if (window.limit) {
+        drawD3Charts();
+    } else {
+        drawD3FCCharts();
+    }
+
+    function drawD3Charts() {
+        svg.append("g")
+            .attr("class", "bars")
+            .attr("fill", d3colorPalette[0])
+            .selectAll("rect")
+            .data(dataValues)
+            .join("rect")
+            .attr("class", "visualPlotting")
+            .attr("x", function (d) {
+                const xValue = d[0];
+                this.setAttribute("data-value-x1", xValue);
+                return xScale(xValue);
+            })
+            .attr("y", function (d) {
+                const value = d[1];
+                let yValue = null;
+                if (value < 0) {
+                    yValue = yScale(0);
+                } else {
+                    yValue = yScale(value);
+                }
+                this.setAttribute("data-value-y1", value);
+                return yValue;
+            })
+            .attr("height", function (d, i) {
+                const value = d[1];
+                var height = Math.abs(yScale(0) - yScale(Math.abs(value)));
+                if (!height) {
+                    height = 0.1;
+                }
+                return height;
+            })
+            .attr("width", xScale.bandwidth());
+    }
+
+    function drawD3FCCharts() {
+        // d3fc chart
+
+        var barSeries = fc
+            .autoBandwidth(fc.seriesCanvasBar())
+            .crossValue((d) => d[0])
+            .align("left")
+            .mainValue((d) => d[1])
+            .decorate((context, datum) => {
+                context.textAlign = "center";
+                context.fillStyle = "#000";
+                context.font = "12px Arial";
+                // context.fillText(d3.format(".1%")(datum.frequency), 0, -8);
+                // context.fillText((datum.frequency), 0, -8);
+                // context.fillStyle = "steelblue";
+                context.fillStyle =  "red";
+                // context.fillStyle =  d3colorPalette[0];
+
+                // context.fillStyle = isVowel(datum.letter) ? "indianred" : "steelblue";
+            });
+        var yExtent = fc
+            .extentLinear()
+            .accessors([(d) => d[1]])
+            // .pad([0, 0.1])
+            .include([0]);
+
+        var chart = fc
+            .chartCartesian(d3.scaleBand(), d3.scaleLinear())
+            .xDomain(dataValues.map((d) => d[0]))
+            .xPadding(0.1)
+            .yDomain(yExtent(dataValues))
+            // .yTicks(10, "%")
+            .yOrient("left")
+            .canvasPlotArea(barSeries);
+
+        d3.select("#chart").datum(dataValues).call(chart);
+    }
 
     return svg;
 };

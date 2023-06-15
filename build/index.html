@@ -21,13 +21,223 @@
         <script type="text/javascript" src="./lib/react-0.12.2.min.js"></script>
         <script type="text/javascript" src="./lib/orb.min.js"></script>
 
+        <!-- d3fc -->
+        <script src="https://unpkg.com/d3/dist/d3.js"></script>
+        <script src="https://unpkg.com/d3fc/build/d3fc.js"></script>
+        <!-- d3fc stackbar chart -->
+        <script src="https://unpkg.com/d3-svg-legend@2.25.6/indexRollup.js"></script>
+
         <script src="./grafieks-charts.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"
+            integrity="sha512-xbQU0+iHqhVt7VIXi6vBJKPh3IQBF5B84sSHdjKiSccyX/1ZI7Vnkt2/8y8uruj63/DVmCxfUNohPNruthTEQA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
     </head>
     <body>
+        <!-- d3fc styles -->
+        <style>
+            /* d3fc-canvas,
+            d3fc-svg > svg {
+                position: absolute;
+                width: 92%;
+                top: 9%;
+                left: 5%;
+            } */
+            #chart {
+                width: 100%;
+                height: 98.5vh;
+            }
+
+            .x-axis .domain,
+            .bottom-axis,
+            .left-axis {
+                /* display: none !important; */
+                visibility: hidden;
+            }
+            .bottom-axis {
+                /* display: none !important; */
+            }
+            .cartesian-chart {
+                position: absolute;
+                bottom: -0.8vh;
+            }
+        </style>
+
         <div class="main-div">
-            <div class="charts-div"></div>
+            <div class="charts-div" id="chart" style="position: absolute"></div>
             <div class="tooltip" style="display: none"></div>
         </div>
         <div class="legend"></div>
+        <!-- <d3fc-canvas use-device-pixel-ratio></d3fc-canvas> -->
+
+        <!-- d3fc html -->
+        <div id="chart" style="display: block">
+            <d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="height: 630px"></d3fc-canvas>
+            <!-- <d3fc-svg id="band-container" style="height: 20px;" use-device-pixel-ratio></d3fc-svg> -->
+            <!-- <d3fc-svg id="category-container" use-device-pixel-ratio></d3fc-svg> -->
+            <!-- <svg id="my_dataviz3" height="1500" width="550"></svg> -->
+        </div>
+        <!-- for line chart d3fc -->
+        <!-- <d3fc-canvas  id="line-chart" use-device-pixel-ratio set-webgl-viewport style="position:absolute;height: 366.67px;width: 882.46px;
+        top: 20px;
+        left: 334px;
+    "></d3fc-canvas> -->
+        <!-- <div id="chart"></div> -->
+
+        <script>
+            var d3Selection = (d3Format = d3Dispatch = d3Scale = d3Array = d3);
+        </script>
+
+        <script>
+            d3.legendColor = indexRollup.legendColor;
+            delete indexRollup;
+        </script>
+        <!-- <script src="d3fcscriptstackbar.js"></script> -->
+        <!-- for bar chart -->
+        <!-- <script src="d3fcscriptbar.js"></script> -->
+        <!-- for line chart -->
+        <!-- <script src="d3fcscriptline.js"></script> -->
+        <!-- for stack bar chart -->
+        <!-- <script src="d3fcscriptstackbar.js"></script> -->
+        <script>
+            window.limit = false;
+
+            // var socket = io("http://localhost:5001?id=werer");
+            // socket.on("connect", function () {
+            //     console.log("conen");
+            //     socket.on("commands", function (dataS) {
+            //         console.log("data", dataS.data);
+                    grafieks.drawChart(
+                        {
+                            axisTextValues: [],
+                            dataLabels: { colorByLabel: "Region", xAxisLabel: "Category", yAxisLabel: "Sales" },
+                            //     // dataValues: {
+                            //     //     Furniture: { Central: 163797.1638, East: 208291.204, South: 117298.684, West: 252612.7435 },
+                            //     //     "Office Supplies": {
+                            //     //         Central: 167026.415,
+                            //     //         East: 205516.055,
+                            //     //         South: 125651.313,
+                            //     //         West: 220853.249
+                            //     //     },
+
+                            //     //     Technology: { Central: 170416.312, East: 264973.981, South: 148771.908, West: 251991.832 }
+                            //     // },
+                            //     // dataValues: window.sampleData,
+                            //     // dataValues: dataa,
+                            //     legendsData: []
+                            // },
+                            // dataValues: dataS.data,
+                            dataValues: [
+                                ["Furniture", 120],
+                                ["Furniture2", 20],
+                                ["Furniture3", 30],
+                                // ["Furniture4", 30],
+                                // ["Furniture5", 30],
+                                // ["Furniture6", 30],
+                                // ["Furniture7", 30],
+                                // ["Furniture8", 30],
+                                // ["Furniture9", 30]
+                            ],
+                            // dataValues: window.sampleData,
+                            // dataValues: dataa,
+                            legendsData: []
+                        },
+                        {
+                            yAxisConfig: { yaxisStatus: true },
+                            xAxisConfig: { xaxisStatus: true },
+                            dataLabelColor: "#000000",
+                            paddingInner: 0.25,
+                            innerRadius: 0.75,
+                            dataColumns: {
+                                xAxisColumnDetails: [
+                                    {
+                                        itemName: "Category",
+                                        tableValue: "Category",
+                                        itemType: "Categorical",
+                                        dateFormat: "%Y"
+                                    }
+                                ],
+                                yAxisColumnDetails: [
+                                    { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+                                ],
+                                row3ColumnDetails: [],
+                                colorByData: [
+                                    {
+                                        tableValue: "Region",
+                                        columnName: "Region",
+                                        itemType: "Categorical",
+                                        itemName: "Region"
+                                    }
+                                ]
+                            },
+                            chartName: "Bar Chart"
+                            // chartName: "Stacked Bar Chart"
+                        }
+                    );
+                    // document.getElementById("data").innerHTML = data.data.velocity
+                // });
+            //     socket.on("disconnect", function () {});
+            // });
+
+            // grafieks.drawChart(
+            //     {
+            //         axisTextValues: [],
+            //         dataLabels: { colorByLabel: "Region", xAxisLabel: "Category", yAxisLabel: "Sales" },
+            //             dataValues: {
+            //                 Furniture: { Central: 163797.1638, East: 208291.204, South: 117298.684, West: 252612.7435 },
+            //                 "Office Supplies": {
+            //                     Central: 167026.415,
+            //                     East: 205516.055,
+            //                     South: 125651.313,
+            //                     West: 220853.249
+            //                 },
+
+            //                 Technology: { Central: 170416.312, East: 264973.981, South: 148771.908, West: 251991.832 }
+            //             },
+            //             // dataValues: window.sampleData,
+            //         //     // dataValues: dataa,
+            //         //     legendsData: []
+            //         // },
+            //         // dataValues: [
+            //         //     ["Furniture", 120],
+            //         //     ["Furniture2", 20],
+            //         //     ["Furniture3", 30],
+            //         //     // ["Furniture4", 30],
+            //         //     // ["Furniture5", 30],
+            //         //     // ["Furniture6", 30],
+            //         //     // ["Furniture7", 30],
+            //         //     // ["Furniture8", 30],
+            //         //     // ["Furniture9", 30]
+            //         // ],
+            //         // dataValues: window.sampleData,
+            //         // dataValues: dataa,
+            //         legendsData: []
+            //     },
+            //     {
+            //         yAxisConfig: { yaxisStatus: true },
+            //         xAxisConfig: { xaxisStatus: true },
+            //         dataLabelColor: "#000000",
+            //         paddingInner: 0.25,
+            //         innerRadius: 0.75,
+            //         dataColumns: {
+            //             xAxisColumnDetails: [
+            //                 { itemName: "Category", tableValue: "Category", itemType: "Categorical", dateFormat: "%Y" }
+            //             ],
+            //             yAxisColumnDetails: [
+            //                 { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+            //             ],
+            //             row3ColumnDetails: [],
+            //             colorByData: [
+            //                 { tableValue: "Region", columnName: "Region", itemType: "Categorical", itemName: "Region" }
+            //             ]
+            //         },
+            //         // chartName: "Line Chart"
+            //         chartName: "Stacked Bar Chart"
+            //     }
+            // );
+        </script>
     </body>
 </html>
+<!-- line,area,bar,kpi,gauge,table ,combination -->
