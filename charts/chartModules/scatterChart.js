@@ -102,7 +102,7 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    const color = d3.scaleOrdinal().domain(dataLabels).range(d3colorPalette);
+    const color = d3.scaleOrdinal().domain(Object.values(dataLabels)).range(d3colorPalette);
 
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
