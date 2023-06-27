@@ -1,5 +1,8 @@
 const d3 = require("d3");
 const CONSTANTS = require("./constants");
+window.sampleData = require("../build/sample.json");
+// D3FC
+const drawStackedD3FCCharts = require("./chartModules/stackBarChartD3FC");
 
 // Utility functions
 const { setInitialConfig, isAxisBasedChart, clearChart, getSvg, isHorizontalGraph } = require("./utils");
@@ -51,7 +54,7 @@ const table = require("./chartModules/table");
     const grafieks = window.grafieks;
     // Expose utility functions to window
     grafieks.utils.clearChart = clearChart;
-
+ 
     const drawChart = (data, plotConfiguration = {}) => {
         grafieks.plotConfiguration = plotConfiguration;
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
@@ -229,10 +232,10 @@ const table = require("./chartModules/table");
                     - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
                     - Change yAxis Scale (Rotating Margin is added to yScale in range)
                     - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
-                */
+                 */
                 svg.node().remove();
                 if (!isHorizontalGraph()) {
-                    grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
+                grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
                 }
                 if (!isOverFlowing && chartName == CONSTANTS.HEAT_MAP) {
                     grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
@@ -242,7 +245,7 @@ const table = require("./chartModules/table");
                 if (!isOverFlowing && chartName == CONSTANTS.HEAT_MAP) {
                     // do nothing
                 } else {
-                    modifyAndHideTicks();
+                modifyAndHideTicks();
                 }
             }
 
@@ -266,8 +269,20 @@ const table = require("./chartModules/table");
             }
         }
 
+        const drawChartD3FC = () => {
+            let chartName = grafieks.plotConfiguration.chartName;
+            console.log("grafieks.plotConfiguration", chartName);
+            switch (chartName) {
+                case CONSTANTS.STACKED_BAR_CHART:
+                    drawStackedD3FCCharts();
+            }
+        };
+
         // Set Tooltip Handler
         setTooltipHandler();
+        if (window.limit) {
+            drawChartD3FC();
+        }
 
         // Set Lenged
         if (!(chartName == CONSTANTS.PIE_CHART || chartName == CONSTANTS.DONUT_CHART)) {
