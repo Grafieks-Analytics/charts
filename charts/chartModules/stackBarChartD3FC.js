@@ -48,7 +48,7 @@ const drawD3FCCharts = (data) => {
         .crossValue((d) => d.data.group)
         .mainValue((d) => d[1])
         .baseValue((d) => d[0])
-        .bandwidth(window.wdd)
+        .bandwidth(Math.max(1,window.wdd))
         .context(ctx);
 
     let pixels = null;

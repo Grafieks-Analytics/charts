@@ -5,47 +5,46 @@ const CONSTANTS = require("../constants");
 const utils = require("../utils");
 
 const getMaximumValue = (data) => {
-    return 5000
-    return d3.max(data, function (d) {
-        try {
-            const value = d.components.map((d1) => {
-                return d1.y0;
-            })
-            return d3.max(
-                value
-            ); 
-        } catch (error) {
-            console.log("error",d,error)
-            return 0
-        }
-       
-    });
+    // if (window.limit) {
+        return d3.max(data, function (d) {
+            try {
+                const value = d.components.map((d1) => {
+                    return d1.y0;
+                });
+                return d3.max(value);
+            } catch (error) {
+                console.log("error", d, error);
+                return 0;
+            }
+        });
+    // } else {
+    //     return 2000;
+    // }
 };
 
 const getMinimumValue = (data) => {
-    return 0
-    let minValue =
-        d3.min(data, function (d) {
-            try {
-                const value = d.components.map((d1) => {
-                    return d1.y1;
-                })
-                const min = d3.min(
-                    value
-                );  
-                console.log(min)
-                return min
-            } catch (error) {
-                console.log("error",d,error)
-                return 0
-            }
-            
-        }) || 0;
-
-    if (minValue > 0) {
-        minValue = 0;
+    if (!window.limit) {
+        let minValue =
+            d3.min(data, function (d) {
+                try {
+                    const value = d.components.map((d1) => {
+                        return d1.y1;
+                    });
+                    const min = d3.min(value);
+                    console.log(min);
+                    return min;
+                } catch (error) {
+                    console.log("error", d, error);
+                    return 0;
+                }
+            }) || 0;
+        if (minValue > 0) {
+            minValue = 0;
+        }
+        return minValue;
+    } else {
+        return 0;
     }
-    return minValue;
 };
 
 function transformDataValues(dataValues) {
@@ -108,10 +107,12 @@ const chartGeneration = (svg) => {
                     y0: (y0_positive += d[key] || 0)
                 };
             } else {
+                // console.log("y0_negative",y0_negative)
                 return {
                     key,
                     mainKey,
-                    y0: y0_negative,
+                    // y0: y0_negative,
+                    y0: 6,
                     y1: (y0_negative += d[key] || 0)
                 };
             }
@@ -213,7 +214,7 @@ const chartGeneration = (svg) => {
 
     // TODO:
     // ---------------------
-    window.wdd = xScale.bandwidth()
+    window.wdd = xScale.bandwidth();
     function drawD3StackBarCharts() {
         const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
@@ -226,7 +227,7 @@ const chartGeneration = (svg) => {
             .attr("transform", function (d) {
                 return "translate(" + xScale(d.key) + ", 0)";
             });
-                    
+
         entry
             .selectAll("rect")
             .data(function (d) {
@@ -256,7 +257,7 @@ const chartGeneration = (svg) => {
             });
     }
 
-
+    
     // ----------------
 
     return svg;
