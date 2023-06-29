@@ -54,11 +54,33 @@ const table = require("./chartModules/table");
     const grafieks = window.grafieks;
     // Expose utility functions to window
     grafieks.utils.clearChart = clearChart;
- 
+
     const drawChart = (data, plotConfiguration = {}) => {
         grafieks.plotConfiguration = plotConfiguration;
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
+        console.warn("dataRaw", data);
+        function countKeys(obj) {
+            let count = 0;
+
+            for (let key in obj) {
+                if (typeof obj[key] === "object") {
+                    count += countKeys(obj[key]); // Recursively count keys in nested objects
+                }
+
+                count++; // Increment count for each key
+            }
+
+            return count;
+        }
+        const keyCount = countKeys(data.dataValues);
+        console.log("Total keys count:", keyCount);
+        if(keyCount>1000){
+            window.limit = true;
+        }else{
+            window.limit = false;
+        }
+        
         if (!grafieks.flags.isDataTransformed) {
             transformData();
         }
@@ -235,7 +257,7 @@ const table = require("./chartModules/table");
                  */
                 svg.node().remove();
                 if (!isHorizontalGraph()) {
-                grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
+                    grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
                 }
                 if (!isOverFlowing && chartName == CONSTANTS.HEAT_MAP) {
                     grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_HORIZONTAL;
@@ -245,7 +267,7 @@ const table = require("./chartModules/table");
                 if (!isOverFlowing && chartName == CONSTANTS.HEAT_MAP) {
                     // do nothing
                 } else {
-                modifyAndHideTicks();
+                    modifyAndHideTicks();
                 }
             }
 
