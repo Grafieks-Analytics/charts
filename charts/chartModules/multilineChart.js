@@ -203,7 +203,7 @@ const chartGeneration = (svg) => {
     const stroke = CONSTANTS.defaultValues.lineStrokeWidth;
 
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
-
+    window.transformedDataValues = transformedDataValues
     let line;
     if (!window.limit) {
         drawD3StackMultilineCharts();

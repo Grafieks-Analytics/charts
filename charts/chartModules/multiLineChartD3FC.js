@@ -1,7 +1,8 @@
 const CONSTANTS = require("../constants");
 const drawD3FCLineCharts = (datas) => {
     console.log("datafrom d3fc line", grafieks.dataUtils.dataValues);
-    data = grafieks.dataUtils.dataValues;
+    // data = grafieks.dataUtils.dataValues;
+    data = window.transformedDataValues;
 
     // Assuming you have the data for the multiline chart
 
