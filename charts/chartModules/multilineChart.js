@@ -200,65 +200,69 @@ const chartGeneration = (svg) => {
         .attr("class", "centerline")
         .attr("transform", "translate(0," + yScale(0) + ")")
         .call(centerLine.tickSize(0));
+    const stroke = CONSTANTS.defaultValues.lineStrokeWidth;
 
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
     let line;
-    if (chartName == CONSTANTS.MULTIPLE_AREA_CHART) {
-        line = d3
-            .area()
-            .x(function (d) {
-                return xScale(d[0]) + xScale.bandwidth() / 2;
-            })
-            .y1(function (d) {
-                return yScale(+d[2]);
-            })
-            .y0(function (d) {
-                return yScale(0);
-            });
-    } else {
-        line = d3
-            .line()
-            .x(function (d) {
-                return xScale(d[0]) + xScale.bandwidth() / 2;
-            })
-            .y(function (d) {
-                return yScale(+d[2]);
-            })
-            .curve(d3[curveType]);
+    if (!window.limit) {
+        drawD3StackMultilineCharts();
     }
+    function drawD3StackMultilineCharts() {
+        if (chartName == CONSTANTS.MULTIPLE_AREA_CHART) {
+            line = d3
+                .area()
+                .x(function (d) {
+                    return xScale(d[0]) + xScale.bandwidth() / 2;
+                })
+                .y1(function (d) {
+                    return yScale(+d[2]);
+                })
+                .y0(function (d) {
+                    return yScale(0);
+                });
+        } else {
+            line = d3
+                .line()
+                .x(function (d) {
+                    return xScale(d[0]) + xScale.bandwidth() / 2;
+                })
+                .y(function (d) {
+                    return yScale(+d[2]);
+                })
+                .curve(d3[curveType]);
+        }
 
-    const entry = svg.selectAll(".line").data(splitKeys).enter();
+        const entry = svg.selectAll(".line").data(splitKeys).enter();
 
-    const stroke = CONSTANTS.defaultValues.lineStrokeWidth;
-    entry
-        .append("path")
-        .attr("fill", function (d) {
-            if (chartName == CONSTANTS.MULTIPLE_AREA_CHART) {
-                return color(d);
-            } else {
-                return "none";
-            }
-        })
-        .attr("stroke", function (d) {
-            return color(d);
-        })
-        .style("opacity", chartName == CONSTANTS.MULTIPLE_AREA_CHART ? 0.7 : 1)
-        .attr("stroke-width", stroke)
-        .attr("class", "line")
-        .attr("d", function (d) {
-            const lineData = transformedDataValues.filter((dataRow) => {
-                if (dataRow[1] == d) {
-                    return true;
+        entry
+            .append("path")
+            .attr("fill", function (d) {
+                if (chartName == CONSTANTS.MULTIPLE_AREA_CHART) {
+                    return color(d);
+                } else {
+                    return "none";
                 }
-                return false;
+            })
+            .attr("stroke", function (d) {
+                return color(d);
+            })
+            .style("opacity", chartName == CONSTANTS.MULTIPLE_AREA_CHART ? 0.7 : 1)
+            .attr("stroke-width", stroke)
+            .attr("class", "line")
+            .attr("d", function (d) {
+                const lineData = transformedDataValues.filter((dataRow) => {
+                    if (dataRow[1] == d) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                return line(lineData);
             });
 
-            return line(lineData);
-        });
-
-    drawMarkerForMultiLine(svg, transformedDataValues, stroke, legendsData);
-
+            drawMarkerForMultiLine(svg, transformedDataValues, stroke, legendsData);
+    }
     return svg;
 };
 module.exports = chartGeneration;

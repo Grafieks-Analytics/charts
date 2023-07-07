@@ -3,6 +3,7 @@ const CONSTANTS = require("./constants");
 window.sampleData = require("../build/sample.json");
 // D3FC
 const drawStackedD3FCCharts = require("./chartModules/stackBarChartD3FC");
+const drawD3FCLineCharts = require("./chartModules/multiLineChartD3FC");
 
 // Utility functions
 const { setInitialConfig, isAxisBasedChart, clearChart, getSvg, isHorizontalGraph } = require("./utils");
@@ -75,12 +76,12 @@ const table = require("./chartModules/table");
         }
         const keyCount = countKeys(data.dataValues);
         console.log("Total keys count:", keyCount);
-        if(keyCount>1000){
+        if(keyCount>2000){
             window.limit = true;
         }else{
             window.limit = false;
         }
-        
+
         if (!grafieks.flags.isDataTransformed) {
             transformData();
         }
@@ -297,6 +298,11 @@ const table = require("./chartModules/table");
             switch (chartName) {
                 case CONSTANTS.STACKED_BAR_CHART:
                     drawStackedD3FCCharts();
+                    break;
+                case CONSTANTS.MULTIPLE_AREA_CHART:
+                case CONSTANTS.MULTIPLE_LINE_CHART:
+                    drawD3FCLineCharts();
+                    break;
             }
         };
 

@@ -69,15 +69,16 @@
             <div class="charts-div" id="chart" style="position: absolute"></div>
             <div class="tooltip" style="display: none"></div>
         </div>
+        <canvas id="chartline" style="position: absolute; right: 10px"></canvas>
         <div class="legend"></div>
         <!-- <d3fc-canvas use-device-pixel-ratio></d3fc-canvas> -->
 
         <!-- d3fc html -->
         <!-- <div id="chart" style="display: block"> -->
-            <!-- <d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="height: 630px"></d3fc-canvas> -->
-            <!-- <d3fc-svg id="band-container" style="height: 20px;" use-device-pixel-ratio></d3fc-svg> -->
-            <!-- <d3fc-svg id="category-container" use-device-pixel-ratio></d3fc-svg> -->
-            <!-- <svg id="my_dataviz3" height="1500" width="550"></svg> -->
+        <!-- <d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="height: 630px"></d3fc-canvas> -->
+        <!-- <d3fc-svg id="band-container" style="height: 20px;" use-device-pixel-ratio></d3fc-svg> -->
+        <!-- <d3fc-svg id="category-container" use-device-pixel-ratio></d3fc-svg> -->
+        <!-- <svg id="my_dataviz3" height="1500" width="550"></svg> -->
         <!-- </div> -->
         <!-- for line chart d3fc -->
         <!-- <d3fc-canvas  id="line-chart" use-device-pixel-ratio set-webgl-viewport style="position:absolute;height: 366.67px;width: 882.46px;
@@ -102,82 +103,215 @@
         <!-- for stack bar chart -->
         <!-- <script src="d3fcscriptstackbar.js"></script> -->
         <script>
-            window.limit = true;
+            // window.limit = true;
 
             // var socket = io("http://localhost:5001?id=werer");
             // socket.on("connect", function () {
             //     console.log("conen");
             //     socket.on("commands", function (dataS) {
             //         console.log("data", dataS.data);
-                    grafieks.drawChart(
-                        {
-                            axisTextValues: [],
-                            dataLabels: { colorByLabel: "Region", xAxisLabel: "Category", yAxisLabel: "Sales" },
-                                // dataValues: {
-                                //     Furniture: { Central: 163797.1638, East: 208291.204, South: 117298.684, West: 252612.7435 },
-                                //     "Office Supplies": {
-                                //         Central: 167026.415,
-                                //         East: 205516.055,
-                                //         South: 125651.313,
-                                //         West: 220853.249
-                                //     },
+            // grafieks.drawChart(
+            //     {
+            //         axisTextValues: [],
+            //         dataLabels: { colorByLabel: "Region", xAxisLabel: "Category", yAxisLabel: "Sales" },
+            //         dataValues: {
+            //             Furniture: { Central: 163797.1638, East: 208291.204, South: 117298.684, West: 252612.7435 },
+            //             "Office Supplies": {
+            //                 Central: 167026.415,
+            //                 East: 205516.055,
+            //                 South: 125651.313,
+            //                 West: 220853.249
+            //             },
 
-                                //     Technology: { Central: 170416.312, East: 264973.981, South: 148771.908, West: 251991.832 }
-                                // },
-                                dataValues: window.sampleData,
-                            //     // dataValues: dataa,
-                            //     legendsData: []
-                            // },
-                            // dataValues: dataS.data,
-                            // dataValues: [
-                            //     ["Furniture", 120],
-                            //     ["Furniture2", 20],
-                            //     ["Furniture3", 30],
-                            //     // ["Furniture4", 30],
-                            //     // ["Furniture5", 30],
-                            //     // ["Furniture6", 30],
-                            //     // ["Furniture7", 30],
-                            //     // ["Furniture8", 30],
-                            //     // ["Furniture9", 30]
-                            // ],
-                            // dataValues: window.sampleData,
-                            // dataValues: dataa,
-                            legendsData: []
-                        },
-                        {
-                            yAxisConfig: { yaxisStatus: true },
-                            xAxisConfig: { xaxisStatus: true },
-                            dataLabelColor: "#000000",
-                            paddingInner: 0.25,
-                            innerRadius: 0.75,
-                            dataColumns: {
-                                xAxisColumnDetails: [
-                                    {
-                                        itemName: "Category",
-                                        tableValue: "Category",
-                                        itemType: "Categorical",
-                                        dateFormat: "%Y"
-                                    }
-                                ],
-                                yAxisColumnDetails: [
-                                    { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
-                                ],
-                                row3ColumnDetails: [],
-                                colorByData: [
-                                    {
-                                        tableValue: "Region",
-                                        columnName: "Region",
-                                        itemType: "Categorical",
-                                        itemName: "Region"
-                                    }
-                                ]
-                            },
-                            // chartName: "Bar Chart"
-                            chartName: "Stacked Bar Chart"
-                        }
-                    );
-                    // document.getElementById("data").innerHTML = data.data.velocity
-                // });
+            //             Technology: { Central: 170416.312, East: 264973.981, South: 148771.908, West: 251991.832 }
+            //         },
+            //         // dataValues: window.sampleData,
+            //         //     // dataValues: dataa,
+            //         //     legendsData: []
+            //         // },
+            //         // dataValues: dataS.data,
+            //         // dataValues: [
+            //         //     ["Furniture", 120],
+            //         //     ["Furniture2", 20],
+            //         //     ["Furniture3", 30],
+            //         //     // ["Furniture4", 30],
+            //         //     // ["Furniture5", 30],
+            //         //     // ["Furniture6", 30],
+            //         //     // ["Furniture7", 30],
+            //         //     // ["Furniture8", 30],
+            //         //     // ["Furniture9", 30]
+            //         // ],
+            //         // dataValues: window.sampleData,
+            //         dataValues: [
+            //             ["Furniture", "Henderson", 2250],
+            //             ["Furniture", "Los Angeles", 4310],
+            //             ["Furniture", "Fort Lauderdale", 1916],
+            //             ["Furniture", "Concord", 0],
+            //             ["Furniture", "Seattle", 1576],
+            //             ["Furniture", "Fort Worth", 0],
+            //             ["Furniture", "Madison", 0],
+            //             ["Furniture", "West Jordan", 0],
+            //             ["Furniture", "San Francisco", 0],
+            //             ["Furniture", "Fremont", 0],
+            //             ["Furniture", "Philadelphia", 6556],
+            //             ["Furniture", "Orem", 2090],
+            //             ["Furniture", "Houston", 2748],
+            //             ["Furniture", "Richardson", 382],
+            //             ["Furniture", "Naperville", 0],
+            //             ["Furniture", "Melbourne", 0],
+            //             ["Furniture", "Eagan", 0],
+            //             ["Furniture", "Westland", 0],
+            //             ["Furniture", "Dover", 0],
+            //             ["Furniture", "New Albany", 192],
+            //             ["Furniture", "New York City", 278],
+            //             ["Furniture", "Troy", 638],
+            //             ["Furniture", "Chicago", 426],
+            //             ["Furniture", "Gilbert", 0],
+            //             ["Furniture", "Springfield", 0],
+            //             ["Furniture", "Jackson", 0],
+            //             ["Furniture", "Memphis", 1858],
+            //             ["Furniture", "Decatur", 0],
+            //             ["Furniture", "Durham", 0],
+            //             ["Furniture", "Columbia", 604],
+            //             ["Furniture", "Rochester", 0],
+            //             ["Furniture", "Minneapolis", 106],
+            //             ["Furniture", "Portland", 0],
+            //             ["Furniture", "Saint Paul", 0],
+            //             ["Furniture", "Aurora", 204],
+            //             ["Furniture", "Charlotte", 0],
+            //             ["Furniture", "Urbandale", 0],
+            //             ["Furniture", "Columbus", 0],
+            //             ["Furniture", "Bristol", 0],
+            //             ["Furniture", "Wilmington", 94],
+            //             ["Furniture", "Bloomington", 1236],
+            //             ["Furniture", "Phoenix", 0],
+            //             ["Furniture", "Roseville", 86],
+            //             ["Office Supplies", "Henderson", 0],
+            //             ["Office Supplies", "Los Angeles", 890],
+            //             ["Office Supplies", "Fort Lauderdale", 44],
+            //             ["Office Supplies", "Concord", 32],
+            //             ["Office Supplies", "Seattle", 816],
+            //             ["Office Supplies", "Fort Worth", 144],
+            //             ["Office Supplies", "Madison", 1332],
+            //             ["Office Supplies", "West Jordan", 112],
+            //             ["Office Supplies", "San Francisco", 238],
+            //             ["Office Supplies", "Fremont", 158],
+            //             ["Office Supplies", "Philadelphia", 244],
+            //             ["Office Supplies", "Orem", 0],
+            //             ["Office Supplies", "Houston", 656],
+            //             ["Office Supplies", "Richardson", 0],
+            //             ["Office Supplies", "Naperville", 0],
+            //             ["Office Supplies", "Melbourne", 192],
+            //             ["Office Supplies", "Eagan", 34],
+            //             ["Office Supplies", "Westland", 424],
+            //             ["Office Supplies", "Dover", 0],
+            //             ["Office Supplies", "New Albany", 226],
+            //             ["Office Supplies", "New York City", 40],
+            //             ["Office Supplies", "Troy", 612],
+            //             ["Office Supplies", "Chicago", 594],
+            //             ["Office Supplies", "Gilbert", 2226],
+            //             ["Office Supplies", "Springfield", 152],
+            //             ["Office Supplies", "Jackson", 38],
+            //             ["Office Supplies", "Memphis", 146],
+            //             ["Office Supplies", "Decatur", 450],
+            //             ["Office Supplies", "Durham", 402],
+            //             ["Office Supplies", "Columbia", 0],
+            //             ["Office Supplies", "Rochester", 60],
+            //             ["Office Supplies", "Minneapolis", 92],
+            //             ["Office Supplies", "Portland", 12],
+            //             ["Office Supplies", "Saint Paul", 156],
+            //             ["Office Supplies", "Aurora", 74],
+            //             ["Office Supplies", "Charlotte", 6],
+            //             ["Office Supplies", "Urbandale", 206],
+            //             ["Office Supplies", "Columbus", 596],
+            //             ["Office Supplies", "Bristol", 316],
+            //             ["Office Supplies", "Wilmington", 746],
+            //             ["Office Supplies", "Bloomington", 0],
+            //             ["Office Supplies", "Phoenix", 492],
+            //             ["Office Supplies", "Roseville", 426],
+            //             ["Technology", "Henderson", 0],
+            //             ["Technology", "Los Angeles", 1990],
+            //             ["Technology", "Fort Lauderdale", 0],
+            //             ["Technology", "Concord", 0],
+            //             ["Technology", "Seattle", 0],
+            //             ["Technology", "Fort Worth", 0],
+            //             ["Technology", "Madison", 0],
+            //             ["Technology", "West Jordan", 0],
+            //             ["Technology", "San Francisco", 426],
+            //             ["Technology", "Fremont", 0],
+            //             ["Technology", "Philadelphia", 0],
+            //             ["Technology", "Orem", 0],
+            //             ["Technology", "Houston", 742],
+            //             ["Technology", "Richardson", 2196],
+            //             ["Technology", "Naperville", 294],
+            //             ["Technology", "Melbourne", 0],
+            //             ["Technology", "Eagan", 92],
+            //             ["Technology", "Westland", 0],
+            //             ["Technology", "Dover", 44],
+            //             ["Technology", "New Albany", 0],
+            //             ["Technology", "New York City", 2060],
+            //             ["Technology", "Troy", 0],
+            //             ["Technology", "Chicago", 192],
+            //             ["Technology", "Gilbert", 336],
+            //             ["Technology", "Springfield", 0],
+            //             ["Technology", "Jackson", 0],
+            //             ["Technology", "Memphis", 0],
+            //             ["Technology", "Decatur", 0],
+            //             ["Technology", "Durham", 0],
+            //             ["Technology", "Columbia", 0],
+            //             ["Technology", "Rochester", 0],
+            //             ["Technology", "Minneapolis", 0],
+            //             ["Technology", "Portland", 0],
+            //             ["Technology", "Saint Paul", 0],
+            //             ["Technology", "Aurora", 478],
+            //             ["Technology", "Charlotte", 204],
+            //             ["Technology", "Urbandale", 0],
+            //             ["Technology", "Columbus", 120],
+            //             ["Technology", "Bristol", 0],
+            //             ["Technology", "Wilmington", 136],
+            //             ["Technology", "Bloomington", 0],
+            //             ["Technology", "Phoenix", 0],
+            //             ["Technology", "Roseville", 0]
+            //         ],
+            //         legendsData: []
+            //     },
+            //     {
+            //         yAxisConfig: { yaxisStatus: true },
+            //         xAxisConfig: { xaxisStatus: true },
+            //         dataLabelColor: "#000000",
+            //         paddingInner: 0.25,
+            //         innerRadius: 0.75,
+            //         dataColumns: {
+            //             xAxisColumnDetails: [
+            //                 {
+            //                     itemName: "Category",
+            //                     tableValue: "Category",
+            //                     itemType: "Categorical",
+            //                     dateFormat: "%Y"
+            //                 }
+            //             ],
+            //             yAxisColumnDetails: [
+            //                 { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+            //             ],
+            //             row3ColumnDetails: [],
+            //             colorByData: [
+            //                 {
+            //                     tableValue: "Region",
+            //                     columnName: "Region",
+            //                     itemType: "Categorical",
+            //                     itemName: "Region"
+            //                 }
+            //             ]
+            //         },
+            //         // chartName: "Bar Chart"
+            //         // chartName: "Line Chart"
+            //         // chartName: "Stacked Bar Chart"
+            //         // chartName: "Multi Line"
+            //         chartName: "Multiple Area Chart"
+            //     }
+            // );
+            // document.getElementById("data").innerHTML = data.data.velocity
+            // });
             //     socket.on("disconnect", function () {});
             // });
 
