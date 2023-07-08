@@ -176,7 +176,7 @@ const drawD3FCLineCharts = (datas) => {
     ctx.translate(margin.left, margin.top);
     const xScale = d3
         .scaleLinear()
-        .domain([-0.5, locations.length - 0.5])
+        .domain([-0.61, locations.length - 0.43])
         .range([0, width]);
 
     const yScale = d3
@@ -202,6 +202,15 @@ const drawD3FCLineCharts = (datas) => {
             ctx.globalAlpha = 0.5; // Set the opacity using ctx.globalAlpha
             ctx.fillStyle = colorScale(name); // Use fillStyle instead of strokeStyle
             ctx.fill(); // Fill the area instead of stroking the line
+
+            // Add markers at each data point
+            ctx.fillStyle = colorScale(name);
+            formattedData[name].forEach((d) => {
+                ctx.beginPath();
+                ctx.arc(xScale(locations.indexOf(d.location)), yScale(d.value), 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            });
         });
     } else {
         // Set up scales
@@ -220,6 +229,15 @@ const drawD3FCLineCharts = (datas) => {
             ctx.beginPath();
             line.context(ctx)(formattedData[name]);
             ctx.stroke();
+
+            // Add markers at each data point
+            ctx.fillStyle = colorScale(name);
+            formattedData[name].forEach((d) => {
+                ctx.beginPath();
+                ctx.arc(xScale(locations.indexOf(d.location)), yScale(d.value), 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            });
         });
     }
 
@@ -239,18 +257,18 @@ const drawD3FCLineCharts = (datas) => {
     // ctx.stroke();
 
     // Render the axes
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 1;
-    ctx.font = "10px sans-serif";
-    ctx.fillStyle = "#000";
+    // ctx.strokeStyle = "#000";
+    // ctx.lineWidth = 1;
+    // ctx.font = "10px sans-serif";
+    // ctx.fillStyle = "#000";
 
-    ctx.beginPath();
-    xAxis(ctx);
-    ctx.stroke();
+    // ctx.beginPath();
+    // xAxis(ctx);
+    // ctx.stroke();
 
-    ctx.beginPath();
-    yAxis(ctx);
-    ctx.stroke();
+    // ctx.beginPath();
+    // yAxis(ctx);
+    // ctx.stroke();
 };
 
 module.exports = drawD3FCLineCharts;
