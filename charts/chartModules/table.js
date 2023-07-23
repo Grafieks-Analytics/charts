@@ -210,7 +210,7 @@ const chartGeneration = () => {
         movableColumns: true,
         columns: data[2].map((d, i) => {
             var obj = { title: d, field: d };
-            if (data[1][i] !== "") {
+            if (data[1][i]) {
                 console.log("Value", data[1][i]);
                 obj["bottomCalc"] = "sum";
 

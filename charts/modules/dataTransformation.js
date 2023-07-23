@@ -58,6 +58,12 @@ const transformData = () => {
 
     grafieks.flags.isDataTransformed = true;
 
+    const excludedCharts = [CONSTANTS.PIVOT];
+
+    if (excludedCharts.indexOf(chartName) > -1) {
+        return;
+    }
+
     const data = grafieks.dataUtils.rawData;
     const { dataValues } = data;
 
