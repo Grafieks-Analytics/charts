@@ -1,6 +1,7 @@
 const d3 = require("d3");
 
 const CONSTANTS = require("../constants");
+const { mouseMoveTooltipHandler, mouseOutTooltiphandler } = require("../modules/tooltip");
 
 const utils = require("../utils");
 
@@ -114,15 +115,28 @@ const chartGeneration = (svg) => {
     const xRange = utils.getXRange();
     const xScale = utils.getXScale(xDomain, xRange);
 
+    grafieks.stackBarChart = { yRange, yDomain, xScale, xDomain };
+
     // Setting center line
     const center = d3.scaleLinear().range(xRange);
     const centerLine = d3.axisTop(center).ticks(0);
+
+    // generateMappingAndSetListener({ xDomain, xRange, yDomain, yRange, dataValues });
 
     const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 
     // Exposing to utils, to be used in other places, like legend, tooltip, datalabels, axis etc.
     grafieks.utils.yScale = yScale;
     grafieks.utils.xScale = xScale;
+
+    if (grafieks.timeout && !grafieks.charPrepared) {
+        // clearTimeout(grafieks.timeout);
+    }
+
+    grafieks.timeout = setTimeout(function () {
+        grafieks.mappingObject = temp({ xDomain, xRange, yDomain, yRange, dataValues });
+        grafieks.charPrepared = true;
+    }, 500);
 
     const xAxis = (options = {}, g) => {
         const {
@@ -183,12 +197,15 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
+    /*
+
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
     svg.append("g")
         .attr("class", "centerline")
         .attr("transform", "translate(0," + yScale(0) + ")")
         .call(centerLine.tickSize(0));
+
 
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
@@ -229,10 +246,164 @@ const chartGeneration = (svg) => {
         .style("fill", function (d) {
             return color(d.key);
         });
-
+*/
     return svg;
 };
-module.exports = chartGeneration;
+
+function generateMappingAndSetListener() {
+    const dataValues = grafieks.tempData;
+    const minValue = getMinimumValue(dataValues);
+    const maxValue = getMaximumValue(dataValues);
+
+    // Setting yScale
+    const yDomain = [minValue, maxValue];
+    const yRange = utils.getYRange();
+
+    // Setting xScale
+
+    const data = grafieks.dataUtils.rawData || [];
+
+    let { axisTextValues = [], dataLabels = [] } = data;
+
+    const xDomain = axisTextValues;
+    const xRange = utils.getXRange();
+
+    return temp({ xDomain, xRange, yDomain, yRange, dataValues });
+}
+
+function temp(axisDataObject) {
+    const { xDomain, dataValues } = axisDataObject;
+
+    console.log(dataValues);
+
+    const mappingObject = {};
+    const xyDataMapping = {};
+
+    const yScale = grafieks.utils.yScale;
+    const xScale = grafieks.utils.xScale;
+
+    xDomain.forEach((xValue) => {
+        const rangeFrom = parseInt(xScale(xValue));
+        const rangeTo = parseInt(rangeFrom + xScale.bandwidth());
+
+        const xAxisKey = `${rangeFrom}-${rangeTo + 1}`;
+        if (!mappingObject[xAxisKey]) {
+            mappingObject[xAxisKey] = {};
+            xyDataMapping[xValue] = xAxisKey;
+        }
+    });
+
+    dataValues.forEach((dataColumns) => {
+        const { key: xValue, components } = dataColumns;
+
+        const xRange = xyDataMapping[xValue];
+
+        components.forEach((component) => {
+            const { y0, y1, key: yKey } = component;
+
+            var yValue = y0 - y1;
+            if (y1 < 0) {
+                yValue = y1 - y0;
+            }
+
+            yRangeFrom = parseInt(grafieks.utils.yScale(y0));
+            yRangeTo = yRangeFrom + parseInt(Math.abs(yScale(y0) - yScale(y1)));
+
+            let currentXRangeObject = mappingObject[xRange];
+
+            if (!currentXRangeObject) {
+                mappingObject[xRange] = currentXRangeObject = {};
+            }
+
+            const yAxisKey = `${yRangeFrom}-${yRangeTo + 1}`;
+
+            currentXRangeObject[yAxisKey] = {
+                valueX1: xValue,
+                valueX2: yKey,
+                valueY1: dataColumns[yKey]
+            };
+        });
+    });
+
+    return mappingObject;
+}
+
+function domAttachListener() {
+    /**
+     *
+     */
+    function getHoverXRange(xValue, object) {
+        const allKeys = Object.keys(object);
+
+        for (var i = 0; i < allKeys.length; i++) {
+            const key = allKeys[i];
+            const keys = key.split("-");
+
+            const from = keys[0];
+            const to = keys[1];
+
+            if (xValue >= from && xValue <= to) {
+                return key;
+            }
+        }
+
+        return null;
+    }
+    function getHoverYRange(yValue, object) {
+        const allKeys = Object.keys(object);
+
+        for (var i = 0; i < allKeys.length; i++) {
+            const key = allKeys[i];
+            const keys = key.split("-");
+
+            const from = keys[0];
+            const to = keys[1];
+
+            if (yValue >= from && yValue <= to) {
+                return key;
+            }
+        }
+
+        return null;
+    }
+
+    document.addEventListener("mousemove", function (event) {
+        const { chartName } = grafieks.plotConfiguration;
+        if (chartName != CONSTANTS.STACKED_BAR_CHART) {
+            return;
+        }
+        const xValue = event.pageX;
+        const yValue = event.pageY;
+        const mappingObject = grafieks.mappingObject;
+
+        if (!mappingObject) {
+            console.log("Mapping object not found");
+            return;
+        }
+
+        const xRangeKey = getHoverXRange(xValue, mappingObject);
+
+        mouseOutTooltiphandler();
+
+        if (!xRangeKey) {
+            return;
+        }
+
+        const yRangeKey = getHoverYRange(yValue, mappingObject[xRangeKey]);
+
+        if (!yRangeKey) {
+            return;
+        }
+
+        const value = mappingObject[xRangeKey][yRangeKey];
+
+        window.forcedTooltipData = value;
+
+        mouseMoveTooltipHandler(event);
+    });
+}
+
+module.exports = { chartGeneration, generateMappingAndSetListener, domAttachListener };
 
 /*
     [[["Bookcases","Furniture",114880.0078125],["Bookcases","Office Supplies",0],["Bookcases","Technology",0],["Chairs","Furniture",328449.21875],["Chairs","Office Supplies",0],["Chairs","Technology",0],["Labels","Furniture",0],["Labels","Office Supplies",12486.3125],["Labels","Technology",0],["Tables","Furniture",206965.5625],["Tables","Office Supplies",0],["Tables","Technology",0],["Storage","Furniture",0],["Storage","Office Supplies",223843.703125],["Storage","Technology",0],["Furnishings","Furniture",91705.3046875],["Furnishings","Office Supplies",0],["Furnishings","Technology",0],["Art","Furniture",0],["Art","Office Supplies",27118.76953125],["Art","Technology",0],["Phones","Furniture",0],["Phones","Office Supplies",0],["Phones","Technology",330006.6875],["Binders","Furniture",0],["Binders","Office Supplies",203413],["Binders","Technology",0],["Appliances","Furniture",0],["Appliances","Office Supplies",107532.1328125],["Appliances","Technology",0],["Paper","Furniture",0],["Paper","Office Supplies",78479.1953125],["Paper","Technology",0],["Accessories","Furniture",0],["Accessories","Office Supplies",0],["Accessories","Technology",167380.234375],["Envelopes","Furniture",0],["Envelopes","Office Supplies",16476.404296875],["Envelopes","Technology",0],["Fasteners","Furniture",0],["Fasteners","Office Supplies",3024.280029296875],["Fasteners","Technology",0],["Supplies","Furniture",0],["Supplies","Office Supplies",46673.5390625],["Supplies","Technology",0],["Machines","Furniture",0],["Machines","Office Supplies",0],["Machines","Technology",189238.53125],["Copiers","Furniture",0],["Copiers","Office Supplies",0],["Copiers","Technology",149528.015625]],["Bookcases","Chairs","Labels","Tables","Storage","Furnishings","Art","Phones","Binders","Appliances","Paper","Accessories","Envelopes","Fasteners","Supplies","Machines","Copiers"],["Furniture","Office Supplies","Technology"],["Category","Sales","Sub-Category"]]
@@ -259,3 +430,8 @@ module.exports = chartGeneration;
     ];
 
 */
+
+/**
+ * Find the area of current pointer
+ * Allocate area
+ */
