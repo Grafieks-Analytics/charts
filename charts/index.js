@@ -24,7 +24,11 @@ const horizontalBarChartGeneration = require("./chartModules/horizontalBarChart"
 const lineChartGeneration = require("./chartModules/lineChart");
 const horizontalLineChartGeneration = require("./chartModules/horizontalLineChart");
 
-const stackBarChart = require("./chartModules/stackBarChart");
+const {
+    chartGeneration: stackBarChart,
+    generateMappingAndSetListener,
+    domAttachListener
+} = require("./chartModules/stackBarChart");
 const horizontalStackedBarChart = require("./chartModules/horizontalStackedBarChart");
 
 const groupBarChart = require("./chartModules/groupBar");
@@ -57,6 +61,7 @@ const table = require("./chartModules/table");
     grafieks.utils.clearChart = clearChart;
 
     const drawChart = (data, plotConfiguration = {}) => {
+        grafieks.charPrepared = false;
         grafieks.plotConfiguration = plotConfiguration;
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
@@ -251,11 +256,11 @@ const table = require("./chartModules/table");
 
             if (isOverFlowing || grafieks.chartsConfig.margins.horizontalLeft) {
                 /*
-                    Rotate the x-axis labels to vertical. To perform this action, we need to
-                    - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
-                    - Change yAxis Scale (Rotating Margin is added to yScale in range)
-                    - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
-                 */
+                        Rotate the x-axis labels to vertical. To perform this action, we need to
+                        - ReDraw bars with new yScale (When Checking overflow condition, a rotatingMargin value is assigned)
+                        - Change yAxis Scale (Rotating Margin is added to yScale in range)
+                        - Rotate ticks to 90 degrees (To do this, tick style config is set to vertical, and tick rotation is set to 90 degrees)
+                    */
                 svg.node().remove();
                 if (!isHorizontalGraph()) {
                     grafieks.chartsConfig.ticksStyle = CONSTANTS.TICK_VERTICAL;
@@ -316,6 +321,13 @@ const table = require("./chartModules/table");
         if (!(chartName == CONSTANTS.PIE_CHART || chartName == CONSTANTS.DONUT_CHART)) {
             setLengend();
         }
+
+        // if (grafieks.timeout && !grafieks.charPrepared) {
+        //     console.log("Clearing timeout, the process was faster", grafieks.timeout);
+        //     clearTimeout(grafieks.timeout);
+        // }
+
+        domAttachListener();
     };
 
     grafieks.drawChart = drawChart;
