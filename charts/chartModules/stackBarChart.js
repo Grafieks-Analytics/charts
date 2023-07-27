@@ -216,7 +216,7 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    /*
+    
 
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);

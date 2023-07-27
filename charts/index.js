@@ -1,6 +1,6 @@
 const d3 = require("d3");
 const CONSTANTS = require("./constants");
-window.sampleData = require("../build/sample.json");
+// window.sampleData = require("../build/sample.json");
 // D3FC
 const drawStackedD3FCCharts = require("./chartModules/stackBarChartD3FC");
 const drawD3FCLineCharts = require("./chartModules/multiLineChartD3FC");

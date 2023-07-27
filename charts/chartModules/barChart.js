@@ -106,7 +106,8 @@ const chartGeneration = (svg) => {
     if (window.limit) {
         drawD3Charts();
     } else {
-        drawD3FCCharts();
+        drawD3Charts();
+        // drawD3FCCharts();
     }
 
     function drawD3Charts() {
