@@ -5,6 +5,13 @@ const clearChart = () => {
     d3.select(".charts-div").html(""); // Clear Chart
     d3.select(".tooltip").html(""); // Clear Tooltip
     d3.select(".legend").html(""); // Clear legend
+    document.getElementById("chartline").remove()//clear canvas multi line and multi area
+    var canvas = document.createElement('canvas');
+    canvas.id = 'chartline';
+    canvas.style.position = "absolute";
+    canvas.style.right = "10";
+    document.body.appendChild(canvas);
+
 };
 
 const isAxisBasedChart = (chartName) => {

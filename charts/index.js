@@ -1,5 +1,9 @@
 const d3 = require("d3");
 const CONSTANTS = require("./constants");
+// window.sampleData = require("../build/sample.json");
+// D3FC
+const drawStackedD3FCCharts = require("./chartModules/stackBarChartD3FC");
+const drawD3FCLineCharts = require("./chartModules/multiLineChartD3FC");
 
 // Utility functions
 const { setInitialConfig, isAxisBasedChart, clearChart, getSvg, isHorizontalGraph } = require("./utils");
@@ -61,6 +65,28 @@ const table = require("./chartModules/table");
         grafieks.plotConfiguration = plotConfiguration;
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
+        console.warn("dataRaw", data);
+        function countKeys(obj) {
+            let count = 0;
+
+            for (let key in obj) {
+                if (typeof obj[key] === "object") {
+                    count += countKeys(obj[key]); // Recursively count keys in nested objects
+                }
+
+                count++; // Increment count for each key
+            }
+
+            return count;
+        }
+        const keyCount = countKeys(data.dataValues);
+        console.log("Total keys count:", keyCount);
+        if(keyCount>2000){
+            window.limit = true;
+        }else{
+            window.limit = false;
+        }
+
         if (!grafieks.flags.isDataTransformed) {
             transformData();
         }
@@ -271,8 +297,25 @@ const table = require("./chartModules/table");
             }
         }
 
+        const drawChartD3FC = () => {
+            let chartName = grafieks.plotConfiguration.chartName;
+            console.log("grafieks.plotConfiguration", chartName);
+            switch (chartName) {
+                case CONSTANTS.STACKED_BAR_CHART:
+                    drawStackedD3FCCharts();
+                    break;
+                case CONSTANTS.MULTIPLE_AREA_CHART:
+                case CONSTANTS.MULTIPLE_LINE_CHART:
+                    drawD3FCLineCharts();
+                    break;
+            }
+        };
+
         // Set Tooltip Handler
         setTooltipHandler();
+        if (window.limit) {
+            drawChartD3FC();
+        }
 
         // Set Lenged
         if (!(chartName == CONSTANTS.PIE_CHART || chartName == CONSTANTS.DONUT_CHART)) {

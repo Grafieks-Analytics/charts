@@ -6,29 +6,46 @@ const { mouseMoveTooltipHandler, mouseOutTooltiphandler } = require("../modules/
 const utils = require("../utils");
 
 const getMaximumValue = (data) => {
-    return d3.max(data, function (d) {
-        return d3.max(
-            d.components.map((d1) => {
-                return d1.y0;
-            })
-        );
-    });
+    // if (window.limit) {
+        return d3.max(data, function (d) {
+            try {
+                const value = d.components.map((d1) => {
+                    return d1.y0;
+                });
+                return d3.max(value);
+            } catch (error) {
+                console.log("error", d, error);
+                return 0;
+            }
+        });
+    // } else {
+    //     return 2000;
+    // }
 };
 
 const getMinimumValue = (data) => {
-    let minValue =
-        d3.min(data, function (d) {
-            return d3.min(
-                d.components.map((d1) => {
-                    return d1.y1;
-                })
-            );
-        }) || 0;
-
-    if (minValue > 0) {
-        minValue = 0;
+    if (!window.limit) {
+        let minValue =
+            d3.min(data, function (d) {
+                try {
+                    const value = d.components.map((d1) => {
+                        return d1.y1;
+                    });
+                    const min = d3.min(value);
+                    console.log(min);
+                    return min;
+                } catch (error) {
+                    console.log("error", d, error);
+                    return 0;
+                }
+            }) || 0;
+        if (minValue > 0) {
+            minValue = 0;
+        }
+        return minValue;
+    } else {
+        return 0;
     }
-    return minValue;
 };
 
 function transformDataValues(dataValues) {
@@ -91,10 +108,12 @@ const chartGeneration = (svg) => {
                     y0: (y0_positive += d[key] || 0)
                 };
             } else {
+                // console.log("y0_negative",y0_negative)
                 return {
                     key,
                     mainKey,
-                    y0: y0_negative,
+                    // y0: y0_negative,
+                    y0: 6,
                     y1: (y0_negative += d[key] || 0)
                 };
             }
@@ -197,7 +216,7 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    /*
+    
 
     svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     svg.append("g").attr("class", "y-axis").call(yAxis);
@@ -205,48 +224,60 @@ const chartGeneration = (svg) => {
         .attr("class", "centerline")
         .attr("transform", "translate(0," + yScale(0) + ")")
         .call(centerLine.tickSize(0));
+    if (!window.limit) {
+        drawD3StackBarCharts();
+    }
 
+    // TODO:
+    // ---------------------
+    window.wdd = xScale.bandwidth();
+    function drawD3StackBarCharts() {
+        const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
+
+        const entry = svg
+            .selectAll(".entry")
+            .data(dataValues)
+            .enter()
+            .append("g")
+            .attr("class", "g")
+            .attr("transform", function (d) {
+                return "translate(" + xScale(d.key) + ", 0)";
+            });
+
+        entry
+            .selectAll("rect")
+            .data(function (d) {
+                return d.components;
+            })
+            .enter()
+            .append("rect")
+            .attr("class", "bar visualPlotting")
+            .attr("width", xScale.bandwidth())
+            .attr("y", function (d) {
+                return yScale(d.y0);
+            })
+            .attr("height", function (d) {
+                this.setAttribute("data-value-x1", d.mainKey);
+                this.setAttribute("data-value-x2", d.key);
 
     const color = d3.scaleOrdinal().domain(legendsData).range(d3colorPalette);
 
-    const entry = svg
-        .selectAll(".entry")
-        .data(dataValues)
-        .enter()
-        .append("g")
-        .attr("class", "g")
-        .attr("transform", function (d) {
-            return "translate(" + xScale(d.key) + ", 0)";
-        });
+                var yValue = d.y0 - d.y1;
+                if (d.y1 < 0) {
+                    yValue = d.y1 - d.y0;
+                }
+                this.setAttribute("data-value-y1", Math.round(yValue));
 
-    entry
-        .selectAll("rect")
-        .data(function (d) {
-            return d.components;
-        })
-        .enter()
-        .append("rect")
-        .attr("class", "bar visualPlotting")
-        .attr("width", xScale.bandwidth())
-        .attr("y", function (d) {
-            return yScale(d.y0);
-        })
-        .attr("height", function (d) {
-            this.setAttribute("data-value-x1", d.mainKey);
-            this.setAttribute("data-value-x2", d.key);
+                return Math.abs(yScale(d.y0) - yScale(d.y1));
+            })
+            .style("fill", function (d) {
+                return color(d.key);
+            });
+    }
 
-            var yValue = d.y0 - d.y1;
-            if (d.y1 < 0) {
-                yValue = d.y1 - d.y0;
-            }
-            this.setAttribute("data-value-y1", Math.round(yValue));
+    
+    // ----------------
 
-            return Math.abs(yScale(d.y0) - yScale(d.y1));
-        })
-        .style("fill", function (d) {
-            return color(d.key);
-        });
-*/
     return svg;
 };
 
