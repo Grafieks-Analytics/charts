@@ -76,11 +76,12 @@ const table = require("./chartModules/table");
         }
         const keyCount = countKeys(data.dataValues);
         console.log("Total keys count:", keyCount);
-        if(keyCount>2000){
-            window.limit = true;
-        }else{
-            window.limit = false;
-        }
+        // if(keyCount>2000){
+        //     window.limit = true;
+        // }else{
+        //     window.limit = false;
+        // }
+        window.limit = true;
 
         if (!grafieks.flags.isDataTransformed) {
             transformData();
