@@ -10,7 +10,7 @@ const getTransformedDataValue = () => {
 
     const data = grafieks.dataUtils.rawData || [];
 
-    let { dataValues = [], dataLabels = [] } = data;
+    let { dataValues = [], dataLabels = [], legendsData = [] } = data;
 
     // Data columns has all the values of x-y axis and rows and values rows
     const { dataColumns } = grafieks.plotConfiguration;
@@ -33,7 +33,7 @@ const getTransformedDataValue = () => {
     }
 
     if (!isKey1Date && !isKey2Date) {
-        return data;
+        return [dataValues, [dataLabels[0], dataLabels[1]], legendsData];
     }
 
     var globalKeys = [];
@@ -131,7 +131,7 @@ const chartGeneration = (svg) => {
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
     const { height } = grafieks.chartsConfig;
-
+    
     const [transformedDataValues, [splitKeys, mainCategoryKeys], dataLabelsTransformed] = getTransformedDataValue();
 
     window.grafieks.dataUtils.dataLabels = dataLabelsTransformed;

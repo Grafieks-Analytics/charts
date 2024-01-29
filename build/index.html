@@ -662,7 +662,7 @@
             //         chartName: "Scatter Plot"
             //     }
             // );
-            // // HorizontalBarChart
+            // // // HorizontalBarChart
             // grafieks.drawChart(
             //     {
             //         dataLabels: { xAxisLabel: "Category", yAxisLabel: "Sales" },
@@ -692,61 +692,157 @@
             //         chartName: "Horizontal Bar Chart"
             //     }
             // );
-            // HorizontalBarChart
-            grafieks.drawChart(
-                {
-                    dataLabels: [
-                        ["Furniture", "Office Supplies", "Technology"],
-                        ["South", "West", "Central", "East"]
-                    ],
-                    dataValues: [
-                        {
-                            Furniture: 117298.6840000001,
-                            "Office Supplies": 125651.31299999992,
-                            Technology: 148771.9079999999,
-                            mainCategory: "South"
-                        },
-                        {
-                            Furniture: 252612.7435000003,
-                            "Office Supplies": 220853.24900000007,
-                            Technology: 251991.83199999997,
-                            mainCategory: "West"
-                        },
-                        {
-                            Furniture: 163797.16380000004,
-                            "Office Supplies": 167026.41500000027,
-                            Technology: 170416.3119999999,
-                            mainCategory: "Central"
-                        },
-                        {
-                            Furniture: 208291.20400000009,
-                            "Office Supplies": 205516.0549999999,
-                            Technology: 264973.9810000003,
-                            mainCategory: "East"
-                        }
-                    ],
-                    legendsData: ["Region", "Category", "Sales"]
-                },
-                {
-                    yAxisConfig: { yaxisStatus: true },
-                    xAxisConfig: { xaxisStatus: true },
-                    dataLabelColor: "#000000",
-                    paddingInner: 0.25,
-                    innerRadius: 0.75,
-                    dataColumns: {
-                        xAxisColumnDetails: [
-                            { itemName: "Region", tableValue: "Region", itemType: "Categorical", dateFormat: "%Y" },
-                            { itemName: "Category", tableValue: "Category", itemType: "Categorical", dateFormat: "%Y" }
-                        ],
-                        yAxisColumnDetails: [
-                            { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
-                        ],
-                        row3ColumnDetails: [],
-                        colorByData: []
-                    },
-                    chartName: "Grouped Bar Chart"
-                }
-            );
+            // GroupedBarChart
+            // grafieks.drawChart(
+            //     {
+            //         dataLabels: [
+            //             ["Furniture", "Office Supplies", "Technology"],
+            //             ["South", "West", "Central", "East"]
+            //         ],
+            //         dataValues: [
+            //             {
+            //                 Furniture: 117298.6840000001,
+            //                 "Office Supplies": 125651.31299999992,
+            //                 Technology: 148771.9079999999,
+            //                 mainCategory: "South"
+            //             },
+            //             {
+            //                 Furniture: 252612.7435000003,
+            //                 "Office Supplies": 220853.24900000007,
+            //                 Technology: 251991.83199999997,
+            //                 mainCategory: "West"
+            //             },
+            //             {
+            //                 Furniture: 163797.16380000004,
+            //                 "Office Supplies": 167026.41500000027,
+            //                 Technology: 170416.3119999999,
+            //                 mainCategory: "Central"
+            //             },
+            //             {
+            //                 Furniture: 208291.20400000009,
+            //                 "Office Supplies": 205516.0549999999,
+            //                 Technology: 264973.9810000003,
+            //                 mainCategory: "East"
+            //             }
+            //         ],
+            //         legendsData: ["Region", "Category", "Sales"]
+            //     },
+            //     {
+            //         yAxisConfig: { yaxisStatus: true },
+            //         xAxisConfig: { xaxisStatus: true },
+            //         dataLabelColor: "#000000",
+            //         paddingInner: 0.25,
+            //         innerRadius: 0.75,
+            //         dataColumns: {
+            //             xAxisColumnDetails: [
+            //                 { itemName: "Region", tableValue: "Region", itemType: "Categorical", dateFormat: "%Y" },
+            //                 { itemName: "Category", tableValue: "Category", itemType: "Categorical", dateFormat: "%Y" }
+            //             ],
+            //             yAxisColumnDetails: [
+            //                 { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+            //             ],
+            //             row3ColumnDetails: [],
+            //             colorByData: []
+            //         },
+            //         chartName: "Grouped Bar Chart"
+            //     }
+            // );
+            // // TableChart
+            // grafieks.drawChart(
+            //     [
+            //             [
+            //                 { Category: "Furniture", Region: "South", Sales: "117298.684000" },
+            //                 { Category: "Office Supplies", Region: "West", Sales: "220853.249000" },
+            //                 { Category: "Office Supplies", Region: "South", Sales: "125651.313000" },
+            //                 { Category: "Furniture", Region: "West", Sales: "252612.743500" },
+            //                 { Category: "Technology", Region: "West", Sales: "251991.832000" },
+            //                 { Category: "Office Supplies", Region: "Central", Sales: "167026.415000" },
+            //                 { Category: "Furniture", Region: "East", Sales: "208291.204000" },
+            //                 { Category: "Office Supplies", Region: "East", Sales: "205516.055000" },
+            //                 { Category: "Technology", Region: "Central", Sales: "170416.312000" },
+            //                 { Category: "Furniture", Region: "Central", Sales: "163797.163800" },
+            //                 { Category: "Technology", Region: "East", Sales: "264973.981000" },
+            //                 { Category: "Technology", Region: "South", Sales: "148771.908000" }
+            //             ],
+            //             [false, false, true],
+            //             ["Region", "Category", "Sales"]
+            //         ],
+            //     {
+            //         yAxisConfig: { yaxisStatus: true },
+            //         xAxisConfig: { xaxisStatus: true },
+            //         dataLabelColor: "#000000",
+            //         paddingInner: 0.25,
+            //         innerRadius: 0.75,
+            //         dataColumns: {
+            //             xAxisColumnDetails: [
+            //                 { itemName: "Region", tableValue: "Region", itemType: "Categorical", dateFormat: "%Y" },
+            //                 { itemName: "Category", tableValue: "Category", itemType: "Categorical", dateFormat: "%Y" },
+            //                 { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+            //             ],
+            //             yAxisColumnDetails: [
+            //                 { itemName: "Category", tableValue: "Category", itemType: "Categorical", dateFormat: "%Y" }
+            //             ],
+            //             row3ColumnDetails: [
+            //                 { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+            //             ],
+            //             colorByData: []
+            //         },
+            //         chartName: "Table",
+            //         gridConfig: { gridStatus: true },
+            //         pivotTheme: "Blue",
+            //         curveType: "curveLinear",
+            //         dataLabelfontSize: 12,
+            //         dataLabelfontFamily: "Arial",
+            //         searchStatus: true,
+            //         rowAlternateStatus: true
+            //     }
+            // );
+            // // PivotChart
+            // grafieks.drawChart(
+            //     {
+            //         dataValues: [
+            //             ["South", "Furniture", 117298.684],
+            //             ["West", "Office Supplies", 220853.249],
+            //             ["South", "Office Supplies", 125651.313],
+            //             ["West", "Furniture", 252612.7435],
+            //             ["West", "Technology", 251991.832],
+            //             ["Central", "Office Supplies", 167026.415],
+            //             ["East", "Furniture", 208291.204],
+            //             ["East", "Office Supplies", 205516.055],
+            //             ["Central", "Technology", 170416.312],
+            //             ["Central", "Furniture", 163797.1638],
+            //             ["East", "Technology", 264973.981],
+            //             ["South", "Technology", 148771.908]
+            //         ],
+            //         fields: ["Region", "Category", "Sales"],
+            //         rowColumnsValues: [["Region"], ["Category"], ["Sales"]]
+            //     },
+            //     {
+            //         yAxisConfig: { yaxisStatus: true },
+            //         xAxisConfig: { xaxisStatus: true },
+            //         dataLabelColor: "#000000",
+            //         paddingInner: 0.25,
+            //         innerRadius: 0.75,
+            //         dataColumns: {
+            //             xAxisColumnDetails: [
+            //                 { itemName: "Region", tableValue: "Region", itemType: "Categorical", dateFormat: "%Y" }
+            //             ],
+            //             yAxisColumnDetails: [
+            //                 { itemName: "Category", tableValue: "Category", itemType: "Categorical", dateFormat: "%Y" }
+            //             ],
+            //             row3ColumnDetails: [
+            //                 { itemName: "Sales", tableValue: "Sales", itemType: "Numerical", dateFormat: "%Y" }
+            //             ],
+            //             colorByData: []
+            //         },
+            //         chartName: "Pivot",
+            //         gridConfig: { gridStatus: true },
+            //         pivotTheme: "Blue",
+            //         curveType: "curveLinear",
+            //         dataLabelfontSize: 12,
+            //         dataLabelfontFamily: "Arial"
+            //     }
+            // );
         </script>
     </body>
 </html>
