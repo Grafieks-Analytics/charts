@@ -81,7 +81,7 @@ const table = require("./chartModules/table");
         // }else{
         //     window.limit = false;
         // }
-        window.limit = true;
+        window.limit = false;
 
         if (!grafieks.flags.isDataTransformed) {
             transformData();
@@ -219,9 +219,6 @@ const table = require("./chartModules/table");
                 break;
             case CONSTANTS.FUNNEL_CHART:
                 funnelChart();
-                if (labelStatus) {
-                    setDataLabels(svg);
-                }
                 return;
             case CONSTANTS.KPI_CHART:
                 kpiChart();
@@ -309,7 +306,7 @@ const table = require("./chartModules/table");
 
         // Set Tooltip Handler
         setTooltipHandler();
-        if (window.limit) {
+        if (!window.limit) {
             drawChartD3FC();
         }
 
