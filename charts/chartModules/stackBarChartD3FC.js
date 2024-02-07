@@ -1,17 +1,21 @@
 const drawD3FCCharts = (data) => {
+    console.log("datafrom d3fc", grafieks.dataUtils.dataValues);
+    dataValues = grafieks.dataUtils.dataValues;
+    const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 
-    console.log("datafrom d3fc",grafieks.dataUtils.dataValues)
-    dataValues=grafieks.dataUtils.dataValues
-   
     var el = document.createElement("div");
     var body = document.getElementsByTagName("body");
     // var heightGrid = document.getElementsByClassName("grid")[0].getBBox().height;
     var heightGrid = document.getElementsByClassName("domain")[2].getBBox().height;
     // var widthGrid = document.getElementsByClassName("grid")[0].getBBox().width;
-    var widthGrid = document.getElementsByClassName("x-axis")[0].getBBox().width-10;
+    var widthGrid = document.getElementsByClassName("x-axis")[0].getBBox().width - 10;
     el.innerHTML =
         // '<d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="position:absolute;height: 70%;width: 882.46px;top: 20px;left: 334px;"></d3fc-canvas>';
-        '<d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="position:absolute;height:'+heightGrid+'px;width:'+widthGrid+'px;top:20px;right: 20px;"></d3fc-canvas>';
+        '<d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="position:absolute;height:' +
+        heightGrid +
+        "px;width:" +
+        widthGrid +
+        'px;top:20px;right: 20px;"></d3fc-canvas>';
     // height: 366.67px;width: 882.46px;
     document.getElementById("chart").appendChild(el);
     dataTransformed = transformData(dataValues);
@@ -27,7 +31,7 @@ const drawD3FCCharts = (data) => {
     const xScale = d3
         .scalePoint()
         .domain(dataTransformed.map((d) => d.group))
-        .padding(1-(window.wdd/1000));
+        .padding(1 - window.wdd / 1000);
 
     const yExtent = fc
         .extentLinear()
@@ -37,7 +41,7 @@ const drawD3FCCharts = (data) => {
     const yScale = d3.scaleLinear().domain(yExtent(series));
 
     // const color = d3.scaleOrdinal(d3.schemeCategory10);
-    const color = d3.scaleOrdinal(d3.schemeAccent);
+    const color = d3.scaleOrdinal(d3colorPalette);
 
     const ctx = container.querySelector("canvas").getContext("webgl");
 
@@ -48,7 +52,7 @@ const drawD3FCCharts = (data) => {
         .crossValue((d) => d.data.group)
         .mainValue((d) => d[1])
         .baseValue((d) => d[0])
-        .bandwidth(Math.max(1,window.wdd))
+        .bandwidth(Math.max(1, window.wdd))
         .context(ctx);
 
     let pixels = null;
@@ -122,6 +126,6 @@ const drawD3FCCharts = (data) => {
     }
 
     container.requestRedraw();
-}
+};
 
 module.exports = drawD3FCCharts;
