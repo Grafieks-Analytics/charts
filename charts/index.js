@@ -306,7 +306,7 @@ const table = require("./chartModules/table");
 
         // Set Tooltip Handler
         setTooltipHandler();
-        if (!window.limit) {
+        if (window.limit) {
             drawChartD3FC();
         }
 

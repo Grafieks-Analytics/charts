@@ -103,7 +103,7 @@ const chartGeneration = (svg) => {
     const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 
     // normal chart
-    if (window.limit) {
+    if (!window.limit) {
         drawD3Charts();
     } else {
         drawD3FCCharts();
@@ -159,7 +159,7 @@ const chartGeneration = (svg) => {
                 // context.fillText(d3.format(".1%")(datum.frequency), 0, -8);
                 // context.fillText((datum.frequency), 0, -8);
                 // context.fillStyle = "steelblue";
-                context.fillStyle =  "red";
+                context.fillStyle = "red";
                 // context.fillStyle =  d3colorPalette[0];
 
                 // context.fillStyle = isVowel(datum.letter) ? "indianred" : "steelblue";
