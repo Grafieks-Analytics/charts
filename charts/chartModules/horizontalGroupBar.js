@@ -90,8 +90,12 @@ const getTransformedDataValue = () => {
     }
 
     globalKeys = globalKeys.filter(utils.getUniqueArrayValues);
+   
+    transformedDataValue = dataValues
+    console.log("transformedDataValue",transformedDataValue)
     var mainCategoryData = transformedDataValue.map((d) => d.mainCategory);
-
+    console.log("mainCategoryData",mainCategoryData)
+    // transformedDataValue =  
     return [transformedDataValue, [globalKeys, mainCategoryData], dataLabels];
 };
 

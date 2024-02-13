@@ -219,9 +219,6 @@ const table = require("./chartModules/table");
                 break;
             case CONSTANTS.FUNNEL_CHART:
                 funnelChart();
-                if (labelStatus) {
-                    setDataLabels(svg);
-                }
                 return;
             case CONSTANTS.KPI_CHART:
                 kpiChart();
