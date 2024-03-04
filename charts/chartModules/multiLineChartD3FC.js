@@ -6,137 +6,7 @@ const drawD3FCLineCharts = (datas) => {
 
     // Assuming you have the data for the multiline chart
 
-    // const data = [
-    //     ["Furniture", "Henderson", 2250],
-    //     ["Furniture", "Los Angeles", 4310],
-    //     ["Furniture", "Fort Lauderdale", 1916],
-    //     ["Furniture", "Concord", 0],
-    //     ["Furniture", "Seattle", 1576],
-    //     ["Furniture", "Fort Worth", 0],
-    //     ["Furniture", "Madison", 0],
-    //     ["Furniture", "West Jordan", 0],
-    //     ["Furniture", "San Francisco", 0],
-    //     ["Furniture", "Fremont", 0],
-    //     ["Furniture", "Philadelphia", 6556],
-    //     ["Furniture", "Orem", 2090],
-    //     ["Furniture", "Houston", 2748],
-    //     ["Furniture", "Richardson", 382],
-    //     ["Furniture", "Naperville", 0],
-    //     ["Furniture", "Melbourne", 0],
-    //     ["Furniture", "Eagan", 0],
-    //     ["Furniture", "Westland", 0],
-    //     ["Furniture", "Dover", 0],
-    //     ["Furniture", "New Albany", 192],
-    //     ["Furniture", "New York City", 278],
-    //     ["Furniture", "Troy", 638],
-    //     ["Furniture", "Chicago", 426],
-    //     ["Furniture", "Gilbert", 0],
-    //     ["Furniture", "Springfield", 0],
-    //     ["Furniture", "Jackson", 0],
-    //     ["Furniture", "Memphis", 1858],
-    //     ["Furniture", "Decatur", 0],
-    //     ["Furniture", "Durham", 0],
-    //     ["Furniture", "Columbia", 604],
-    //     ["Furniture", "Rochester", 0],
-    //     ["Furniture", "Minneapolis", 106],
-    //     ["Furniture", "Portland", 0],
-    //     ["Furniture", "Saint Paul", 0],
-    //     ["Furniture", "Aurora", 204],
-    //     ["Furniture", "Charlotte", 0],
-    //     ["Furniture", "Urbandale", 0],
-    //     ["Furniture", "Columbus", 0],
-    //     ["Furniture", "Bristol", 0],
-    //     ["Furniture", "Wilmington", 94],
-    //     ["Furniture", "Bloomington", 1236],
-    //     ["Furniture", "Phoenix", 0],
-    //     ["Furniture", "Roseville", 86],
-    //     ["Office Supplies", "Henderson", 0],
-    //     ["Office Supplies", "Los Angeles", 890],
-    //     ["Office Supplies", "Fort Lauderdale", 44],
-    //     ["Office Supplies", "Concord", 32],
-    //     ["Office Supplies", "Seattle", 816],
-    //     ["Office Supplies", "Fort Worth", 144],
-    //     ["Office Supplies", "Madison", 1332],
-    //     ["Office Supplies", "West Jordan", 112],
-    //     ["Office Supplies", "San Francisco", 238],
-    //     ["Office Supplies", "Fremont", 158],
-    //     ["Office Supplies", "Philadelphia", 244],
-    //     ["Office Supplies", "Orem", 0],
-    //     ["Office Supplies", "Houston", 656],
-    //     ["Office Supplies", "Richardson", 0],
-    //     ["Office Supplies", "Naperville", 0],
-    //     ["Office Supplies", "Melbourne", 192],
-    //     ["Office Supplies", "Eagan", 34],
-    //     ["Office Supplies", "Westland", 424],
-    //     ["Office Supplies", "Dover", 0],
-    //     ["Office Supplies", "New Albany", 226],
-    //     ["Office Supplies", "New York City", 40],
-    //     ["Office Supplies", "Troy", 612],
-    //     ["Office Supplies", "Chicago", 594],
-    //     ["Office Supplies", "Gilbert", 2226],
-    //     ["Office Supplies", "Springfield", 152],
-    //     ["Office Supplies", "Jackson", 38],
-    //     ["Office Supplies", "Memphis", 146],
-    //     ["Office Supplies", "Decatur", 450],
-    //     ["Office Supplies", "Durham", 402],
-    //     ["Office Supplies", "Columbia", 0],
-    //     ["Office Supplies", "Rochester", 60],
-    //     ["Office Supplies", "Minneapolis", 92],
-    //     ["Office Supplies", "Portland", 12],
-    //     ["Office Supplies", "Saint Paul", 156],
-    //     ["Office Supplies", "Aurora", 74],
-    //     ["Office Supplies", "Charlotte", 6],
-    //     ["Office Supplies", "Urbandale", 206],
-    //     ["Office Supplies", "Columbus", 596],
-    //     ["Office Supplies", "Bristol", 316],
-    //     ["Office Supplies", "Wilmington", 746],
-    //     ["Office Supplies", "Bloomington", 0],
-    //     ["Office Supplies", "Phoenix", 492],
-    //     ["Office Supplies", "Roseville", 426],
-    //     ["Technology", "Henderson", 0],
-    //     ["Technology", "Los Angeles", 1990],
-    //     ["Technology", "Fort Lauderdale", 0],
-    //     ["Technology", "Concord", 0],
-    //     ["Technology", "Seattle", 0],
-    //     ["Technology", "Fort Worth", 0],
-    //     ["Technology", "Madison", 0],
-    //     ["Technology", "West Jordan", 0],
-    //     ["Technology", "San Francisco", 426],
-    //     ["Technology", "Fremont", 0],
-    //     ["Technology", "Philadelphia", 0],
-    //     ["Technology", "Orem", 0],
-    //     ["Technology", "Houston", 742],
-    //     ["Technology", "Richardson", 2196],
-    //     ["Technology", "Naperville", 294],
-    //     ["Technology", "Melbourne", 0],
-    //     ["Technology", "Eagan", 92],
-    //     ["Technology", "Westland", 0],
-    //     ["Technology", "Dover", 44],
-    //     ["Technology", "New Albany", 0],
-    //     ["Technology", "New York City", 2060],
-    //     ["Technology", "Troy", 0],
-    //     ["Technology", "Chicago", 192],
-    //     ["Technology", "Gilbert", 336],
-    //     ["Technology", "Springfield", 0],
-    //     ["Technology", "Jackson", 0],
-    //     ["Technology", "Memphis", 0],
-    //     ["Technology", "Decatur", 0],
-    //     ["Technology", "Durham", 0],
-    //     ["Technology", "Columbia", 0],
-    //     ["Technology", "Rochester", 0],
-    //     ["Technology", "Minneapolis", 0],
-    //     ["Technology", "Portland", 0],
-    //     ["Technology", "Saint Paul", 0],
-    //     ["Technology", "Aurora", 478],
-    //     ["Technology", "Charlotte", 204],
-    //     ["Technology", "Urbandale", 0],
-    //     ["Technology", "Columbus", 120],
-    //     ["Technology", "Bristol", 0],
-    //     ["Technology", "Wilmington", 136],
-    //     ["Technology", "Bloomington", 0],
-    //     ["Technology", "Phoenix", 0],
-    //     ["Technology", "Roseville", 0]
-    // ];
+   
 
     // Extract unique names and locations
     const names = Array.from(new Set(data.map((d) => d[1])));
@@ -181,7 +51,8 @@ const drawD3FCLineCharts = (datas) => {
 
     const yScale = d3
         .scaleLinear()
-        .domain([0, d3.max(Object.values(formattedData), (d) => d3.max(d, (v) => v.value))])
+        .domain([0, d3.max(Object.values(formattedData), (d) => d3.max(d, (v) => Number(
+             v.value)))])
         .range([height, 0]);
     // Set colors for each name
     const colorScale = d3.scaleOrdinal().domain(names).range(d3.schemeCategory10);
@@ -193,7 +64,7 @@ const drawD3FCLineCharts = (datas) => {
             .area()
             .x((d, i) => xScale(i))
             .y0(height)
-            .y1((d) => yScale(d.value));
+            .y1((d) => yScale( Number(d.value)));
 
         // Draw the multiline chart
         names.forEach((name) => {
@@ -234,7 +105,7 @@ const drawD3FCLineCharts = (datas) => {
             ctx.fillStyle = colorScale(name);
             formattedData[name].forEach((d) => {
                 ctx.beginPath();
-                ctx.arc(xScale(locations.indexOf(d.location)), yScale(d.value), 4, 0, Math.PI * 2);
+                ctx.arc(xScale(locations.indexOf(d.location)), yScale(Number(d.value)), 4, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.stroke();
             });

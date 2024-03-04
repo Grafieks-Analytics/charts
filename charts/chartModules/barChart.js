@@ -3,20 +3,31 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
+const { isDateFormat } = require("../modules/dataTransformation");
 
 const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
+    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+        grafieks.plotConfiguration;
+    let itemType = xAxisColumnDetails[0].itemType;
+   
+    let { dataValues = [], dataLabels = [] } = data;
 
-    const { dataValues = [], dataLabels = [] } = data;
+    if (isDateFormat(itemType)) {
+        // const { dataValuess = [], dataLabels = [] } = data;
+         dataValues = grafieks.dataUtils.dataCombined;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    } else {
+        // let { dataValues = [], dataLabels = [] } = data;
 
-    grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
-
-    grafieks.dataUtils.dataLabelValues = dataValues[1];
-
-    grafieks.legend.data = [dataLabels.xAxisLabel];
+        grafieks.dataUtils.dataValues = dataValues;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.dataUtils.dataLabelValues = dataValues[1];
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    }
 
     const { height } = grafieks.chartsConfig;
 
@@ -103,7 +114,8 @@ const chartGeneration = (svg) => {
     const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 
     // normal chart
-    if (window.limit) {
+    console.warn("window.limit", window.limit);
+    if (!window.limit) {
         drawD3Charts();
     } else {
         drawD3FCCharts();
@@ -147,6 +159,18 @@ const chartGeneration = (svg) => {
     function drawD3FCCharts() {
         // d3fc chart
 
+        // Define the range of the y-axis scale
+        var yScale = d3.scaleLinear().range([height, 0]); // Adjust the range based on your chart height
+
+        // Alternatively, you can adjust the range dynamically based on the data
+        var yMax = d3.max(dataValues, function (d) {
+            return d[1];
+        }); // Get the maximum data value
+        var yScaleDynamic = d3
+            .scaleLinear()
+            .range([height, 0]) // Adjust the range based on your chart height
+            .domain([0, yMax]);
+
         var barSeries = fc
             .autoBandwidth(fc.seriesCanvasBar())
             .crossValue((d) => d[0])
@@ -159,17 +183,17 @@ const chartGeneration = (svg) => {
                 // context.fillText(d3.format(".1%")(datum.frequency), 0, -8);
                 // context.fillText((datum.frequency), 0, -8);
                 // context.fillStyle = "steelblue";
-                context.fillStyle =  "red";
-                // context.fillStyle =  d3colorPalette[0];
+                // context.fillStyle =  "red";
+                context.fillStyle = d3colorPalette[0];
 
                 // context.fillStyle = isVowel(datum.letter) ? "indianred" : "steelblue";
             });
         var yExtent = fc
             .extentLinear()
-            .accessors([(d) => d[1]])
+            .accessors([(d) => Number(d[1])])
             // .pad([0, 0.1])
             .include([0]);
-
+        console.log("yExtent(dataValues)", yExtent(dataValues));
         var chart = fc
             .chartCartesian(d3.scaleBand(), d3.scaleLinear())
             .xDomain(dataValues.map((d) => d[0]))

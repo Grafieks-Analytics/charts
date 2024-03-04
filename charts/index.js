@@ -60,7 +60,7 @@ const table = require("./chartModules/table");
         grafieks.plotConfiguration = plotConfiguration;
         // Set data to grafieks.dataUtils.rawData for future use (redraw when resize, etc)
         grafieks.dataUtils.rawData = data;
-        console.warn("dataRaw", data);
+        console.warn("dataRawdd", data);
         function countKeys(obj) {
             let count = 0;
 
@@ -76,16 +76,17 @@ const table = require("./chartModules/table");
         }
         const keyCount = countKeys(data.dataValues);
         console.log("Total keys count:", keyCount);
-        // if(keyCount>2000){
-        //     window.limit = true;
-        // }else{
-        //     window.limit = false;
-        // }
-        window.limit = false;
+        if(keyCount>4000){
+            window.limit = true;
+        }else{
+            window.limit = false;
+        }
+        // window.limit = true;
 
         if (!grafieks.flags.isDataTransformed) {
             transformData();
         }
+        
 
         grafieks.plotConfiguration.isHorizontalGraph = isHorizontalGraph();
 
@@ -306,7 +307,7 @@ const table = require("./chartModules/table");
 
         // Set Tooltip Handler
         setTooltipHandler();
-        if (!window.limit) {
+        if (window.limit) {
             drawChartD3FC();
         }
 

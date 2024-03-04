@@ -116,13 +116,13 @@ const chartGeneration = (svg) => {
     let fill = "none";
     const lineStroke = CONSTANTS.defaultValues.lineStrokeWidth;
     if (chartName == CONSTANTS.AREA_CHART) {
-        if (window.limit) {
+        if (!window.limit) {
             drawD3AreaCharts();
         } else {
             drawD3FCAreaCharts();
         }
     } else {
-        if (window.limit) {
+        if (!window.limit) {
             drawD3LineCharts();
         } else {
             drawD3FCLineCharts();
@@ -157,7 +157,7 @@ const chartGeneration = (svg) => {
         var el = document.createElement("div");
         var body = document.getElementsByTagName("body");
         el.innerHTML =
-            '<d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="position:absolute;height: 70%;width: 882.46px;top: 20px;left: 334px;"></d3fc-canvas>';
+            '<d3fc-canvas use-device-pixel-ratio set-webgl-viewport style="position:absolute;height: 98%;width: 100%;top: 20px;left: 104px;"></d3fc-canvas>';
         // height: 366.67px;width: 882.46px;
         document.getElementById("chart").appendChild(el);
         

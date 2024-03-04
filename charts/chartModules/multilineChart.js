@@ -252,7 +252,7 @@ const chartGeneration = (svg) => {
             .attr("class", "line")
             .attr("d", function (d) {
                 const lineData = transformedDataValues.filter((dataRow) => {
-                    if (dataRow[1] == d) {
+                    if (dataRow[1] == Number(d)) {
                         return true;
                     }
                     return false;

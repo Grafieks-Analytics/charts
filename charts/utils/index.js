@@ -153,6 +153,7 @@ const setInitialConfig = () => {
 };
 
 const getDateFormattedData = (value, dateFormat) => {
+    console.warn("getDateFormattedData called")
     return d3.timeFormat(dateFormat)(new Date(value));
 };
 

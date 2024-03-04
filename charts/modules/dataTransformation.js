@@ -58,6 +58,12 @@ const transformData = () => {
 
     grafieks.flags.isDataTransformed = true;
 
+    const excludedCharts = [CONSTANTS.PIVOT];
+
+    if (excludedCharts.indexOf(chartName) > -1) {
+        return;
+    }
+
     const data = grafieks.dataUtils.rawData;
     const { dataValues } = data;
 
@@ -72,6 +78,53 @@ const transformData = () => {
             let itemType = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
 
+            // // if (isHorizontalGraph()) {
+            // //     itemType = yAxisColumnDetails[0].itemType;
+            // //     dateFormat = yAxisColumnDetails[0].dateFormat;
+            // // }
+            if (!isDateFormat(itemType)) {
+                return;
+            }
+
+            // // timeFormat = d3.timeFormat(dateFormat);
+
+            // // // [xAxisData, yAxisData] = dataValues;
+            // // const xAxisData = dataValues.map(item => item[0]);
+            // // const yAxisData = dataValues.map(item => item[1]);
+
+            // // // console.warn("dataValues",dataValues[0])
+
+            // // console.warn("xAxisData",xAxisData)
+            // // xAxisData.forEach((d, i) => {
+            // //     const dateValue = timeFormat(new Date(d));
+            // //     if (!newDataSet[dateValue]) {
+            // //         newDataSet[dateValue] = 0;
+            // //     }
+            // //     newDataSet[dateValue] += yAxisData[i];
+            // // });
+
+            // // dates = Object.keys(newDataSet);
+            // // console.warn("dates",dates)
+            // // sortedDates = sortDates(dates, dateFormat);
+            // // exp
+            // var dataTemp = dataValues
+            // console.warn("dataTemp",dataTemp)
+            // // for (let i = 0; i < dataValues.length; i++) {
+            // //     // Assuming sortDates function returns the desired result
+            // //     dataTemp[i][0] = sortDates(dataValues[i][0], dateFormat);
+            // // }
+            // console.warn("dataTemp",dataTemp)
+            // // exp
+
+            // // const values = sortedDates.map((d) => newDataSet[d]);
+
+            // // // transformedData = [sortedDates, values];
+            // // transformedData = [sortedDates, yAxisData];
+            // // console.warn("transformedData",transformedData)
+            // // const dataCombined = sortedDates.map((item, index) => [item, values[index]]);
+            // // console.warn("dataCombined",dataCombined)
+            // // grafieks.dataUtils.dataCombined = dataCombined;
+            // ------
             if (isHorizontalGraph()) {
                 itemType = yAxisColumnDetails[0].itemType;
                 dateFormat = yAxisColumnDetails[0].dateFormat;
@@ -82,23 +135,48 @@ const transformData = () => {
 
             timeFormat = d3.timeFormat(dateFormat);
 
-            [xAxisData, yAxisData] = dataValues || [];
+            // [xAxisData, yAxisData] = dataValues || [];
+            // xAxisData.forEach((d, i) => {
+            //     const dateValue = timeFormat(new Date(d));
+            //     if (!newDataSet[dateValue]) {
+            //         newDataSet[dateValue] = 0;
+            //     }
+            //     newDataSet[dateValue] += yAxisData[i];
+            // });
+
+            // dates = Object.keys(newDataSet);
+            // sortedDates = sortDates(dates, dateFormat);
+
+            // const values = sortedDates.map((d) => newDataSet[d]);
+
+            // transformedData = [sortedDates, values];
+            const xAxisData = dataValues.map((item) => item[0]);
+            const yAxisData = dataValues.map((item) => item[1]);
+
             xAxisData.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));
                 if (!newDataSet[dateValue]) {
                     newDataSet[dateValue] = 0;
                 }
-                newDataSet[dateValue] += yAxisData[i];
+                console.log("number",newDataSet[dateValue])
+                newDataSet[dateValue] += Number(yAxisData[i]);
             });
-
             dates = Object.keys(newDataSet);
             sortedDates = sortDates(dates, dateFormat);
-
             const values = sortedDates.map((d) => newDataSet[d]);
+            const dataCombined = sortedDates.map((item, index) => [item, values[index]]);
+            grafieks.dataUtils.dataCombined = dataCombined;
+            // grafieks.dataUtils.rawData["dataValues"] = dataCombined
 
-            transformedData = [sortedDates, values];
 
-            grafieks.dataUtils.rawData[0] = transformedData;
+            // console.log("sortedDates", sortedDates);
+            // console.log("values", values);
+            // console.log("xAxisData", xAxisData);
+            // console.log("yAxisData", yAxisData);
+
+            // grafieks.dataUtils.rawData[0] = transformedData;
+
+            // ------
             return;
 
         case CONSTANTS.LINE_CHART:
@@ -196,5 +274,6 @@ const transformData = () => {
 
 module.exports = {
     transformData,
-    sortDates
+    sortDates,
+    isDateFormat
 };
