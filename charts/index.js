@@ -83,9 +83,7 @@ const table = require("./chartModules/table");
         }
         // window.limit = true;
 
-        if (!grafieks.flags.isDataTransformed) {
             transformData();
-        }
         
 
         grafieks.plotConfiguration.isHorizontalGraph = isHorizontalGraph();
