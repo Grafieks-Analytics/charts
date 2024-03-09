@@ -7,7 +7,8 @@ const setXAxisLabel = (svg) => {
     let {
         xAxisConfig: { xlabel } = {},
         xLabelfontSize = CONSTANTS.defaultValues.fontSize,
-        xaxisFontFamily = CONSTANTS.defaultValues.fontFamily
+        xaxisFontFamily = CONSTANTS.defaultValues.fontFamily,
+        xLabelfontColor = CONSTANTS.defaultValues.fontColor,
     } = window.grafieks.plotConfiguration;
 
     if (!xlabel) {
@@ -23,7 +24,7 @@ const setXAxisLabel = (svg) => {
         .attr("class", "x-axis-label")
         .attr("transform", `translate(${width / 2},${height - xLabelfontSize / 2})`)
         .append("text")
-        .attr("fill", "black")
+        .attr("fill", xLabelfontColor)
         .attr("font-size", xLabelfontSize)
         .attr("font-family", xaxisFontFamily)
         .attr("text-anchor", "middle")
@@ -35,7 +36,8 @@ const setYAxisLabel = (svg) => {
     let {
         yAxisConfig: { ylabel } = {},
         yLabelfontSize = CONSTANTS.defaultValues.fontSize,
-        yaxisFontFamily = CONSTANTS.defaultValues.fontFamily
+        yaxisFontFamily = CONSTANTS.defaultValues.fontFamily,
+        yLabelfontColor = CONSTANTS.defaultValues.fontColor,
     } = window.grafieks.plotConfiguration;
 
     if (!ylabel) {
@@ -51,7 +53,7 @@ const setYAxisLabel = (svg) => {
     svg.append("g")
         .attr("class", "y-axis-label")
         .append("text")
-        .attr("fill", "black")
+        .attr("fill", yLabelfontColor)
         .attr("transform", "rotate(-90)")
         .attr("x", -(height / 2 - chartsMargins.rotatingMargin))
         .attr("y", yLabelfontSize)
