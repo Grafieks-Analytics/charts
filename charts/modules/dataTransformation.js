@@ -158,7 +158,7 @@ const transformData = () => {
                 if (!newDataSet[dateValue]) {
                     newDataSet[dateValue] = 0;
                 }
-                console.log("number",newDataSet[dateValue])
+                // console.log("number",newDataSet[dateValue])
                 newDataSet[dateValue] += Number(yAxisData[i]);
             });
             dates = Object.keys(newDataSet);
@@ -185,27 +185,31 @@ const transformData = () => {
             if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
                 return;
             }
+            // debugger;
 
             dateFormat = xAxisColumnDetails[0].dateFormat;
             timeFormat = d3.timeFormat(dateFormat);
 
-            xAxisData = dataValues.map((d) => d[0]);
-            yAxisData = dataValues.map((d) => d[1]);
+            const xAxisDataLineChart = dataValues.map((d) => d[0]);
+            const yAxisDataLIneChart = dataValues.map((d) => d[1]);
 
-            xAxisData.forEach((d, i) => {
+            xAxisDataLineChart.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));
                 if (!newDataSet[dateValue]) {
                     newDataSet[dateValue] = 0;
                 }
-                newDataSet[dateValue] += yAxisData[i];
+                newDataSet[dateValue] += Number(yAxisDataLIneChart[i]);
             });
 
             dates = Object.keys(newDataSet);
             sortedDates = sortDates(dates, dateFormat);
+            const valuesLineChart = sortedDates.map((d) => newDataSet[d]);
+            const dataCombinedLineChart = sortedDates.map((item, index) => [item, valuesLineChart[index]]);
+            grafieks.dataUtils.dataCombined = dataCombinedLineChart;
 
-            transformedData = sortedDates.map((d) => [d, newDataSet[d]]);
+            // transformedData = sortedDates.map((d) => [d, newDataSet[d]]);
 
-            grafieks.dataUtils.rawData[0] = transformedData;
+            // grafieks.dataUtils.rawData[0] = transformedData;
 
             return;
         case CONSTANTS.FUNNEL_CHART:

@@ -3,6 +3,8 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
+const { isDateFormat } = require("../modules/dataTransformation");
+
 
 const { drawMarker } = require("../modules/markers");
 
@@ -10,15 +12,30 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
+    const { chartNamet, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+    grafieks.plotConfiguration;
+    let itemType = xAxisColumnDetails[0].itemType;
 
-    const { dataValues = [], dataLabels = [] } = data;
+    let { dataValues = [], dataLabels = [] } = data;
+    if (isDateFormat(itemType)) {
+        // const { dataValuess = [], dataLabels = [] } = data;
+         dataValues = grafieks.dataUtils.dataCombined;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    } else {
+        // let { dataValues = [], dataLabels = [] } = data;
 
-    grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.dataUtils.dataValues = dataValues;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.dataUtils.dataLabelValues = dataValues[1];
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    }
+    // grafieks.dataUtils.dataValues = dataValues;
+    // grafieks.dataUtils.dataLabels = dataLabels;
 
-    grafieks.dataUtils.dataLabelValues = dataValues[1];
+    // grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    // grafieks.legend.data = [dataLabels[0]];
 
     const { height } = grafieks.chartsConfig;
 
