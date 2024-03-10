@@ -21,7 +21,7 @@ const chartGeneration = (svg) => {
         // const { dataValuess = [], dataLabels = [] } = data;
          dataValues = grafieks.dataUtils.dataCombined;
         grafieks.dataUtils.dataLabels = dataLabels;
-        grafieks.legend.data = [dataLabels.xAxisLabel];
+        grafieks.legend.data = [dataLabels.xAxisLabel]; 
     } else {
         // let { dataValues = [], dataLabels = [] } = data;
 
