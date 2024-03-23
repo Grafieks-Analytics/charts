@@ -152,7 +152,8 @@ const transformData = () => {
             // transformedData = [sortedDates, values];
             const xAxisData = dataValues.map((item) => item[0]);
             const yAxisData = dataValues.map((item) => item[1]);
-
+            
+            timeFormat = d3.timeFormat(dateFormat);
             xAxisData.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));
                 if (!newDataSet[dateValue]) {
@@ -168,7 +169,6 @@ const transformData = () => {
             grafieks.dataUtils.dataCombined = dataCombined;
             // grafieks.dataUtils.rawData["dataValues"] = dataCombined
 
-
             // console.log("sortedDates", sortedDates);
             // console.log("values", values);
             // console.log("xAxisData", xAxisData);
@@ -178,7 +178,120 @@ const transformData = () => {
 
             // ------
             return;
+        case CONSTANTS.STACKED_BAR_CHART:
+            console.log("data in data transformation func", dataValues);
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            console.log("xAxisColumnDetails", xAxisColumnDetails);
+            // Function to sort the data by year
+            const sortedDataValues = Object.fromEntries(
+                Object.entries(dataValues).sort(([date1], [date2]) => date1.localeCompare(date2))
+            );
 
+            // if (!isDateFormat(itemType)) {
+            //     return;
+            // }
+
+            // Function to process the data
+            const processData = (data) => {
+                const result = {};
+
+                // Loop through each date in the data
+                for (const date in data) {
+                    if (data.hasOwnProperty(date)) {
+                        // alert(dateFormat);
+                        // console.log({ dateFormat });
+                        let year = date.split("-")[0];
+                        if (dateFormat == "%Y") {
+                            year = date.split("-")[0];
+                        } else if (dateFormat == "%b") {
+                            year = date.split("-")[1];
+                        } else if (dateFormat == "%d") {
+                            year = date.split("-")[2];
+                        } else {
+                            year = date;
+                        }
+
+                        const shipments = data[date];
+
+                        // If the year key doesn't exist in the result, create it
+                        if (!result[year]) {
+                            result[year] = {};
+                        }
+
+                        // Loop through each status in the shipments for the date
+                        for (const status in shipments) {
+                            if (shipments.hasOwnProperty(status)) {
+                                const amount = shipments[status];
+
+                                // If the status key doesn't exist in the result, create it
+                                if (!result[year][status]) {
+                                    result[year][status] = 0;
+                                }
+
+                                // Add the amount to the corresponding status in the result
+                                result[year][status] += amount;
+                            }
+                        }
+                    }
+                }
+                // const sortedResult = {};
+                // Object.keys(result)
+                //     .sort()
+                //     .forEach((year) => {
+                //         sortedResult[year] = result[year];
+                //     });
+                return result;
+            };
+
+            // grafieks.dataUtils.dataCombined = {
+            //     2003: {
+            //         Shipped: 16922965.6,
+            //         Resolved: 51059.99,
+            //         Cancelled: 191273.63
+            //     },
+            //     2004: {
+            //         Shipped: 20218708.54,
+            //         Cancelled: 1001208.48,
+            //         Resolved: 107446.5,
+            //         "On Hold": 88680.65
+            //     },
+            //     2005: {
+            //         Shipped: 11562776.330000002,
+            //         Resolved: 869542.28,
+            //         "On Hold": 131366.36,
+            //         Disputed: 928106.24,
+            //         "In Process": 1729295.6099999999
+            //     }
+            // };
+            console.log("result", processData(sortedDataValues));
+            // if (dateFormat != "%Y" || dateFormat != "%b" || dateFormat != "%d" ) {
+            //     grafieks.dataUtils.dataCombined = sortedDataValues;
+            // } else {
+            grafieks.dataUtils.dataCombined = processData(sortedDataValues);
+            // }
+            return;
+        case CONSTANTS.MULTIPLE_LINE_CHART:
+        case CONSTANTS.MULTIPLE_AREA_CHART:
+            // console.log("data transform in line chart", dataValues);
+            // console.log("dateFormat", dateFormat);
+            // const xAxisDataMultiline = dataValues.map((item) => item[0]);
+            // const yAxisDataMultiline = dataValues.map((item) => item[2]);
+            // timeFormat = d3.timeFormat(dateFormat);
+            // xAxisDataMultiline.forEach((d, i) => {
+            //     const dateValue = timeFormat(new Date(d));
+            //     if (!newDataSet[dateValue]) {
+            //         newDataSet[dateValue] = 0;
+            //     }
+            //     // console.log("number",newDataSet[dateValue])
+            //     newDataSet[dateValue] += Number(yAxisDataMultiline[i]);
+            // });
+            // dates = Object.keys(newDataSet);
+            // sortedDates = sortDates(dates, dateFormat);
+            // const valuesmultiline = sortedDates.map((d) => newDataSet[d]);
+            // const dataCombinedMultiline = sortedDates.map((item, index) => [item, valuesmultiline[index]]);
+            // console.log("dataCombinedMultiline",dataCombinedMultiline)
+            // grafieks.dataUtils.dataCombined = dataCombined;
+            
         case CONSTANTS.LINE_CHART:
         case CONSTANTS.AREA_CHART:
         case CONSTANTS.WATERFALL_CHART:
@@ -188,11 +301,12 @@ const transformData = () => {
             // debugger;
 
             dateFormat = xAxisColumnDetails[0].dateFormat;
-            timeFormat = d3.timeFormat(dateFormat);
+           
 
             const xAxisDataLineChart = dataValues.map((d) => d[0]);
             const yAxisDataLIneChart = dataValues.map((d) => d[1]);
-
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            timeFormat = d3.timeFormat(dateFormat);
             xAxisDataLineChart.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));
                 if (!newDataSet[dateValue]) {

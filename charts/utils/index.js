@@ -5,6 +5,16 @@ const clearChart = () => {
     d3.select(".charts-div").html(""); // Clear Chart
     d3.select(".tooltip").html(""); // Clear Tooltip
     d3.select(".legend").html(""); // Clear legend
+    // document?.getElementById("chartline")?.remove()// Clear legend
+    // if(document.getElementById("chartline")){
+    //     document.getElementById("chartline").remove()
+    // }
+    var canvas = document.getElementById("chartline");
+    var context = canvas.getContext("2d");
+    if (context) {
+        // do some drawing
+        context.clearRect(0, 0, canvas.width, canvas.height+20);
+    }
 };
 
 const isAxisBasedChart = (chartName) => {
@@ -52,7 +62,7 @@ const getDistanceBetweenElements = (rect1, rect2) => {
 const getMaximumValue = (array) => {
     let numericArray = array.map(parseFloat);
 
-    console.warn(array,d3.max(numericArray))
+    console.warn(array, d3.max(numericArray));
     let maxValue = d3.max(numericArray);
     if (maxValue < 0) {
         maxValue = 0;
@@ -153,7 +163,7 @@ const setInitialConfig = () => {
 };
 
 const getDateFormattedData = (value, dateFormat) => {
-    console.warn("getDateFormattedData called")
+    console.warn("getDateFormattedData called");
     return d3.timeFormat(dateFormat)(new Date(value));
 };
 

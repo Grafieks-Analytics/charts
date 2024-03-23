@@ -3,20 +3,21 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
+const { isDateFormat } = require("../modules/dataTransformation");
 
 const getMaximumValue = (data) => {
     // if (window.limit) {
-        return d3.max(data, function (d) {
-            try {
-                const value = d.components.map((d1) => {
-                    return d1.y0;
-                });
-                return d3.max(value);
-            } catch (error) {
-                console.log("error", d, error);
-                return 0;
-            }
-        });
+    return d3.max(data, function (d) {
+        try {
+            const value = d.components.map((d1) => {
+                return d1.y0;
+            });
+            return d3.max(value);
+        } catch (error) {
+            console.log("error", d, error);
+            return 0;
+        }
+    });
     // } else {
     //     return 2000;
     // }
@@ -61,10 +62,30 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
+    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+        grafieks.plotConfiguration;
+    let itemType = xAxisColumnDetails[0].itemType;
 
-    let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
-    const { dataColumns = {} } = grafieks.plotConfiguration;
-    const { xAxisColumnDetails = [] } = dataColumns;
+    let { dataValues = [], dataLabels = [] } = data;
+    console.log("grafieks.dataUtils.dataCombined", grafieks.dataUtils.dataCombined);
+    console.log("itemType",itemType)
+    if (isDateFormat(itemType)) {
+        const { dataValuess = [], dataLabels = [] } = data;
+        dataValues = grafieks.dataUtils.dataCombined;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    } else {
+        // let { dataValues = [], dataLabels = [] } = data;
+
+        grafieks.dataUtils.dataValues = dataValues;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.dataUtils.dataLabelValues = dataValues[1];
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    }
+
+    // let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
+    // const { dataColumns = {} } = grafieks.plotConfiguration;
+    // const { xAxisColumnDetails = [] } = dataColumns;
 
     let isDateTransforming = false;
     if (xAxisColumnDetails[0].itemType == "Date") {
@@ -72,9 +93,9 @@ const chartGeneration = (svg) => {
     }
 
     grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
+    // grafieks.dataUtils.dataLabels = dataLabels;
 
-    grafieks.dataUtils.dataLabelValues = dataValues[1];
+    // grafieks.dataUtils.dataLabelValues = dataValues[1];
 
     const { height } = grafieks.chartsConfig;
 
@@ -257,7 +278,6 @@ const chartGeneration = (svg) => {
             });
     }
 
-    
     // ----------------
 
     return svg;

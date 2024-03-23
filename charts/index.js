@@ -299,6 +299,16 @@ const table = require("./chartModules/table");
                 case CONSTANTS.MULTIPLE_AREA_CHART:
                 case CONSTANTS.MULTIPLE_LINE_CHART:
                     drawD3FCLineCharts();
+                    if (
+                        legendStatus &&
+                        (legendPosition === CONSTANTS.LEGEND_POSITION.RIGHT )
+                    ) {
+                        document.getElementById("chartline").style.left="9px"
+                    } else if (legendStatus && (legendPosition === CONSTANTS.LEGEND_POSITION.LEFT) ){
+                        document.getElementById("chartline").style.right="10px"
+                        document.getElementById("chartline").style.left="unset"
+                    }
+                   
                     break;
             }
         };
