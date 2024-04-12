@@ -1,6 +1,7 @@
 const d3 = require("d3");
 
 const CONSTANTS = require("../constants");
+const { isDateFormat } = require("../modules/dataTransformation");
 
 const utils = require("../utils");
 
@@ -8,18 +9,37 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
+    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+    grafieks.plotConfiguration;
+    console.log("yAxisColumnDetails",yAxisColumnDetails)
+    let itemType = yAxisColumnDetails[0].itemType;
+    // debugger;
+    let { dataValues = [], dataLabels = [] } = data;
+    console.log("grafieks.dataUtils.dataCombined",grafieks.dataUtils.dataCombined)
+    if (isDateFormat(itemType)) {
+        // const { dataValuess = [], dataLabels = [] } = data;
+         dataValues = grafieks.dataUtils.dataCombined;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.legend.data = [dataLabels.yAxisLabel];
+    } else {
+        // let { dataValues = [], dataLabels = [] } = data;
 
-    const { dataValues = [], dataLabels = [] } = data;
+        grafieks.dataUtils.dataValues = dataValues;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.dataUtils.dataLabelValues = dataValues[1];
+        grafieks.legend.data = [dataLabels.yAxisLabel];
+    }
+    // const { dataValues = [], dataLabels = [] } = data;
 
-    grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
+    // grafieks.dataUtils.dataValues = dataValues;
+    // grafieks.dataUtils.dataLabels = dataLabels;
 
-    grafieks.dataUtils.dataLabelValues = dataValues[1];
+    // grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    // grafieks.legend.data = [dataLabels[0]];
 
     const { height } = grafieks.chartsConfig;
-
+console.log("dataValues",dataValues)
     const numericalValues = dataValues.map((d) => d[1]);
     const minValue = utils.getMinimumValue(numericalValues);
     const maxValue = utils.getMaximumValue(numericalValues);

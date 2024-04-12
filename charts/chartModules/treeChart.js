@@ -89,7 +89,7 @@ function update(source) {
                 return d.children || d._children ? "end" : "start";
             })
             .text(function (d) {
-                return d.data.name ? d.data.name + " : " + d.data.size : d.data.size;
+                return d.data.name ? d.data.name + " : " + (d.data.size).toFixed(2) : d.data.size;
             })
             .attr("stroke", "black")
             .attr("stroke-width", 0)

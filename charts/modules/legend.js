@@ -40,7 +40,9 @@ const heatmapCustomLegend = (colors, legendData) => {
 };
 
 const getLegendDataHtml = () => {
+   
     const legendData = window.grafieks.legend.data || [];
+    // console.log("funnel legend",legendData)
     let { d3colorPalette, chartName } = grafieks.plotConfiguration;
 
     if (chartName == CONSTANTS.WATERFALL_CHART) {
@@ -103,19 +105,20 @@ const updateLegendPosition = (legendPosition) => {
         }
     }
 };
-
 const setLengend = () => {
+
     if (isLegendExceptionChart()) {
+        
         return;
     }
-
+  
     const {
         legendConfig: {
             legendStatus = CONSTANTS.defaultValues.legendStatus,
             legendPosition = CONSTANTS.LEGEND_POSITION.RIGHT
         } = {}
     } = window.grafieks.plotConfiguration;
-
+    
     if (legendStatus) {
         // Adding Legend in legend placeholder
         var legend = d3.select(".legend").node();
@@ -137,6 +140,7 @@ const setLengend = () => {
                 grafieks.legend.rightMargin = CONSTANTS.defaultValues.legendWidth;
 
                 legendContentOuterDiv.className = "outerLegendDivVertical";
+                // alert("yes")
                 legendContentOuterDiv.innerHTML = getLegendDataHtml();
 
                 break;

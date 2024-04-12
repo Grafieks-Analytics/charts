@@ -53,6 +53,7 @@ const sortDates = (datesArray, dateFormat) => {
 
 const transformData = () => {
     const grafieks = window.grafieks;
+   
     const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
         grafieks.plotConfiguration;
 
@@ -71,17 +72,17 @@ const transformData = () => {
     let newDataSet = {};
     let dateFormat = "%Y";
     let sortedDates = [];
-
+   
     switch (chartName) {
         case CONSTANTS.HORIZONTAL_BAR_CHART:
         case CONSTANTS.BAR_CHART:
             let itemType = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
-
-            // // if (isHorizontalGraph()) {
-            // //     itemType = yAxisColumnDetails[0].itemType;
-            // //     dateFormat = yAxisColumnDetails[0].dateFormat;
-            // // }
+           
+            if (isHorizontalGraph()) {
+                itemType = yAxisColumnDetails[0].itemType;
+                dateFormat = yAxisColumnDetails[0].dateFormat;
+            }
             if (!isDateFormat(itemType)) {
                 return;
             }
@@ -125,6 +126,7 @@ const transformData = () => {
             // // console.warn("dataCombined",dataCombined)
             // // grafieks.dataUtils.dataCombined = dataCombined;
             // ------
+
             if (isHorizontalGraph()) {
                 itemType = yAxisColumnDetails[0].itemType;
                 dateFormat = yAxisColumnDetails[0].dateFormat;
@@ -167,6 +169,7 @@ const transformData = () => {
             const values = sortedDates.map((d) => newDataSet[d]);
             const dataCombined = sortedDates.map((item, index) => [item, values[index]]);
             grafieks.dataUtils.dataCombined = dataCombined;
+           
             // grafieks.dataUtils.rawData["dataValues"] = dataCombined
 
             // console.log("sortedDates", sortedDates);
@@ -192,83 +195,111 @@ const transformData = () => {
             // }
 
             // Function to process the data
-            const processData = (data) => {
+            // const processData = (data) => {
+            //     const result = {};
+
+            //     // Loop through each date in the data
+            //     for (const date in data) {
+            //         if (data.hasOwnProperty(date)) {
+            //             // alert(dateFormat);
+            //             // console.log({ dateFormat });
+            //             let year = date.split("-")[0];
+            //             if (dateFormat == "%Y") {
+            //                 year = date.split("-")[0];
+            //             } else if (dateFormat == "%b") {
+            //                 year = date.split("-")[1];
+            //             } else if (dateFormat == "%d") {
+            //                 year = date.split("-")[2];
+            //             } else {
+            //                 year = date;
+            //             }
+
+            //             const shipments = data[date];
+
+            //             // If the year key doesn't exist in the result, create it
+            //             if (!result[year]) {
+            //                 result[year] = {};
+            //             }
+
+            //             // Loop through each status in the shipments for the date
+            //             for (const status in shipments) {
+            //                 if (shipments.hasOwnProperty(status)) {
+            //                     const amount = shipments[status];
+
+            //                     // If the status key doesn't exist in the result, create it
+            //                     if (!result[year][status]) {
+            //                         result[year][status] = 0;
+            //                     }
+
+            //                     // Add the amount to the corresponding status in the result
+            //                     result[year][status] += amount;
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     // const sortedResult = {};
+            //     // Object.keys(result)
+            //     //     .sort()
+            //     //     .forEach((year) => {
+            //     //         sortedResult[year] = result[year];
+            //     //     });
+            //     return result;
+            // };
+            function sumDataByDateAndStatus(data, dateFormat) {
+                // alert(dateFormat)
                 const result = {};
-
-                // Loop through each date in the data
+            
                 for (const date in data) {
-                    if (data.hasOwnProperty(date)) {
-                        // alert(dateFormat);
-                        // console.log({ dateFormat });
-                        let year = date.split("-")[0];
-                        if (dateFormat == "%Y") {
-                            year = date.split("-")[0];
-                        } else if (dateFormat == "%b") {
-                            year = date.split("-")[1];
-                        } else if (dateFormat == "%d") {
-                            year = date.split("-")[2];
-                        } else {
-                            year = date;
+                    const formattedDate = new Date(date);
+                    let formattedDateString = '';
+            
+                    switch (dateFormat) {
+                        case '%Y':
+                            formattedDateString = formattedDate.getFullYear().toString();
+                            break;
+                        case 'month-num':
+                            formattedDateString = (formattedDate.getMonth() + 1).toString();
+                            break;
+                        case '%b':
+                            formattedDateString = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(formattedDate);
+                            break;
+                        case '%d':
+                            formattedDateString = formattedDate.getDate().toString();
+                            break;
+                        case '%b %Y':
+                            const monthName = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(formattedDate);
+                            const year = formattedDate.getFullYear().toString();
+                            formattedDateString = `${monthName}-${year}`;
+                            break;
+                        default:
+                            throw new Error('Invalid date format specified');
+                    }
+            
+                    for (const status in data[date]) {
+                        if (!result[formattedDateString]) {
+                            result[formattedDateString] = {};
                         }
-
-                        const shipments = data[date];
-
-                        // If the year key doesn't exist in the result, create it
-                        if (!result[year]) {
-                            result[year] = {};
+                        if (!result[formattedDateString][status]) {
+                            result[formattedDateString][status] = 0;
                         }
-
-                        // Loop through each status in the shipments for the date
-                        for (const status in shipments) {
-                            if (shipments.hasOwnProperty(status)) {
-                                const amount = shipments[status];
-
-                                // If the status key doesn't exist in the result, create it
-                                if (!result[year][status]) {
-                                    result[year][status] = 0;
-                                }
-
-                                // Add the amount to the corresponding status in the result
-                                result[year][status] += amount;
-                            }
-                        }
+                        result[formattedDateString][status] += data[date][status];
                     }
                 }
-                // const sortedResult = {};
-                // Object.keys(result)
-                //     .sort()
-                //     .forEach((year) => {
-                //         sortedResult[year] = result[year];
-                //     });
+            
                 return result;
-            };
+            }
 
-            // grafieks.dataUtils.dataCombined = {
-            //     2003: {
-            //         Shipped: 16922965.6,
-            //         Resolved: 51059.99,
-            //         Cancelled: 191273.63
-            //     },
-            //     2004: {
-            //         Shipped: 20218708.54,
-            //         Cancelled: 1001208.48,
-            //         Resolved: 107446.5,
-            //         "On Hold": 88680.65
-            //     },
-            //     2005: {
-            //         Shipped: 11562776.330000002,
-            //         Resolved: 869542.28,
-            //         "On Hold": 131366.36,
-            //         Disputed: 928106.24,
-            //         "In Process": 1729295.6099999999
-            //     }
-            // };
-            console.log("result", processData(sortedDataValues));
-            // if (dateFormat != "%Y" || dateFormat != "%b" || dateFormat != "%d" ) {
-            //     grafieks.dataUtils.dataCombined = sortedDataValues;
-            // } else {
-            grafieks.dataUtils.dataCombined = processData(sortedDataValues);
-            // }
+
+
+            // console.log("result", processData(sortedDataValues));
+            if (dateFormat == "%d %b %Y") {
+                grafieks.dataUtils.dataCombined = sortedDataValues;
+            } else {
+            // grafieks.dataUtils.dataCombined = processData(sortedDataValues);
+            // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'year');
+            // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'month-word');
+            grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, dateFormat);
+            }
             return;
         case CONSTANTS.MULTIPLE_LINE_CHART:
         case CONSTANTS.MULTIPLE_AREA_CHART:
@@ -294,18 +325,31 @@ const transformData = () => {
             
         case CONSTANTS.LINE_CHART:
         case CONSTANTS.AREA_CHART:
+        case CONSTANTS.HORIZONTAL_LINE_CHART:
+        case CONSTANTS.HORIZONTAL_AREA_CHART:
         case CONSTANTS.WATERFALL_CHART:
-            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+         
+            let itemTypeLine = xAxisColumnDetails[0].itemType;
+            dateFormat = xAxisColumnDetails[0].dateFormat;
+            
+            if (isHorizontalGraph()) {
+                itemTypeLine = yAxisColumnDetails[0].itemType;
+                dateFormat = yAxisColumnDetails[0].dateFormat;
+            }
+            console.log("yAxisColumnDetails",itemTypeLine)
+            if (!isDateFormat(itemTypeLine)) {
                 return;
             }
+            
+
             // debugger;
 
-            dateFormat = xAxisColumnDetails[0].dateFormat;
+            // dateFormat = xAxisColumnDetails[0].dateFormat;
            
 
             const xAxisDataLineChart = dataValues.map((d) => d[0]);
             const yAxisDataLIneChart = dataValues.map((d) => d[1]);
-            dateFormat = xAxisColumnDetails[0].dateFormat;
+            // dateFormat = xAxisColumnDetails[0].dateFormat;
             timeFormat = d3.timeFormat(dateFormat);
             xAxisDataLineChart.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));

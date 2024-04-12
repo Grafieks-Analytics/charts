@@ -45,7 +45,7 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
-
+    console.log("data to be converted",data)
     let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
     const { dataColumns = {} } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
@@ -183,10 +183,10 @@ const chartGeneration = (svg) => {
     const center = d3.scaleLinear().range(yRange);
     const centerLine = d3.axisLeft(center).ticks(0);
 
-    svg.append("g")
-        .attr("class", "centerline")
-        .attr("transform", "translate(0," + xScale(0) + ")")
-        .call(centerLine.tickSize(0));
+    // svg.append("g")
+    //     .attr("class", "centerline")
+    //     .attr("transform", "translate(0," + xScale(0) + ")")
+    //     .call(centerLine.tickSize(0));
 
     const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 

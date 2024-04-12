@@ -3,6 +3,7 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const addDataStyling = (fontStyling, textType, styleElementId) => {
+    console.log("fontStyling",fontStyling)
     var {
         fontSize = CONSTANTS.defaultValues.fontSize,
         color = CONSTANTS.defaultValues.fontColor,

@@ -1,19 +1,22 @@
 const D3Funnel = require("d3-funnel");
 const CONSTANTS = require("../constants");
+const { setLengend } = require("../modules/legend");
 
 const chartGeneration = () => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
 
-    const { dataValues = [], dataLabels = [] } = data;
+    const { dataValues = [], dataLabels = [],legendsData=[] } = data;
 
     grafieks.dataUtils.dataValues = dataValues;
     grafieks.dataUtils.dataLabels = dataLabels;
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
-    grafieks.legend.data = [dataLabels[0]];
+    grafieks.legend.data = legendsData;
+    // console.log("dataLabels",legendsData)
+    // console.log("grafieks.legend.data",grafieks.legend.data)
 
     // documentation for options
     // https://github.com/jakezatecky/d3-funnel/blob/master/README.md
@@ -63,7 +66,10 @@ const chartGeneration = () => {
             d3colorPalette.push(...d3colorPalette);
         }
     });
+    // const legendsData = Object.keys(dataValues);
+    grafieks.legend.data = legendsData;
 
+    setLengend();
     const funnelChartDiv = document.createElement("div");
     funnelChartDiv.id = "funnelChart";
     const chartsDiv = document.querySelector(".charts-div");

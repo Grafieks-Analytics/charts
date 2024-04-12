@@ -6,15 +6,30 @@ const clearChart = () => {
     d3.select(".tooltip").html(""); // Clear Tooltip
     d3.select(".legend").html(""); // Clear legend
     // document?.getElementById("chartline")?.remove()// Clear legend
-    // if(document.getElementById("chartline")){
+    // if(document.getElementById("chartline") != null){
     //     document.getElementById("chartline").remove()
     // }
-    var canvas = document.getElementById("chartline");
-    var context = canvas.getContext("2d");
-    if (context) {
-        // do some drawing
-        context.clearRect(0, 0, canvas.width, canvas.height+20);
-    }
+    // document.getElementById("chartline").remove()
+
+    // var canvas = document.getElementById("chartline");
+    // var context = canvas.getContext("2d");
+    // if (context) {
+    //     // do some drawing
+    //     context.clearRect(0, 0, canvas.width, canvas.height+20);
+    // }
+     const canvas = document.getElementById('chartline');
+    const parent = canvas.parentElement;
+
+    // Remove the canvas element
+    parent.removeChild(canvas);
+
+    // Create a new canvas element with the same id and style
+    const newCanvas = document.createElement('canvas');
+    newCanvas.setAttribute('id', 'chartline');
+    newCanvas.setAttribute('style', 'position: absolute; right: 10px;');
+
+    // Append the new canvas to the parent element
+    parent.appendChild(newCanvas);
 };
 
 const isAxisBasedChart = (chartName) => {
