@@ -298,7 +298,7 @@ const transformData = () => {
             // grafieks.dataUtils.dataCombined = processData(sortedDataValues);
             // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'year');
             // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'month-word');
-            grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, dateFormat);
+            grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(sortedDataValues, dateFormat);
             }
             return;
         case CONSTANTS.MULTIPLE_LINE_CHART:
