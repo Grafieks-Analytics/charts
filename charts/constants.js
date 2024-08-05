@@ -129,10 +129,12 @@ module.exports = {
         fontSize: 12,
         fontFamily: "MS Sans Serif",
         fontColor: "black",
-
+        bold: false,
+        italic: false,
+        underline: false,
         gridStatus: true,
         legendStatus: false,
-        labelStatus: false,
+        labelStatus: true,
 
         legendWidth: 120,
         legendHeight: 30,
@@ -145,7 +147,7 @@ module.exports = {
         lineStrokeWidth: 3,
 
         labelConfig: {
-            labelStatus: false
+            labelStatus: true
         },
 
         innerRadius: 0.75,
@@ -183,6 +185,7 @@ module.exports = {
     KPI: {
         STYLE: {
             value: {
+                valuePosition: false,
                 fontSize: 12,
                 color: "#000",
                 bold: false,
@@ -191,12 +194,13 @@ module.exports = {
                 fontFamily: "Arial"
             },
             label: {
+                show: true,
                 fontSize: 12,
                 color: "#000",
                 bold: false,
                 italic: false,
                 underline: false,
-                fontFamily: "Arial"
+                fontFamily: "Arial",
             }
         }
     },

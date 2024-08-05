@@ -77,7 +77,6 @@ const getDistanceBetweenElements = (rect1, rect2) => {
 const getMaximumValue = (array) => {
     let numericArray = array.map(parseFloat);
 
-    console.warn(array, d3.max(numericArray));
     let maxValue = d3.max(numericArray);
     if (maxValue < 0) {
         maxValue = 0;

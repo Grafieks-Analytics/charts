@@ -6,15 +6,15 @@ const { getDistanceBetweenElements } = require("../utils");
 function formatLabel(labelValue, labelFormat) {
     switch (labelFormat) {
         case "round":
-            return Math.round(labelValue);
+            return Math.round(labelValue).toString()
         case "comma":
-            return Math.round(labelValue).toLocaleString("en-US");
+            return Math.round(labelValue).toLocaleString("en-US").toString()
         case "symbol":
-            return d3.format(".3s")(labelValue);
+            return d3.format(".3s")(labelValue).toString();
         case "none":
-            return labelValue;
+            return labelValue.toString()
         default:
-            return Math.round(labelValue);
+            return Math.round(labelValue).toString();
     }
 }
 
@@ -48,7 +48,10 @@ const barChartDataLabel = (svg) => {
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline
     } = grafieks.plotConfiguration;
 
     svg.append("g")
@@ -57,6 +60,9 @@ const barChartDataLabel = (svg) => {
         .data(visualPlottingNodes)
         .join("text")
         .attr("class", "label-text")
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
         .attr("font-family", dataLabelfontFamily)
@@ -65,7 +71,7 @@ const barChartDataLabel = (svg) => {
             return +d.getAttribute("x") + +d.getAttribute("width") / 2;
         })
         .attr("y", function (d, i) {
-            let yPosition = +d.getAttribute("y") - 3;
+            let yPosition = +d.getAttribute("y");
             if (d < 0) {
                 yPosition += +d.getAttribute("height") + 16;
             }
@@ -84,31 +90,38 @@ const horizontalBarChartDataLabel = (svg) => {
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline
     } = grafieks.plotConfiguration;
 
     svg.append("g")
         .attr("class", "data-label")
         .selectAll("text")
-        .data(grafieks.dataUtils.dataLabelValues)
+        .data(grafieks.dataUtils.dataValues)
         .join("text")
         .attr("class", "label-text")
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
         .attr("font-family", dataLabelfontFamily)
         .attr("fill", dataLabelColor)
         .attr("x", function (d, i) {
-            let xPosition = +visualPlottingNodes[i].getAttribute("x") - 20;
+            console.log(visualPlottingNodes[i].getAttribute("x"))
+            let xPosition = +visualPlottingNodes[i].getAttribute("x") + 5;
             if (d > 0) {
-                xPosition += +visualPlottingNodes[i].getAttribute("width") + 35;
+                xPosition += +visualPlottingNodes[i].getAttribute("width") / 2;
             }
             return xPosition;
         })
         .attr("y", function (_, i) {
-            return +visualPlottingNodes[i].getAttribute("y") + +visualPlottingNodes[i].getAttribute("height") / 2 + 4;
+            return +visualPlottingNodes[i].getAttribute("y") + +visualPlottingNodes[i].getAttribute("height") / 2 + 20;
         })
-        .text(function (dataLabelText) {
-            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+        .text(function (_, i) {
+            return formatLabel(grafieks.dataUtils.rawData.dataValues[i][1], CONSTANTS.defaultValues.dataLabelFormat);
         });
 };
 
@@ -119,7 +132,10 @@ const stackedBarChartDataLabel = (svg) => {
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline
     } = grafieks.plotConfiguration;
 
     svg.append("g")
@@ -131,6 +147,10 @@ const stackedBarChartDataLabel = (svg) => {
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
         .attr("font-family", dataLabelfontFamily)
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
+        .attr("z-index", "1")
         .attr("fill", dataLabelColor)
         .attr("x", function (d) {
             let xPosition = +d.getAttribute("x");
@@ -149,7 +169,9 @@ const stackedBarChartDataLabel = (svg) => {
             return +d.getAttribute("y") + +d.getAttribute("height") / 2 + 4;
         })
         .text(function (d, i) {
+            console.log(d)
             const dataLabelText = d.dataset.valueY1;
+            console.log(dataLabelText);
             return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
         });
 };
@@ -161,7 +183,10 @@ const lineChartDataLabel = (svg) => {
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline
     } = grafieks.plotConfiguration;
 
     svg.append("g")
@@ -173,6 +198,9 @@ const lineChartDataLabel = (svg) => {
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
         .attr("font-family", dataLabelfontFamily)
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
         .attr("fill", dataLabelColor)
         .attr("x", function (d) {
             return d.getBBox && d.getBBox().x;
@@ -198,7 +226,10 @@ const waterfallDataLabel = (svg) => {
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline
     } = grafieks.plotConfiguration;
 
     svg.append("g")
@@ -209,6 +240,9 @@ const waterfallDataLabel = (svg) => {
         .attr("class", "label-text")
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
         .attr("font-family", dataLabelfontFamily)
         .attr("fill", dataLabelColor)
         .attr("x", function (d, i) {
@@ -243,7 +277,10 @@ const heatmapDataLabels = (svg) => {
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelfontSize = CONSTANTS.defaultValues.fontSize
+        dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline
     } = grafieks.plotConfiguration;
 
     svg.append("g")
@@ -254,6 +291,9 @@ const heatmapDataLabels = (svg) => {
         .attr("class", "label-text")
         .attr("text-anchor", "middle")
         .attr("font-size", dataLabelfontSize)
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
         .attr("font-family", dataLabelfontFamily)
         .attr("fill", dataLabelColor)
         .attr("x", function (d, i) {
@@ -277,6 +317,9 @@ const pieChartDataLabels = () => {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
         dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
+        dataLabelfontWeight = CONSTANTS.defaultValues.bold,
+        dataLabelfontStyle = CONSTANTS.defaultValues.italic,
+        dataLabeltextDecoration = CONSTANTS.defaultValues.underline,
         labelConfig: { labelFormat } = {}
     } = grafieks.plotConfiguration;
 
@@ -296,6 +339,9 @@ const pieChartDataLabels = () => {
         .attr("font-size", dataLabelfontSize)
         .attr("font-family", dataLabelfontFamily)
         .attr("fill", dataLabelColor)
+        .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
+        .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
+        .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
         .attr("text-anchor", "middle")
         .text(function (d) {
             return formatLabel(d.data, labelFormat);

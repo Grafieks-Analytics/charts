@@ -34,12 +34,12 @@ const chartGeneration = (svg) => {
     // grafieks.dataUtils.dataValues = dataValues;
     // grafieks.dataUtils.dataLabels = dataLabels;
 
-    // grafieks.dataUtils.dataLabelValues = dataValues[1];
+    grafieks.dataUtils.dataLabelValues = dataValues[1];
 
     // grafieks.legend.data = [dataLabels[0]];
 
     const { height } = grafieks.chartsConfig;
-console.log("dataValues",dataValues)
+    console.log("dataValues",dataValues)
     const numericalValues = dataValues.map((d) => d[1]);
     const minValue = utils.getMinimumValue(numericalValues);
     const maxValue = utils.getMaximumValue(numericalValues);

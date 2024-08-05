@@ -3,17 +3,16 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const addDataStyling = (fontStyling, textType, styleElementId) => {
-    console.log("fontStyling",fontStyling)
     var {
         fontSize = CONSTANTS.defaultValues.fontSize,
         color = CONSTANTS.defaultValues.fontColor,
-        fontStyle = CONSTANTS.defaultValues.fontStyle,
         fontFamily = CONSTANTS.defaultValues.fontFamily,
         bold,
         italic,
         underline,
         dataLabelColorKpi = CONSTANTS.defaultValues.fontColor,
-        dataValueColorKpi = CONSTANTS.defaultValues.fontColor
+        dataValueColorKpi = CONSTANTS.defaultValues.fontColor,
+        labelStatus = CONSTANTS.defaultValues.labelStatus
     } = fontStyling;
 
     if (textType == "label") {
@@ -50,17 +49,27 @@ const chartGeneration = () => {
 
     const chartsDiv = d3.select(".charts-div");
 
-    const { valueFontStylings = CONSTANTS.STYLE.KPI.value, labelFontStylings = CONSTANTS.STYLE.KPI.label } =
+    const { valueFontStylings = CONSTANTS.KPI.STYLE.value, labelFontStylings = CONSTANTS.KPI.STYLE.label,  labelConfig: { labelStatus = CONSTANTS.defaultValues.labelStatus } = {} } =
         grafieks.plotConfiguration;
 
+    
     addDataStyling(valueFontStylings, "value", "valueStyling");
     addDataStyling(labelFontStylings, "label", "labelStyling");
 
-    chartsDiv.html(`<div class="kpi-text-center"><div class="value"></div><div class="label text-center"></div></div>`);
-
+    console.log(valueFontStylings.valuePosition)
+    
+    //true: value above; false: value below
+    if(labelStatus){
+        valueFontStylings.valuePosition===true ? chartsDiv.html(`<div class="kpi-text-center"><div class="value"></div><div class="label text-center"></div></div>`) : chartsDiv.html(`<div class="kpi-text-center"><div class="label text-center"></div><div class="value"></div></div>`)
+    } else {
+        chartsDiv.html(`<div class="kpi-text-center"><div class="value"></div></div>`)
+    }
+    
+    
     // d3.select(".value").text(Math.round(value)).style("color",dataValueColorKpi);
-    d3.select(".value").text(d3.format(".3s")(dataValue)).style("color", dataValueColorKpi);
-    d3.select(".label").text(dataLabel).style("color", dataLabelColorKpi);
+    d3.select(".label").text(dataLabel).style("color", dataLabelColorKpi);  
+    d3.select(".value").text(d3.format(".3s")(dataValue)).style("color", dataValueColorKpi); 
+    
 };
 module.exports = chartGeneration;
 

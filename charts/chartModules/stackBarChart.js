@@ -70,19 +70,19 @@ const chartGeneration = (svg) => {
     console.log("grafieks.dataUtils.dataCombined", grafieks.dataUtils.dataCombined);
     console.log("itemType",itemType)
     if (isDateFormat(itemType)) {
-        const { dataValuess = [], dataLabels = [] } = data;
+        // const { dataValues = [], dataLabels = [] } = data;
         dataValues = grafieks.dataUtils.dataCombined;
         grafieks.dataUtils.dataLabels = dataLabels;
         grafieks.legend.data = [dataLabels.xAxisLabel];
     } else {
         // let { dataValues = [], dataLabels = [] } = data;
-
         grafieks.dataUtils.dataValues = dataValues;
         grafieks.dataUtils.dataLabels = dataLabels;
         grafieks.dataUtils.dataLabelValues = dataValues[1];
         grafieks.legend.data = [dataLabels.xAxisLabel];
     }
 
+    // grafieks.dataUtils.dataLabelValues = dataValues[1];
     // let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
     // const { dataColumns = {} } = grafieks.plotConfiguration;
     // const { xAxisColumnDetails = [] } = dataColumns;
@@ -95,7 +95,6 @@ const chartGeneration = (svg) => {
     grafieks.dataUtils.dataValues = dataValues;
     // grafieks.dataUtils.dataLabels = dataLabels;
 
-    // grafieks.dataUtils.dataLabelValues = dataValues[1];
 
     const { height } = grafieks.chartsConfig;
 
