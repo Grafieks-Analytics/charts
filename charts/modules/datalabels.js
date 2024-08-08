@@ -86,7 +86,6 @@ const barChartDataLabel = (svg) => {
 const horizontalBarChartDataLabel = (svg) => {
     const visualPlotting = svg.selectAll(".visualPlotting");
     const visualPlottingNodes = visualPlotting.nodes();
-
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
@@ -110,8 +109,8 @@ const horizontalBarChartDataLabel = (svg) => {
         .attr("font-family", dataLabelfontFamily)
         .attr("fill", dataLabelColor)
         .attr("x", function (d, i) {
-            console.log(visualPlottingNodes[i].getAttribute("x"))
-            let xPosition = +visualPlottingNodes[i].getAttribute("x") + 5;
+            console.log(visualPlottingNodes[i])
+            let xPosition = +visualPlottingNodes[i].getAttribute("width") + 50;
             if (d > 0) {
                 xPosition += +visualPlottingNodes[i].getAttribute("width") / 2;
             }
@@ -121,14 +120,15 @@ const horizontalBarChartDataLabel = (svg) => {
             return +visualPlottingNodes[i].getAttribute("y") + +visualPlottingNodes[i].getAttribute("height") / 2 + 20;
         })
         .text(function (_, i) {
-            return formatLabel(grafieks.dataUtils.rawData.dataValues[i][1], CONSTANTS.defaultValues.dataLabelFormat);
+            const dataLabelText = visualPlottingNodes[i].getAttribute("data-value-y1");
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
         });
 };
 
 const stackedBarChartDataLabel = (svg) => {
     const visualPlotting = svg.selectAll(".visualPlotting");
     const visualPlottingNodes = visualPlotting.nodes();
-
+    
     const {
         dataLabelColor = CONSTANTS.defaultValues.fontColor,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
@@ -150,7 +150,6 @@ const stackedBarChartDataLabel = (svg) => {
         .attr("font-weight", dataLabelfontWeight ? "bold" : "normal")
         .attr("font-style", dataLabelfontStyle ? "italic" : "normal")
         .attr("text-decoration", dataLabeltextDecoration ? "underline" : "none")
-        .attr("z-index", "1")
         .attr("fill", dataLabelColor)
         .attr("x", function (d) {
             let xPosition = +d.getAttribute("x");
@@ -166,13 +165,14 @@ const stackedBarChartDataLabel = (svg) => {
             return (xPosition += +matrixValues[4] || 0);
         })
         .attr("y", function (d) {
-            return +d.getAttribute("y") + +d.getAttribute("height") / 2 + 4;
+            return +d.getAttribute("y") + +d.getAttribute("height") / 2 + 2;
         })
         .text(function (d, i) {
-            console.log(d)
-            const dataLabelText = d.dataset.valueY1;
-            console.log(dataLabelText);
-            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
+            const dataLabelText = d.getAttribute("data-value-y1");
+            if(dataLabelText === "6"){
+                return "";
+            }
+            return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);   
         });
 };
 
