@@ -169,9 +169,6 @@ const stackedBarChartDataLabel = (svg) => {
         })
         .text(function (d, i) {
             const dataLabelText = d.getAttribute("data-value-y1");
-            if(dataLabelText === "6"){
-                return "";
-            }
             return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);   
         });
 };
@@ -214,7 +211,7 @@ const lineChartDataLabel = (svg) => {
             return yPosition;
         })
         .text(function (d) {
-            const dataLabelText = d.dataset.valueY1;
+            const dataLabelText = d.getAttribute("data-value-y1");
             return formatLabel(dataLabelText, CONSTANTS.defaultValues.dataLabelFormat);
         });
 };
