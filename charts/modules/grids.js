@@ -26,12 +26,13 @@ const isExceptionChart = () => {
     return false;
 };
 
-const setGrids = (svg) => {
+const setGrids = (svg, chartsGrid) => {
     if (isExceptionChart()) {
         return;
     }
 
     const grafieks = window.grafieks;
+    console.log(grafieks)
     const chartsMargins = grafieks.chartsConfig.margins;
 
     let transformValue = `translate(${chartsMargins.left},0)`;
@@ -41,11 +42,15 @@ const setGrids = (svg) => {
         transformValue = `translate(0,${chartsMargins.top})`;
     }
 
+    const gridDash = chartsGrid.gridDash;
+    const strokeWidth = chartsGrid.strokeWidth;
+
     svg.append("g")
         .lower() // lower() Works like Prepend in jquery
         .attr("class", "grid")
         .attr("transform", transformValue)
-        .style("stroke-width", "1")
+        .style("stroke-width", strokeWidth) //this is not user selectable
+        .attr("stroke-dasharray", gridDash ? "5,5": "0,0") //Dash Size, Dash Gap Size
         .call(scale);
 };
 

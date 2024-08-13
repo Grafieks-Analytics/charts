@@ -92,7 +92,9 @@ const table = require("./chartModules/table");
             chartName,
             yAxisConfig: { yLabelfontSize = CONSTANTS.defaultValues.fontSize, yaxisStatus = true } = {},
             xAxisConfig: { xLabelfontSize = CONSTANTS.defaultValues.fontSize, xaxisStatus = true } = {},
-            gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus } = {},
+            gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus, chartsGrid = CONSTANTS.chartsGrid } = {},
+
+
             legendConfig: {
                 legendStatus = CONSTANTS.defaultValues.legendStatus,
                 legendPosition = CONSTANTS.LEGEND_POSITION.RIGHT
@@ -280,7 +282,7 @@ const table = require("./chartModules/table");
             }
 
             if (gridStatus) {
-                setGrids(svg);
+                setGrids(svg, chartsGrid);
             }
 
             // Set data labels

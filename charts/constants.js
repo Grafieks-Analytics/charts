@@ -74,6 +74,8 @@ module.exports = {
 
     chartsMargins: { top: 20, right: 20, bottom: 30, left: 40, rotatingMargin: 0, horizontalLeft: 0 },
 
+    chartsGrid: { gridDash: false, strokeWidth: 2},
+    
     d3SequentialDefaultTheme: ["#ffffff", "#08306b"],
     d3ColorPalette: [
         "#1f77b4",
@@ -132,7 +134,6 @@ module.exports = {
         bold: false,
         italic: false,
         underline: false,
-        gridStatus: true,
         legendStatus: false,
         labelStatus: true,
 
@@ -142,7 +143,7 @@ module.exports = {
         dataLabelFormat: "symbol",
 
         maxDistanceBetweenTicks: 18,
-        maxDistanceBetweenLabels: 40,
+        maxDistanceBetweenLabels: 10,
 
         lineStrokeWidth: 3,
 
