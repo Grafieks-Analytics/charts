@@ -252,14 +252,13 @@ const chartGeneration = (svg) => {
             .attr("class", "line")
             .attr("d", function (d) {
                 const lineData = transformedDataValues.filter((dataRow) => {
-                    if (dataRow[1] == Number(d)) {
+                    if (dataRow[1] == d) {
                         return true;
                     }
                     return false;
                 });
-
                 return line(lineData);
-            });
+            }); //TODO : Lines not appearing in the chart
 
             drawMarkerForMultiLine(svg, transformedDataValues, stroke, legendsData);
     }

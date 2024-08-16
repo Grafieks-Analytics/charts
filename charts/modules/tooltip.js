@@ -130,7 +130,7 @@ const getToolTopValues = (element) => {
 const setTooltipHandler = () => {
     // Show tooltip on mouseover
     // Move this to function and move it to utils
-
+    const { chartName, markerShape = CONSTANTS.defaultValues.markerShape } = grafieks.plotConfiguration;
     const tooltip = d3.select(".tooltip");
     tooltip.append("span").attr("class", "leftArrow");
     tooltip.append("div").attr("class", "tooltip-text");
@@ -139,7 +139,7 @@ const setTooltipHandler = () => {
     d3.selectAll(".visualPlotting")
         .on("mouseout", function () {
             d3.select(".tooltip").style("display", "none");
-            d3.selectAll(".visualPlotting").style("opacity", 1);
+            d3.selectAll(".visualPlotting").style("opacity", markerShape == "none" ? 0 : 1);
         })
         .on("mouseover mousemove", function (event) {
             d3.select(".tooltip").style("display", "block");
@@ -150,7 +150,6 @@ const setTooltipHandler = () => {
             let topValue = 0,
                 leftValue = 0;
 
-            const { chartName } = grafieks.plotConfiguration;
 
             if (
                 chartName == CONSTANTS.HORIZONTAL_STACKED_BAR_CHART ||
@@ -229,9 +228,9 @@ const setTooltipHandler = () => {
             }
 
             // Fade all the other lines
-            d3.selectAll(".visualPlotting").style("opacity", 0.3);
+            d3.selectAll(".visualPlotting").style("opacity", markerShape == "none" ? 0 : 0.3);
             // Mark the current line
-            d3.select(this).style("opacity", 1);
+            d3.select(this).style("opacity", markerShape == "none" ? 0 : 1);
         });
 };
 

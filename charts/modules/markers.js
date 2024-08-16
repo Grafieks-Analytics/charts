@@ -41,9 +41,10 @@ const drawMarker = (svg, dataValues, stroke, fill) => {
 
             return value;
         })
-        .attr("r", markerShape == "none" ? 0 : initialCircleRadius)
-        .attr("height", markerShape == "none" ? 0 : initialBoxDimension)
-        .attr("width", markerShape == "none" ? 0 : initialBoxDimension)
+        .attr("r", markerShape == "none" ? 4 : initialCircleRadius)
+        .attr("height", markerShape == "none" ? 4 : initialBoxDimension)
+        .attr("width", markerShape == "none" ? 4 : initialBoxDimension)
+        .attr("opacity", markerShape == "none" ? 0 : 1) 
         .attr("points", function (d, i) {
             var x1 = xScale(d[0]);
             return x1;

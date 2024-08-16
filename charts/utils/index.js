@@ -165,7 +165,7 @@ const setInitialConfig = () => {
     // margins
     // width
     // height
-    grafieks.chartsConfig = { margins: CONSTANTS.chartsMargins };
+    grafieks.chartsConfig = { margins: CONSTANTS.chartsMargins, chartsGrid: CONSTANTS.chartsGrid };
 
     // legend config; Will have margins to be used in tooltip
     grafieks.legend = {};

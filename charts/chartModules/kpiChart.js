@@ -12,7 +12,6 @@ const addDataStyling = (fontStyling, textType, styleElementId) => {
         underline,
         dataLabelColorKpi = CONSTANTS.defaultValues.fontColor,
         dataValueColorKpi = CONSTANTS.defaultValues.fontColor,
-        labelStatus = CONSTANTS.defaultValues.labelStatus
     } = fontStyling;
 
     if (textType == "label") {
@@ -67,8 +66,8 @@ const chartGeneration = () => {
     
     
     // d3.select(".value").text(Math.round(value)).style("color",dataValueColorKpi);
-    d3.select(".label").text(dataLabel).style("color", dataLabelColorKpi);  
-    d3.select(".value").text(d3.format(".3s")(dataValue)).style("color", dataValueColorKpi); 
+    d3.select(".label").text(dataLabel);  
+    d3.select(".value").text(d3.format(".3s")(dataValue));
     
 };
 module.exports = chartGeneration;

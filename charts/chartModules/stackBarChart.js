@@ -109,7 +109,9 @@ const chartGeneration = (svg) => {
                 .join()
                 .split(",")
         )
-    ).filter((d) => d != "key");
+    )
+    .filter((d) => d != "key")
+    .filter((d) => d != "components");
 
     legendsData = splitKeys;
     grafieks.legend.data = legendsData;
