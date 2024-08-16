@@ -72,11 +72,12 @@ const transformData = () => {
     let newDataSet = {};
     let dateFormat = "%Y";
     let sortedDates = [];
+    let itemType = "";
 
     switch (chartName) {
         case CONSTANTS.HORIZONTAL_BAR_CHART:
         case CONSTANTS.BAR_CHART:
-            let itemType = xAxisColumnDetails[0].itemType;
+            itemType = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
 
             if (isHorizontalGraph()) {
@@ -182,10 +183,16 @@ const transformData = () => {
             // ------
             return;
         case CONSTANTS.STACKED_BAR_CHART:
-            console.log("data in data transformation func", dataValues);
+        case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
+            itemType = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
+            console.log("data in data transformation func", dataValues);
+            if (isHorizontalGraph()) {
+                itemType = yAxisColumnDetails[0].itemType;
+                dateFormat = yAxisColumnDetails[0].dateFormat;
+            }
             console.log("xAxisColumnDetails", xAxisColumnDetails);
-            if (!isDateFormat(xAxisColumnDetails[0].itemType)) {
+            if (!isDateFormat(itemType)) {
                 return;
             }
             // Function to sort the data by year
@@ -292,6 +299,7 @@ const transformData = () => {
                         result[formattedDateString][status] += data[date][status];
                     }
                 }
+                console.log("result", result);
 
                 return result;
             }
@@ -303,6 +311,7 @@ const transformData = () => {
                 // grafieks.dataUtils.dataCombined = processData(sortedDataValues);
                 // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'year');
                 // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'month-word');
+                console.log("formatting by date", dateFormat);
                 grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(sortedDataValues, dateFormat);
             }
             return;

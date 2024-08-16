@@ -3,7 +3,7 @@ const d3 = require("d3");
 const CONSTANTS = require("../constants");
 
 const utils = require("../utils");
-const { sortDates } = require("../modules/dataTransformation");
+const { sortDates, isDateFormat } = require("../modules/dataTransformation");
 
 const getMaximumValue = (data) => {
     return d3.max(data, function (d) {
@@ -45,7 +45,7 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
-    console.log("data to be converted",data)
+    console.log("data to be converted", data);
     let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
     const { dataColumns = {} } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
@@ -55,8 +55,20 @@ const chartGeneration = (svg) => {
         isDateTransforming = true;
     }
 
-    grafieks.dataUtils.dataValues = dataValues;
-    grafieks.dataUtils.dataLabels = dataLabels;
+    let itemType = yAxisColumnDetails[0].itemType;
+
+    if (isDateFormat(itemType)) {
+        // const { dataValues = [], dataLabels = [] } = data;
+        dataValues = grafieks.dataUtils.dataCombined;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    } else {
+        // let { dataValues = [], dataLabels = [] } = data;
+        grafieks.dataUtils.dataValues = dataValues;
+        grafieks.dataUtils.dataLabels = dataLabels;
+        grafieks.dataUtils.dataLabelValues = dataValues[1];
+        grafieks.legend.data = [dataLabels.xAxisLabel];
+    }
 
     grafieks.dataUtils.dataLabelValues = dataValues[1];
 
@@ -105,7 +117,7 @@ const chartGeneration = (svg) => {
     const maxValue = getMaximumValue(dataValues);
 
     // Setting yScale
-    const yDomain =  axisTextValues;
+    const yDomain = axisTextValues;
     const yRange = utils.getYRange();
     const yScale = utils.getYScale(yDomain, yRange);
 
