@@ -28,7 +28,10 @@ const chartGeneration = () => {
         labelConfig = CONSTANTS.defaultValues.labelConfig,
         dataLabelfontSize = CONSTANTS.defaultValues.fontSize,
         dataLabelfontFamily = CONSTANTS.defaultValues.fontFamily,
-        dataLabelColor = CONSTANTS.defaultValues.fontColor
+        dataLabelColor = CONSTANTS.defaultValues.fontColor,
+        dataLabelfontWeight,
+        dataLabelfontStyle,
+        dataLabeltextDecoration,
     } = grafieks.plotConfiguration;
 
     let { labelStatus } = labelConfig;
@@ -56,10 +59,14 @@ const chartGeneration = () => {
             enabled: labelStatus,
             fill: dataLabelColor,
             fontSize: dataLabelfontSize,
-            fontFamily: dataLabelfontFamily
+            fontFamily: dataLabelfontFamily,
+            fontWeight: dataLabelfontWeight ? "bold" : "normal",
+            fontStyle: dataLabelfontStyle ? "italic" : "normal",
+            textDecoration: dataLabeltextDecoration ? "underline" : "none"
         }
     };
 
+    console.log(options)
     dataValues.forEach((value, i) => {
         value.label = value.label || value.key;
         if (i >= d3colorPalette.length && d3colorPalette.length < dataValues.length) {
