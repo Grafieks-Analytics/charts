@@ -90,8 +90,8 @@ const table = require("./chartModules/table");
 
         const {
             chartName,
-            yAxisConfig: { yLabelfontSize = CONSTANTS.defaultValues.fontSize, yaxisStatus = true } = {},
-            xAxisConfig: { xLabelfontSize = CONSTANTS.defaultValues.fontSize, xaxisStatus = true } = {},
+            yAxisConfig: { yLabelfontSize = CONSTANTS.defaultValues.fontSize, yaxisStatus = CONSTANTS.defaultValues.yAxisStatus } = {},
+            xAxisConfig: { xLabelfontSize = CONSTANTS.defaultValues.fontSize, xaxisStatus = CONSTANTS.defaultValues.xAxisStatus } = {},
             gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus, chartsGrid = CONSTANTS.chartsGrid } = {},
 
 

@@ -9,7 +9,7 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
-    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+    const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] }, yAxisConfig: { yaxisStatus }, xAxisConfig: { xaxisStatus } = {} } =
         grafieks.plotConfiguration;
     let itemType = xAxisColumnDetails[0].itemType;
    
@@ -108,8 +108,12 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(yAxis);
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
+    }
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(yAxis);
+    }
 
     const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
 

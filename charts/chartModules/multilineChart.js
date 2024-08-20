@@ -92,7 +92,8 @@ const chartGeneration = (svg) => {
     const data = grafieks.dataUtils.rawData || [];
 
     const { dataValues = [], legendsData = [], dataLabels = [] } = data;
-    const { dataColumns = {}, curveType = CONSTANTS.curveType.LINEAR, chartName } = grafieks.plotConfiguration;
+    const { dataColumns = {}, curveType = CONSTANTS.curveType.LINEAR, chartName, xAxisConfig: { xaxisStatus },
+    yAxisConfig: { yaxisStatus } } = grafieks.plotConfiguration;
     const { xAxisColumnDetails = [] } = dataColumns;
 
     let isDateTransforming = false;
@@ -194,8 +195,14 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(yAxis);
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
+    }
+    
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(yAxis);
+    }
+    
     svg.append("g")
         .attr("class", "centerline")
         .attr("transform", "translate(0," + yScale(0) + ")")

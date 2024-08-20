@@ -20,7 +20,7 @@ const chartGeneration = (svg) => {
 
     const { height } = grafieks.chartsConfig;
 
-    const { d3colorPalette = CONSTANTS.d3ColorPalette } = grafieks.plotConfiguration;
+    const { d3colorPalette = CONSTANTS.d3ColorPalette, yAxisConfig: { yaxisStatus }, xAxisConfig: { xaxisStatus } } = grafieks.plotConfiguration;
 
     const numericalValues = dataValues.map((d) => +d[1]);
     const minValue = utils.getMinimumValue(numericalValues);
@@ -104,8 +104,14 @@ const chartGeneration = (svg) => {
 
     const color = d3.scaleOrdinal().domain(dataLabels).range(d3colorPalette);
 
-    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(yAxis);
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
+    }
+    
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(yAxis);
+    }
+    
 
     svg.append("g")
         .selectAll("dot")
