@@ -125,7 +125,9 @@ const chartGeneration = (svg) => {
     const {
         dataColumns = {},
         options: { groupBarChartColorBy } = {},
-        d3colorPalette = CONSTANTS.d3ColorPalette
+        d3colorPalette = CONSTANTS.d3ColorPalette,
+        yAxisConfig: { yaxisStatus }, 
+        xAxisConfig: { xaxisStatus }
     } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
@@ -226,8 +228,13 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
+    if(yaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
+    }
+    if(xaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
+    }
+    
 
     const color = d3
         .scaleOrdinal()

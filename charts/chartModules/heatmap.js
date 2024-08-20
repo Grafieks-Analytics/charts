@@ -79,8 +79,8 @@ function transformData(dataValue) {
 
 const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
-    const { d3colorPalette = CONSTANTS.d3SequentialDefaultTheme, gridStatus = true } = grafieks.plotConfiguration;
-
+    const { d3colorPalette = CONSTANTS.d3SequentialDefaultTheme, yAxisConfig: { yaxisStatus }, xAxisConfig: { xaxisStatus } } = grafieks.plotConfiguration;
+    
     const { height } = grafieks.chartsConfig;
 
     const data = grafieks.dataUtils.rawData || [];
@@ -174,8 +174,14 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(yAxis);
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
+    }
+    
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(yAxis);
+    }
+    
 
     svg.selectAll()
         .data(transformedDataValues)
@@ -196,7 +202,7 @@ const chartGeneration = (svg) => {
             return myColor(d[2]);
         })
         .style("stroke-width", 0.5)
-        .style("stroke", gridStatus ? "grey" : "none")
+        .style("stroke", "grey")
         .attr("class", function (d, i) {
             return "visualPlotting heatmap" + i;
         });

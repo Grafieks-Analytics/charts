@@ -94,7 +94,9 @@ const chartGeneration = (svg) => {
         dataColumns = {},
         d3colorPalette = CONSTANTS.d3ColorPalette,
         chartName,
-        curveType = CONSTANTS.curveType.LINEAR
+        curveType = CONSTANTS.curveType.LINEAR,
+        xAxisConfig: { xaxisStatus },
+        yAxisConfig: { yaxisStatus }
     } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
@@ -186,8 +188,14 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
+    }
+    
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
+    }
+    
 
     // Setting center line
     const center = d3.scaleLinear().range(yRange);

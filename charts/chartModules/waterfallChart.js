@@ -30,7 +30,7 @@ const chartGeneration = (svg) => {
     const grafieks = window.grafieks;
 
     const data = grafieks.dataUtils.rawData || [];
-    const { chartNamet, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
+    const { chartNamet, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] }, yAxisConfig: { yaxisStatus }, xAxisConfig: { xaxisStatus } = {} } =
     grafieks.plotConfiguration;
     let itemType = xAxisColumnDetails[0].itemType;
     let { dataValues = [], dataLabels = [] } = data;
@@ -136,8 +136,14 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(yAxis);
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
+    }
+    
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(yAxis);
+    }
+    
 
     const bar = svg
         .selectAll(".bar")

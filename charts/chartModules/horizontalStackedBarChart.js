@@ -47,7 +47,7 @@ const chartGeneration = (svg) => {
     const data = grafieks.dataUtils.rawData || [];
     console.log("data to be converted",data)
     let { dataValues = {}, legendsData = [], axisTextValues = [], dataLabels = [] } = data;
-    const { dataColumns = {} } = grafieks.plotConfiguration;
+    const { dataColumns = {}, xaxisConfig: { xaxisStatus }, yaxisConfig: { yaxisStatus } } = grafieks.plotConfiguration;
     const { yAxisColumnDetails = [] } = dataColumns;
 
     let isDateTransforming = false;
@@ -176,8 +176,14 @@ const chartGeneration = (svg) => {
         return ticks;
     };
 
-    svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
-    svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
+    if(xaxisStatus){
+        svg.append("g").attr("class", "x-axis").call(yAxis.bind(this, {}));
+    }
+    
+    if(yaxisStatus){
+        svg.append("g").attr("class", "y-axis").call(xAxis.bind(this, {}));
+    }
+    
 
     // Setting center line
     const center = d3.scaleLinear().range(yRange);
