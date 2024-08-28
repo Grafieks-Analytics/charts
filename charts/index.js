@@ -90,8 +90,8 @@ const table = require("./chartModules/table");
 
         const {
             chartName,
-            yAxisConfig: { yLabelfontSize = CONSTANTS.defaultValues.fontSize, yaxisStatus = CONSTANTS.defaultValues.yAxisStatus } = {},
-            xAxisConfig: { xLabelfontSize = CONSTANTS.defaultValues.fontSize, xaxisStatus = CONSTANTS.defaultValues.xAxisStatus } = {},
+            yAxisConfig: { yLabelfontSize = CONSTANTS.defaultValues.fontSize, yaxisStatus = CONSTANTS.defaultValues.yAxisStatus, yLabelStatus = CONSTANTS.defaultValues.yLabelStatus } = {},
+            xAxisConfig: { xLabelfontSize = CONSTANTS.defaultValues.fontSize, xaxisStatus = CONSTANTS.defaultValues.xAxisStatus, xLabelStatus = CONSTANTS.defaultValues.xLabelStatus } = {},
             gridConfig: { gridStatus = CONSTANTS.defaultValues.gridStatus, chartsGrid = CONSTANTS.chartsGrid } = {},
 
 
@@ -272,12 +272,12 @@ const table = require("./chartModules/table");
             }
 
             // Setting xAxis labels
-            if (xaxisStatus) {
+            if (xLabelStatus) {
                 setXAxisLabel(svg);
             }
 
             // Setting yAxis labels
-            if (yaxisStatus) {
+            if (yLabelStatus) {
                 setYAxisLabel(svg);
             }
 
