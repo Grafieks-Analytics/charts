@@ -138,6 +138,8 @@ module.exports = {
         labelStatus: true,
         xAxisStatus: true,
         yAxisStatus: true,
+        yLabelStatus: true,
+        xLabelStatus: true,
         legendWidth: 120,
         legendHeight: 30,
         maxRotationMargin: 70, // Maximum height allowed for ticks after rotation
