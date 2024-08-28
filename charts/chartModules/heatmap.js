@@ -147,7 +147,11 @@ const chartGeneration = (svg) => {
         ticks.attr("font-size", xTickfontSize);
         ticks.attr("font-family", xTickfontFamily);
         ticks.attr("fill", xTickfontColor);
-
+        
+        if(!xaxisStatus){
+            g.select(".domain").remove()
+        }
+        
         return ticks;
     };
 
@@ -171,16 +175,16 @@ const chartGeneration = (svg) => {
         ticks.attr("font-family", yTickfontFamily);
         ticks.attr("fill", yTickfontColor);
 
+        if(!yaxisStatus) {
+            g.select(".domain").remove()
+        }
+
         return ticks;
     };
 
-    if(xaxisStatus){
-        svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
-    }
+    svg.append("g").attr("class", "x-axis").call(xAxis.bind(this, {}));
     
-    if(yaxisStatus){
-        svg.append("g").attr("class", "y-axis").call(yAxis);
-    }
+    svg.append("g").attr("class", "y-axis").call(yAxis);
     
 
     svg.selectAll()
