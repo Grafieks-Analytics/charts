@@ -36,7 +36,8 @@ const chartNames = {
     PIVOT: "Pivot",
     TABLE: "Table",
     KPI_CHART: "KPI",
-    FUNNEL_CHART: "Funnel Chart"
+    FUNNEL_CHART: "Funnel Chart",
+    GEO_CHART: "Geo Chart",
 };
 
 module.exports = {

@@ -32,7 +32,7 @@ const horizontalGroupBar = require("./chartModules/horizontalGroupBar");
 
 const multiLineChart = require("./chartModules/multilineChart");
 const horizontalMultiLineChart = require("./chartModules/horizontalMultilineChart");
-
+const geoChart = require("./chartModules/geoChart");
 const scatterChart = require("./chartModules/scatterChart");
 const waterfallChart = require("./chartModules/waterfallChart");
 const heatmapChart = require("./chartModules/heatmap");
@@ -232,6 +232,9 @@ const table = require("./chartModules/table");
                 return;
             case CONSTANTS.PIVOT:
                 pivotChart();
+                return;
+            case CONSTANTS.GEO_CHART:
+                geoChart();
                 return;
             default:
                 return console.log("No chart generator function found for this chart");

@@ -18,6 +18,7 @@
         "d3-funnel": "^2.1.1",
         "dotenv": "^16.0.0",
         "fs": "^0.0.1-security",
+        "topojson": "^3.0.2",
         "webpack": "^5.71.0",
         "webpack-bundle-analyzer": "^4.5.0"
     },
