@@ -53,7 +53,7 @@ const sortDates = (datesArray, dateFormat) => {
 
 const transformData = () => {
     const grafieks = window.grafieks;
-   
+
     const { chartName, dataColumns: { xAxisColumnDetails = [], yAxisColumnDetails = [] } = {} } =
         grafieks.plotConfiguration;
 
@@ -72,13 +72,14 @@ const transformData = () => {
     let newDataSet = {};
     let dateFormat = "%Y";
     let sortedDates = [];
-   
+    let itemType = "";
+
     switch (chartName) {
         case CONSTANTS.HORIZONTAL_BAR_CHART:
         case CONSTANTS.BAR_CHART:
-            let itemType = xAxisColumnDetails[0].itemType;
+            itemType = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
-           
+
             if (isHorizontalGraph()) {
                 itemType = yAxisColumnDetails[0].itemType;
                 dateFormat = yAxisColumnDetails[0].dateFormat;
@@ -154,7 +155,7 @@ const transformData = () => {
             // transformedData = [sortedDates, values];
             const xAxisData = dataValues.map((item) => item[0]);
             const yAxisData = dataValues.map((item) => item[1]);
-            
+
             timeFormat = d3.timeFormat(dateFormat);
             xAxisData.forEach((d, i) => {
                 const dateValue = timeFormat(new Date(d));
@@ -169,7 +170,7 @@ const transformData = () => {
             const values = sortedDates.map((d) => newDataSet[d]);
             const dataCombined = sortedDates.map((item, index) => [item, values[index]]);
             grafieks.dataUtils.dataCombined = dataCombined;
-           
+
             // grafieks.dataUtils.rawData["dataValues"] = dataCombined
 
             // console.log("sortedDates", sortedDates);
@@ -182,9 +183,18 @@ const transformData = () => {
             // ------
             return;
         case CONSTANTS.STACKED_BAR_CHART:
-            console.log("data in data transformation func", dataValues);
+        case CONSTANTS.HORIZONTAL_STACKED_BAR_CHART:
+            itemType = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
+            console.log("data in data transformation func", dataValues);
+            if (isHorizontalGraph()) {
+                itemType = yAxisColumnDetails[0].itemType;
+                dateFormat = yAxisColumnDetails[0].dateFormat;
+            }
             console.log("xAxisColumnDetails", xAxisColumnDetails);
+            if (!isDateFormat(itemType)) {
+                return;
+            }
             // Function to sort the data by year
             const sortedDataValues = Object.fromEntries(
                 Object.entries(dataValues).sort(([date1], [date2]) => date1.localeCompare(date2))
@@ -248,33 +258,37 @@ const transformData = () => {
             function sumDataByDateAndStatus(data, dateFormat) {
                 // alert(dateFormat)
                 const result = {};
-            
+
                 for (const date in data) {
                     const formattedDate = new Date(date);
-                    let formattedDateString = '';
-            
+                    let formattedDateString = "";
+
                     switch (dateFormat) {
-                        case '%Y':
+                        case "%Y":
                             formattedDateString = formattedDate.getFullYear().toString();
                             break;
-                        case 'month-num':
+                        case "month-num":
                             formattedDateString = (formattedDate.getMonth() + 1).toString();
                             break;
-                        case '%b':
-                            formattedDateString = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(formattedDate);
+                        case "%b":
+                            formattedDateString = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+                                formattedDate
+                            );
                             break;
-                        case '%d':
+                        case "%d":
                             formattedDateString = formattedDate.getDate().toString();
                             break;
-                        case '%b %Y':
-                            const monthName = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(formattedDate);
+                        case "%b %Y":
+                            const monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+                                formattedDate
+                            );
                             const year = formattedDate.getFullYear().toString();
                             formattedDateString = `${monthName}-${year}`;
                             break;
                         default:
-                            throw new Error('Invalid date format specified');
+                            throw new Error("Invalid date format specified");
                     }
-            
+
                     for (const status in data[date]) {
                         if (!result[formattedDateString]) {
                             result[formattedDateString] = {};
@@ -285,67 +299,64 @@ const transformData = () => {
                         result[formattedDateString][status] += data[date][status];
                     }
                 }
-            
+                console.log("result", result);
+
                 return result;
             }
-
-
 
             // console.log("result", processData(sortedDataValues));
             if (dateFormat == "%d %b %Y") {
                 grafieks.dataUtils.dataCombined = sortedDataValues;
             } else {
-            // grafieks.dataUtils.dataCombined = processData(sortedDataValues);
-            // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'year');
-            // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'month-word');
-            grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(sortedDataValues, dateFormat);
+                // grafieks.dataUtils.dataCombined = processData(sortedDataValues);
+                // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'year');
+                // grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(dataValues, 'month-word');
+                console.log("formatting by date", dateFormat);
+                grafieks.dataUtils.dataCombined = sumDataByDateAndStatus(sortedDataValues, dateFormat);
             }
             return;
         case CONSTANTS.MULTIPLE_LINE_CHART:
         case CONSTANTS.MULTIPLE_AREA_CHART:
-            // console.log("data transform in line chart", dataValues);
-            // console.log("dateFormat", dateFormat);
-            // const xAxisDataMultiline = dataValues.map((item) => item[0]);
-            // const yAxisDataMultiline = dataValues.map((item) => item[2]);
-            // timeFormat = d3.timeFormat(dateFormat);
-            // xAxisDataMultiline.forEach((d, i) => {
-            //     const dateValue = timeFormat(new Date(d));
-            //     if (!newDataSet[dateValue]) {
-            //         newDataSet[dateValue] = 0;
-            //     }
-            //     // console.log("number",newDataSet[dateValue])
-            //     newDataSet[dateValue] += Number(yAxisDataMultiline[i]);
-            // });
-            // dates = Object.keys(newDataSet);
-            // sortedDates = sortDates(dates, dateFormat);
-            // const valuesmultiline = sortedDates.map((d) => newDataSet[d]);
-            // const dataCombinedMultiline = sortedDates.map((item, index) => [item, valuesmultiline[index]]);
-            // console.log("dataCombinedMultiline",dataCombinedMultiline)
-            // grafieks.dataUtils.dataCombined = dataCombined;
-            
+        // console.log("data transform in line chart", dataValues);
+        // console.log("dateFormat", dateFormat);
+        // const xAxisDataMultiline = dataValues.map((item) => item[0]);
+        // const yAxisDataMultiline = dataValues.map((item) => item[2]);
+        // timeFormat = d3.timeFormat(dateFormat);
+        // xAxisDataMultiline.forEach((d, i) => {
+        //     const dateValue = timeFormat(new Date(d));
+        //     if (!newDataSet[dateValue]) {
+        //         newDataSet[dateValue] = 0;
+        //     }
+        //     // console.log("number",newDataSet[dateValue])
+        //     newDataSet[dateValue] += Number(yAxisDataMultiline[i]);
+        // });
+        // dates = Object.keys(newDataSet);
+        // sortedDates = sortDates(dates, dateFormat);
+        // const valuesmultiline = sortedDates.map((d) => newDataSet[d]);
+        // const dataCombinedMultiline = sortedDates.map((item, index) => [item, valuesmultiline[index]]);
+        // console.log("dataCombinedMultiline",dataCombinedMultiline)
+        // grafieks.dataUtils.dataCombined = dataCombined;
+
         case CONSTANTS.LINE_CHART:
         case CONSTANTS.AREA_CHART:
         case CONSTANTS.HORIZONTAL_LINE_CHART:
         case CONSTANTS.HORIZONTAL_AREA_CHART:
         case CONSTANTS.WATERFALL_CHART:
-         
             let itemTypeLine = xAxisColumnDetails[0].itemType;
             dateFormat = xAxisColumnDetails[0].dateFormat;
-            
+
             if (isHorizontalGraph()) {
                 itemTypeLine = yAxisColumnDetails[0].itemType;
                 dateFormat = yAxisColumnDetails[0].dateFormat;
             }
-            console.log("yAxisColumnDetails",itemTypeLine)
+            console.log("yAxisColumnDetails", itemTypeLine);
             if (!isDateFormat(itemTypeLine)) {
                 return;
             }
-            
 
             // debugger;
 
             // dateFormat = xAxisColumnDetails[0].dateFormat;
-           
 
             const xAxisDataLineChart = dataValues.map((d) => d[0]);
             const yAxisDataLIneChart = dataValues.map((d) => d[1]);
