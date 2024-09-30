@@ -19,6 +19,7 @@
         "dotenv": "^16.0.0",
         "fs": "^0.0.1-security",
         "topojson": "^3.0.2",
+        "topojson-client": "^3.1.0",
         "webpack": "^5.71.0",
         "webpack-bundle-analyzer": "^4.5.0"
     },
