@@ -36,7 +36,8 @@ const chartNames = {
     PIVOT: "Pivot",
     TABLE: "Table",
     KPI_CHART: "KPI",
-    FUNNEL_CHART: "Funnel Chart"
+    FUNNEL_CHART: "Funnel Chart",
+    GEO_CHART: "Geo Chart",
 };
 
 module.exports = {
@@ -138,6 +139,8 @@ module.exports = {
         labelStatus: true,
         xAxisStatus: true,
         yAxisStatus: true,
+        yLabelStatus: true,
+        xLabelStatus: true,
         legendWidth: 120,
         legendHeight: 30,
         maxRotationMargin: 70, // Maximum height allowed for ticks after rotation

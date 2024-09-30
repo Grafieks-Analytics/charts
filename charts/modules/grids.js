@@ -51,7 +51,10 @@ const setGrids = (svg, chartsGrid) => {
         .attr("transform", transformValue)
         .style("stroke-width", strokeWidth) //this is not user selectable
         .attr("stroke-dasharray", gridDash ? "5,5": "0,0") //Dash Size, Dash Gap Size
-        .call(scale);
+        .call(scale)
+        .selectAll('.tick text').filter(function() { return d3.select(this).text() === '0.0'}).each(function() {
+            d3.select(this.parentNode).remove();
+        });
 };
 
 module.exports = {
