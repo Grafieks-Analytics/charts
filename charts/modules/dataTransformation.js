@@ -128,13 +128,13 @@ const transformData = () => {
             // // grafieks.dataUtils.dataCombined = dataCombined;
             // ------
 
-            if (isHorizontalGraph()) {
-                itemType = yAxisColumnDetails[0].itemType;
-                dateFormat = yAxisColumnDetails[0].dateFormat;
-            }
-            if (!isDateFormat(itemType)) {
-                return;
-            }
+            // if (isHorizontalGraph()) {
+            //     itemType = yAxisColumnDetails[0].itemType;
+            //     dateFormat = yAxisColumnDetails[0].dateFormat;
+            // }
+            // if (!isDateFormat(itemType)) {
+            //     return;
+            // }
 
             timeFormat = d3.timeFormat(dateFormat);
 
