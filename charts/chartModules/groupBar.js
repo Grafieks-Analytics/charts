@@ -44,7 +44,7 @@ const getTransformedDataValue = () => {
 
         var category = d.mainCategory;
         if (isKey1Date) {
-            category = utils.getDateFormattedData(d.mainCategory, dateFormat);
+            // category = utils.getDateFormattedData(d.mainCategory, dateFormat);
         }
         // console.log(category);
         if (!transformedDataValue[category]) {

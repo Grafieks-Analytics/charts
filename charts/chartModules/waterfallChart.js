@@ -34,24 +34,27 @@ const chartGeneration = (svg) => {
     grafieks.plotConfiguration;
     let itemType = xAxisColumnDetails[0].itemType;
     let { dataValues = [], dataLabels = [] } = data;
-    if (isDateFormat(itemType)) {
-        // const { dataValuess = [], dataLabels = [] } = data;
-         dataValues = grafieks.dataUtils.dataCombined;
-        grafieks.dataUtils.dataLabels = dataLabels;
-        // grafieks.legend.data = [dataLabels.xAxisLabel]; 
-    } else {
-        // let { dataValues = [], dataLabels = [] } = data;
+    // if (isDateFormat(itemType)) {
+    //     // const { dataValuess = [], dataLabels = [] } = data;
+    //      dataValues = grafieks.dataUtils.dataCombined;
+    //     grafieks.dataUtils.dataLabels = dataLabels;
+    //     // grafieks.legend.data = [dataLabels.xAxisLabel]; 
+    // } else {
+    //     // let { dataValues = [], dataLabels = [] } = data;
 
-        grafieks.dataUtils.dataValues = dataValues;
-        grafieks.dataUtils.dataLabels = dataLabels;
-        grafieks.dataUtils.dataLabelValues = dataValues[1];
-        // grafieks.legend.data = [dataLabels.xAxisLabel];
-    }
+    //     grafieks.dataUtils.dataValues = dataValues;
+    //     grafieks.dataUtils.dataLabels = dataLabels;
+    //     grafieks.dataUtils.dataLabelValues = dataValues[1];
+    //     // grafieks.legend.data = [dataLabels.xAxisLabel];
+    // }
 
     // grafieks.dataUtils.dataValues = dataValues;
     // grafieks.dataUtils.dataLabels = dataLabels;
 
     // grafieks.dataUtils.dataLabelValues = dataValues[1];
+    grafieks.dataUtils.dataValues = dataValues;
+    grafieks.dataUtils.dataLabels = dataLabels;
+    grafieks.dataUtils.dataLabelValues = dataValues[1];
 
     grafieks.legend.data = ["Increase", "Decrease", "Total"];
 

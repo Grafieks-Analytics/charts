@@ -57,20 +57,23 @@ const chartGeneration = (svg) => {
 
     let itemType = yAxisColumnDetails[0].itemType;
 
-    if (isDateFormat(itemType)) {
-        // const { dataValues = [], dataLabels = [] } = data;
-        dataValues = grafieks.dataUtils.dataCombined;
-        grafieks.dataUtils.dataLabels = dataLabels;
-        grafieks.legend.data = [dataLabels.xAxisLabel];
-    } else {
-        // let { dataValues = [], dataLabels = [] } = data;
-        grafieks.dataUtils.dataValues = dataValues;
-        grafieks.dataUtils.dataLabels = dataLabels;
-        grafieks.dataUtils.dataLabelValues = dataValues[1];
-        grafieks.legend.data = [dataLabels.xAxisLabel];
-    }
+    // if (isDateFormat(itemType)) {
+    //     // const { dataValues = [], dataLabels = [] } = data;
+    //     dataValues = grafieks.dataUtils.dataCombined;
+    //     grafieks.dataUtils.dataLabels = dataLabels;
+    //     grafieks.legend.data = [dataLabels.xAxisLabel];
+    // } else {
+    //     // let { dataValues = [], dataLabels = [] } = data;
+    //     grafieks.dataUtils.dataValues = dataValues;
+    //     grafieks.dataUtils.dataLabels = dataLabels;
+    //     grafieks.dataUtils.dataLabelValues = dataValues[1];
+    //     grafieks.legend.data = [dataLabels.xAxisLabel];
+    // }
 
+    grafieks.dataUtils.dataValues = dataValues;
+    grafieks.dataUtils.dataLabels = dataLabels;
     grafieks.dataUtils.dataLabelValues = dataValues[1];
+    grafieks.legend.data = [dataLabels.xAxisLabel];
 
     const { height } = grafieks.chartsConfig;
 

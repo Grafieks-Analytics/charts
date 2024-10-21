@@ -16,25 +16,27 @@ const chartGeneration = (svg) => {
     // debugger;
     let { dataValues = [], dataLabels = [] } = data;
     console.log("grafieks.dataUtils.dataCombined",grafieks.dataUtils.dataCombined)
-    if (isDateFormat(itemType)) {
-        // const { dataValuess = [], dataLabels = [] } = data;
-         dataValues = grafieks.dataUtils.dataCombined;
-        grafieks.dataUtils.dataLabels = dataLabels;
-        grafieks.legend.data = [dataLabels.yAxisLabel];
-    } else {
-        // let { dataValues = [], dataLabels = [] } = data;
+    // if (isDateFormat(itemType)) {
+    //     // const { dataValuess = [], dataLabels = [] } = data;
+    //      dataValues = grafieks.dataUtils.dataCombined;
+    //     grafieks.dataUtils.dataLabels = dataLabels;
+    //     grafieks.legend.data = [dataLabels.yAxisLabel];
+    // } else {
+    //     // let { dataValues = [], dataLabels = [] } = data;
 
-        grafieks.dataUtils.dataValues = dataValues;
-        grafieks.dataUtils.dataLabels = dataLabels;
-        grafieks.dataUtils.dataLabelValues = dataValues[1];
-        grafieks.legend.data = [dataLabels.yAxisLabel];
-    }
+    //     grafieks.dataUtils.dataValues = dataValues;
+    //     grafieks.dataUtils.dataLabels = dataLabels;
+    //     grafieks.dataUtils.dataLabelValues = dataValues[1];
+    //     grafieks.legend.data = [dataLabels.yAxisLabel];
+    // }
     // const { dataValues = [], dataLabels = [] } = data;
 
     // grafieks.dataUtils.dataValues = dataValues;
     // grafieks.dataUtils.dataLabels = dataLabels;
-
+    grafieks.dataUtils.dataValues = dataValues;
+    grafieks.dataUtils.dataLabels = dataLabels;
     grafieks.dataUtils.dataLabelValues = dataValues[1];
+    grafieks.legend.data = [dataLabels.yAxisLabel];
 
     // grafieks.legend.data = [dataLabels[0]];
 
